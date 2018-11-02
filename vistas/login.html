@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+  <head lang="es">
     <meta charset="utf-8">
     <title>Login</title>
     <link rel="icon" href="images/keyword-research_icon-icons.com_537756_537756.ico">
@@ -8,6 +8,38 @@
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,700'>
+    <script type="text/javascript">
+
+function validarFormulario(){
+
+  var txtNombre = document.getElementById('nombre').value;
+
+  var txtCorreo = document.getElementById('correo').value;
+
+  var banderaRBTN = false;
+
+  //Test campo obligatorio
+  if(txtNombre == null || txtNombre.length == 0 || /^\s+$/.test(txtNombre)){
+    alert('ERROR: El campo nombre no debe ir vacío o lleno de solamente espacios en blanco');
+    return false;
+  }
+
+  //Test correo
+  if(!(/\S+@\S+\.\S+/.test(txtCorreo))){
+    alert('ERROR: Debe escribir un correo válido');
+    return false;
+  }
+
+  if(!banderaRBTN){
+  alert('ERROR: Debe elegir una opción de radio button');
+  return false;
+}
+
+return true;}
+
+
+
+</script>
   </head>
 
   <body>
@@ -17,10 +49,10 @@
       </a>
       <nav>
   		    <ul>
-      			<li><a href="#">Inicio</a></li>
+      			<li><a href="home.html">Inicio</a></li>
             <li><a href="#">Perfiles</a></li>
       			<li><a href="#">Acerca de</a></li>
-      			<li><a href="#">Registro</a></li>
+      			<li><a href="login.html">Registro</a></li>
             <li><a href="#">Admin Site</a></li>
   		    </ul>
      </nav>
@@ -63,16 +95,16 @@
                 <div class="col-md-12">
             			<h2>¿No tienes cuenta?</h2>
                     <p>
-                      <form class="forms">
+                      <form class="forms" action="" onsubmit="return validarFormulario()">
                         <label for="nombre">Ingresa tu nombre: </label>
                         <input type="text" placeholder="Escribe algo" name="nombre" id="nombre"><br><br>
-                        <label for="correo">Ingresa tu nombre: </label>
+                        <label for="correo">Ingresa tu correo electrónico: </label>
                         <input type="text" placeholder="Escribe algo" name="correo" id="correo"><br><br>
-                        <label for="correo">Ingresa tu contraseña: </label>
+                        <label for="pwd">Ingresa tu contraseña: </label>
                         <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"><br><br>
-                        <label for="correo">Confirma tu contraseña: </label>
+                        <label for="pwd">Confirma tu contraseña: </label>
                         <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"><br><br>
-                        <button type="button" name="button">Registrarse</button>
+                        <input type="submit" value="Registrarse">
                       </form>
                     </p>
                 </div>
