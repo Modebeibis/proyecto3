@@ -1,0 +1,23 @@
+[
+  {
+    "model": "core.degrees",
+    "pk": 1,
+    "fields": {
+      "degree": "Licenciatura"
+    }
+  },
+  {
+    "model": "core.degrees",
+    "pk": 2,
+    "fields": {
+      "degree": "Maestría"
+    }
+  },
+  {
+    "model": "core.degrees",
+    "pk": 3,
+    "fields": {
+      "degree": "Doctorado"
+    }
+  }
+]

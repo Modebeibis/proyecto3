@@ -1,0 +1,30 @@
+[
+  {
+    "model": "core.roles",
+    "pk": 1,
+    "fields": {
+      "description": "Alumno"
+    }
+  },
+  {
+    "model": "core.roles",
+    "pk": 2,
+    "fields": {
+      "description": "Postdoc"
+    }
+  },
+  {
+    "model": "core.roles",
+    "pk": 3,
+    "fields": {
+      "description": "Investigador"
+    }
+  },
+  {
+    "model": "core.roles",
+    "pk": 4,
+    "fields": {
+      "description": "Administrador"
+    }
+  }
+]

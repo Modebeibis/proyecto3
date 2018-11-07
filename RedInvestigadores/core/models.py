@@ -3,21 +3,31 @@ from django.db import models
 class Affiliations(models.Model):
     name    = models.TextField()
     address = models.TextField()
+    def __str__(self):
+        return self.name
 
 class Degrees(models.Model):
     degree = models.TextField()
+    def __str__(self):
+        return self.degree
 
 class Roles(models.Model):
     description = models.TextField()
+    def __str__(self):
+        return self.description
 
 class SNI(models.Model):
     level = models.TextField()
+    def __str__(self):
+        return self.level
 
 class States(models.Model):
     name = models.TextField()
+    def __str__(self):
+        return self.name
 
 class Persons(models.Model):
-    name        = models.TextField()
+    first_name  = models.TextField()
     last_name   = models.TextField()
     orcid       = models.TextField()
     email       = models.EmailField()
@@ -26,6 +36,8 @@ class Persons(models.Model):
     role        = models.ForeignKey(Roles, on_delete=models.PROTECT)
     state       = models.ForeignKey(States, on_delete=models.PROTECT)
     sni         = models.ForeignKey(SNI, on_delete=models.PROTECT)
+    def __str__(self):
+        return '%s %s' % (self.first_name, self.last_name)
 
 class Administrators(models.Model):
     person = models.ForeignKey(Persons, on_delete=models.CASCADE)
@@ -49,6 +61,8 @@ class Affiliation_sublevel(models.Model):
 class Journals(models.Model):
     name = models.TextField()
     issn = models.TextField()
+    def __str__(self):
+        return self.name
 
 class Publications(models.Model):
     title   = models.TextField()
@@ -57,6 +71,8 @@ class Publications(models.Model):
     issue   = models.IntegerField()
     date    = models.DateField()
     doi     = models.TextField()
+    def __str__(self):
+        return self.title
 
 class Author_of(models.Model):
     person      = models.ForeignKey(Persons, on_delete=models.CASCADE)
@@ -66,8 +82,10 @@ class Author_of(models.Model):
         unique_together = (('person', 'publication'),)
 
 class External_authors(models.Model):
-    name      = models.TextField()
-    last_name = models.TextField()
+    first_name = models.TextField()
+    last_name  = models.TextField()
+    def __str__(self):
+        return '%s %s' % (self.first_name, self.last_name)
 
 class Author_of_external(models.Model):
     author      = models.ForeignKey(External_authors, on_delete=models.PROTECT)
@@ -95,6 +113,8 @@ class Grants(models.Model):
     title       = models.TextField()
     start_date  = models.DateField()
     end_date    = models.DateField()
+    def __str__(self):
+        return self.title
 
 class Grant_participant(models.Model):
     person = models.ForeignKey(Persons, on_delete=models.CASCADE)
@@ -106,6 +126,8 @@ class Grant_participant(models.Model):
 class Groups(models.Model):
     name  = models.TextField()
     owner = models.ForeignKey(Persons, on_delete=models.DO_NOTHING)
+    def __str__(self):
+        return self.name
 
 class Group_member(models.Model):
     group  = models.ForeignKey(Groups, on_delete=models.CASCADE)
@@ -131,12 +153,16 @@ class Internal_citation(models.Model):
 
 class PNPC(models.Model):
     level = models.TextField()
+    def __str__(self):
+        return self.level
 
 class Programs(models.Model):
     name        = models.TextField()
     affiliation = models.ForeignKey(Affiliations, on_delete=models.CASCADE)
     degree      = models.ForeignKey(Degrees, on_delete=models.PROTECT)
     pnpc        = models.ForeignKey(PNPC, on_delete=models.PROTECT)
+    def __str__(self):
+        return self.name
 
 class Program_tutor(models.Model):
     person  = models.ForeignKey(Persons, on_delete=models.CASCADE)

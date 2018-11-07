@@ -1,0 +1,44 @@
+[
+  {
+    "model": "core.sni",
+    "pk": 1,
+    "fields": {
+      "level": "No pertenece"
+    }
+  },
+  {
+    "model": "core.sni",
+    "pk": 2,
+    "fields": {
+      "level": "Candidato"
+    }
+  },
+  {
+    "model": "core.sni",
+    "pk": 3,
+    "fields": {
+      "level": "Nivel I"
+    }
+  },
+  {
+    "model": "core.sni",
+    "pk": 4,
+    "fields": {
+      "level": "Nivel II"
+    }
+  },
+  {
+    "model": "core.sni",
+    "pk": 5,
+    "fields": {
+      "level": "Nivel III"
+    }
+  },
+  {
+    "model": "core.sni",
+    "pk": 6,
+    "fields": {
+      "level": "Emérito"
+    }
+  }
+]

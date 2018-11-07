@@ -1,0 +1,30 @@
+[
+  {
+    "model": "core.pnpc",
+    "pk": 1,
+    "fields": {
+      "level": "De reciente creación"
+    }
+  },
+  {
+    "model": "core.pnpc",
+    "pk": 2,
+    "fields": {
+      "level": "En desarrollo"
+    }
+  },
+  {
+    "model": "core.pnpc",
+    "pk": 3,
+    "fields": {
+      "level": "Consolidado"
+    }
+  },
+  {
+    "model": "core.pnpc",
+    "pk": 4,
+    "fields": {
+      "level": "Competencia internacional"
+    }
+  }
+]
