@@ -4,8 +4,8 @@ from .models import Post
 
 def log_in(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, 'blog/log_in.html', {'posts': posts})
+    return render(request, 'blog/log_in.html')
 
 def home(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, 'blog/home.html', {'posts': posts})
+    return render(request, 'blog/home.html')
