@@ -6,3 +6,6 @@ def home(request):
 
 def log_in(request):
     return render(request, 'blog/log_in.html')
+
+def research(request):
+    return render(request, 'blog/researcher.html')
