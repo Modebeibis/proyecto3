@@ -8,6 +8,22 @@
     }
   },
   {
+    "model": "core.affiliations",
+    "pk": 2,
+    "fields": {
+      "name": "Departamento de Computación",
+      "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
+    }
+  },
+  {
+    "model": "core.affiliationsublevel",
+    "pk": 1,
+    "fields": {
+      "sub": 2,
+      "super": 1
+    }
+  },
+  {
     "model": "core.persons",
     "pk": 1,
     "fields": {
@@ -15,11 +31,11 @@
       "last_name": "Hernández Cruz",
       "orcid": "https://orcid.org/0000-0002-5867-3801",
       "email": "japo@ciencias.unam.mx",
-      "affiliation": 1,
-      "degree": 3,
+      "affiliation": 2,
+      "degree": "MSC",
       "role": 3,
-      "state": 7,
-      "sni": 4
+      "state": "CDMX",
+      "sni": "2"
     }
   }
 ]
