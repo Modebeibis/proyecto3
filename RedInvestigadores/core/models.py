@@ -1,23 +1,27 @@
 from django.db import models
 
-class Affiliations(models.Model):
-    name    = models.TextField()
-    address = models.TextField()
+class Affiliation(models.Model):
+    name        = models.TextField()
+    super_level = models.ForeignKey('self', on_delete=models.CASCADE)
+    address     = models.TextField()
     def __str__(self):
-        return self.name
+        if self.id < 3:
+            return self.name
+        else:
+            return '%s - %s' % (self.super_level.__str__(), self.name)
 
-class Roles(models.Model):
+class Role(models.Model):
     description = models.TextField()
     def __str__(self):
         return self.description
 
-class Persons(models.Model):
+class Person(models.Model):
     first_name  = models.TextField()
     last_name   = models.TextField()
-    affiliation = models.ForeignKey(Affiliations, on_delete=models.PROTECT)
+    affiliation = models.ForeignKey(Affiliation, on_delete=models.PROTECT)
     email       = models.EmailField()
     orcid       = models.TextField(unique=True)
-    role        = models.ForeignKey(Roles, on_delete=models.PROTECT)
+    role        = models.ForeignKey(Role, on_delete=models.PROTECT)
 
     BACHELOR = 'BSC'
     MASTERS  = 'MSC'
@@ -128,34 +132,41 @@ class Persons(models.Model):
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
 
-class Administrators(models.Model):
-    person = models.OneToOneField(Persons, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Roles, on_delete=models.PROTECT)
-
-class AffiliationSublevel(models.Model):
-    sub = models.ForeignKey(
-        Affiliations,
-        related_name='sub',
-        on_delete=models.CASCADE
-    )
-    super = models.ForeignKey(
-        Affiliations,
-        related_name='super',
-        on_delete=models.CASCADE
-        )
+class PersonRole(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.PROTECT)
 
     class Meta:
-        unique_together = (('super', 'sub'),)
+        unique_together = (('person'), ('role'),)
 
-class Journals(models.Model):
+class Administrator(models.Model):
+    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
+
+# class AffiliationSublevel(models.Model):
+#     sub = models.ForeignKey(
+#         Affiliation,
+#         related_name='sub',
+#         on_delete=models.CASCADE
+#     )
+#     super = models.ForeignKey(
+#         Affiliation,
+#         related_name='super',
+#         on_delete=models.CASCADE
+#         )
+#
+#     class Meta:
+#         unique_together = (('super', 'sub'),)
+
+class Journal(models.Model):
     name = models.TextField(unique=True)
     issn = models.TextField(max_length=9, unique=True)
     def __str__(self):
         return self.name
 
-class Publications(models.Model):
+class Publication(models.Model):
     title   = models.TextField()
-    journal = models.ForeignKey(Journals, on_delete=models.PROTECT)
+    journal = models.ForeignKey(Journal, on_delete=models.PROTECT)
     volume  = models.IntegerField()
     issue   = models.IntegerField()
     date    = models.DateField()
@@ -164,13 +175,13 @@ class Publications(models.Model):
         return self.title
 
 class AuthorOf(models.Model):
-    person      = models.ForeignKey(Persons, on_delete=models.CASCADE)
-    publication = models.ForeignKey(Publications, on_delete=models.PROTECT)
+    person      = models.ForeignKey(Person, on_delete=models.CASCADE)
+    publication = models.ForeignKey(Publication, on_delete=models.PROTECT)
 
     class Meta:
         unique_together = (('person', 'publication'),)
 
-class ExternalAuthors(models.Model):
+class ExternalAuthor(models.Model):
     first_name = models.TextField()
     last_name  = models.TextField()
     def __str__(self):
@@ -180,18 +191,18 @@ class ExternalAuthors(models.Model):
         unique_together = (('first_name', 'last_name'),)
 
 class AuthorOfExternal(models.Model):
-    author      = models.ForeignKey(ExternalAuthors, on_delete=models.PROTECT)
-    publication = models.ForeignKey(Publications, on_delete=models.PROTECT)
+    author      = models.ForeignKey(ExternalAuthor, on_delete=models.PROTECT)
+    publication = models.ForeignKey(Publication, on_delete=models.PROTECT)
 
     class Meta:
         unique_together = (('author', 'publication'),)
 
-class Researchers(models.Model):
-    person = models.OneToOneField(Persons, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Roles, on_delete=models.PROTECT)
+class Researcher(models.Model):
+    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
 
-class Grants(models.Model):
-    responsible = models.ForeignKey(Researchers, on_delete=models.CASCADE)
+class Grant(models.Model):
+    responsible = models.ForeignKey(Researcher, on_delete=models.CASCADE)
     title       = models.TextField()
     start_date  = models.DateField()
     end_date    = models.DateField()
@@ -202,15 +213,15 @@ class Grants(models.Model):
         unique_together = (('responsible', 'title'),)
 
 class GrantParticipant(models.Model):
-    person = models.ForeignKey(Persons, on_delete=models.CASCADE)
-    grant  = models.ForeignKey(Grants, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    grant  = models.ForeignKey(Grant, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (('person', 'grant'),)
 
-class Groups(models.Model):
+class Group(models.Model):
     name  = models.TextField()
-    owner = models.ForeignKey(Persons, on_delete=models.DO_NOTHING)
+    owner = models.ForeignKey(Person, on_delete=models.DO_NOTHING)
     def __str__(self):
         return self.name
 
@@ -218,26 +229,23 @@ class Groups(models.Model):
         unique_together = (('name', 'owner'),)
 
 class GroupMember(models.Model):
-    group  = models.ForeignKey(Groups, on_delete=models.CASCADE)
-    person = models.ForeignKey(Persons, on_delete=models.CASCADE)
+    group  = models.ForeignKey(Group, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (('group', 'person'),)
 
-class Postdocs(models.Model):
-    person = models.OneToOneField(Persons, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Roles, on_delete=models.PROTECT)
+class Postdoc(models.Model):
+    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
 
-class Subjects(models.Model):
-    classification = models.TextField()
-
-class Students(models.Model):
-    person = models.OneToOneField(Persons, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Roles, on_delete=models.PROTECT)
+class Student(models.Model):
+    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
 
 class StudentOf(models.Model):
-    student = models.ForeignKey(Students, on_delete=models.CASCADE)
-    tutor   = models.ForeignKey(Researchers, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    tutor   = models.ForeignKey(Researcher, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (('student', 'tutor'),)

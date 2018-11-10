@@ -1,30 +1,33 @@
 [
   {
-    "model": "core.affiliations",
+    "model": "core.affiliation",
     "pk": 1,
     "fields": {
-      "name": "Centro de Investigación y de Estudios Avanzados del IPN",
-      "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
+      "name": "Base",
+      "super_level": 1,
+      "address": ""
     }
   },
   {
-    "model": "core.affiliations",
+    "model": "core.affiliation",
     "pk": 2,
     "fields": {
-      "name": "Departamento de Computación",
+      "name": "Centro de Investigación y de Estudios Avanzados del IPN",
+      "super_level": 1,
       "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
     }
   },
   {
-    "model": "core.affiliationsublevel",
-    "pk": 1,
+    "model": "core.affiliation",
+    "pk": 3,
     "fields": {
-      "sub": 2,
-      "super": 1
+      "name": "Departamento de Computación",
+      "super_level": 2,
+      "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
     }
   },
   {
-    "model": "core.persons",
+    "model": "core.person",
     "pk": 1,
     "fields": {
       "first_name": "César",
