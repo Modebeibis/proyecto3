@@ -9,3 +9,6 @@ def log_in(request):
 
 def research(request):
     return render(request, 'blog/researcher.html')
+
+def about_of(request):
+    return render(request, 'blog/about_of.html')
