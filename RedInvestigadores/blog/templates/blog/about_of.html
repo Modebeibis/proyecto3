@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <title>Acerca de...</title>
-    <link rel="shortcut icon" href="{% static "img/books.ico" %}">
+    <link rel="shortcut icon" href="{% static "img/Question.ico" %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
@@ -75,7 +75,7 @@
         <nav>
             <ul>
               <li><a href="{% url 'home' %}">Inicio</a></li>
-              <li><a href="#">Perfiles</a></li>
+              <li><a href="{% url 'research' %}">Perfiles</a></li>
               <li><a href="{% url 'about_of' %}">Acerca de</a></li>
               <li><a href="{% url 'log_in' %}">Registro</a></li>
             </ul>
@@ -96,7 +96,7 @@
        <h2 align="center">¿Quiénes somos?</h2>
        <p style="
        padding: 3rem;">
-          Somos una pagina que busca crear una red de investigadores existentes en México, 
+          Somos una pagina que busca crear una red de investigadores existentes en México,
           donde toda persona podra buscar e informarce acerca de proyectos y trabajos que ciertas personas
           se encuentren realizandolo.<br>
           Queremos generar un sitio donde distintos investigadores puedan llevar el control de sus labores
@@ -111,7 +111,7 @@
      #Investigador {background-color: #7c3733; height: 100%;}
      #Alumno {background-color: #788724; height: 100%;}
    </style>
-   
+
    <button class="tablink" onclick="openPage('Invitado', this, '#245c87 ')"  id="defaultOpen">Invitado</button>
    <button class="tablink" onclick="openPage('Investigador', this, '#7c3733')">Investigador</button>
    <button class="tablink" onclick="openPage('Alumno', this, '#788724')">Alumno</button>
@@ -181,7 +181,7 @@
 
     <footer id="main-footer">
       <p>&copy; 2018 <a href=""></a></p>
-    </footer>   
+    </footer>
     {% endblock %}
   </body>
 </html>

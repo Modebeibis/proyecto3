@@ -24,7 +24,7 @@
   		    <ul>
 
               <li><a href="{% url 'home' %}">Inicio</a></li>
-              <li><a href="#">Perfiles</a></li>
+              <li><a href="{% url 'research' %}">Perfiles</a></li>
               <li><a href="{% url 'about_of' %}">Acerca de</a></li>
               <li><a href="{% url 'log_in' %}">Registro</a></li>
   		    </ul>
@@ -81,8 +81,9 @@
                         <label for="selector">¿Con qué perfil?:</label>
                         <select id="selector" name="selector">
                           <option value="">Ninguno</option>
-                          <option value="1">Investigador</option>
-                          <option value="2">Estudiante</option>
+                          <option value="1">Estudiante</option>
+                          <option value="2">Investigador</option>
+                          <option value="3">Posdoctorado</option>
                         </select><br><br>
                         <button type="button" name="button" id="button">Registrarse</button>
                       </form>
