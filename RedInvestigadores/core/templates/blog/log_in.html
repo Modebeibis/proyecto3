@@ -10,8 +10,46 @@
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,700'>
+<<<<<<< HEAD:vistas/login.html
+<<<<<<< HEAD
+    <script type="text/javascript">
+
+function validarFormulario(){
+
+  var txtNombre = document.getElementById('nombre').value;
+
+  var txtCorreo = document.getElementById('correo').value;
+
+  var banderaRBTN = false;
+
+  //Test campo obligatorio
+  if(txtNombre == null || txtNombre.length == 0 || /^\s+$/.test(txtNombre)){
+    alert('ERROR: El campo nombre no debe ir vacío o lleno de solamente espacios en blanco');
+    return false;
+  }
+
+  //Test correo
+  if(!(/\S+@\S+\.\S+/.test(txtCorreo))){
+    alert('ERROR: Debe escribir un correo válido');
+    return false;
+  }
+
+  if(!banderaRBTN){
+  alert('ERROR: Debe elegir una opción de radio button');
+  return false;
+}
+
+return true;}
+
+
+
+</script>
+=======
+>>>>>>> 60c760dfdabdc3085ef53273cbb2be606aaa5a03
+=======
     <link rel="stylesheet" type="text/css" href="{% static "css/styles.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+>>>>>>> 3a7092f70fabdd05e63ead8e8474f7fa03f62dbf:RedInvestigadores/core/templates/blog/log_in.html
   </head>
 
   <body>
@@ -41,10 +79,25 @@
           </li>
           <li class="tab fancyTab">
           <div class="arrow-down"><div class="arrow-down-inner"></div></div>
+<<<<<<< HEAD:vistas/login.html
+<<<<<<< HEAD
+              <a id="tab4" href="#tabBody4" role="tab" aria-controls="tabBody4" aria-selected="true" data-toggle="tab" tabindex="0"><span class="fa fa-stack-overflow"></span><span class="hidden-xs">Regístrate</span></a>
+=======
+              <a id="tab4" href="#tabBody4" role="tab" aria-controls="tabBody4" aria-selected="true" data-toggle="tab" tabindex="0"><span class="fa fa-check"></span><span class="hidden-xs">Regístrate</span></a>
+              <div class="whiteBlock"></div>
+          </li>
+          <li class="tab fancyTab">
+            <div class="arrow-down"><div class="arrow-down-inner"></div></div>
+              <a id="tab1" href="#tabBody1" role="tab" aria-controls="tabBody1" aria-selected="true" data-toggle="tab" tabindex="0"><span class="fa fa-coffee"></span><span class="hidden-xs">Invitado</span></a>
+>>>>>>> 60c760dfdabdc3085ef53273cbb2be606aaa5a03
+              <div class="whiteBlock"></div>
+          </li>
+=======
               <a id="tab4" href="#tabBody4" role="tab" aria-controls="tabBody4" aria-selected="true" data-toggle="tab" tabindex="0"><span class="fa fa-check"></span><span class="hidden-xs">Regístrate</span></a>
               <div class="whiteBlock"></div>
           </li>
 
+>>>>>>> 3a7092f70fabdd05e63ead8e8474f7fa03f62dbf:RedInvestigadores/core/templates/blog/log_in.html
         </ul>
         <div id="myTabContent" class="tab-content fancyTabContent" aria-live="polite">
             <div class="tab-pane  fade active in" id="tabBody0" role="tabpanel" aria-labelledby="tab0" aria-hidden="false" tabindex="0">
@@ -63,13 +116,29 @@
                     </div>
                   </div>
             </div>
+<<<<<<< HEAD:vistas/login.html
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 60c760dfdabdc3085ef53273cbb2be606aaa5a03
+=======
+
+>>>>>>> 3a7092f70fabdd05e63ead8e8474f7fa03f62dbf:RedInvestigadores/core/templates/blog/log_in.html
             <div class="tab-pane  fade" id="tabBody4" role="tabpanel" aria-labelledby="tab4" aria-hidden="true" tabindex="0">
               <div class="row">
                 <div class="col-md-12">
             			<h2>¿No tienes cuenta?</h2>
                     <p>
+<<<<<<< HEAD:vistas/login.html
+<<<<<<< HEAD
+                      <form class="forms" action="" onsubmit="return validarFormulario()">
+=======
                       <form class="forms">
+>>>>>>> 60c760dfdabdc3085ef53273cbb2be606aaa5a03
+=======
+                      <form class="forms">
+>>>>>>> 3a7092f70fabdd05e63ead8e8474f7fa03f62dbf:RedInvestigadores/core/templates/blog/log_in.html
                         <label for="nombre">Ingresa tu nombre: </label>
                         <input type="text" placeholder="Escribe algo" name="nombre" id="nombre"><br><br>
                         <label for="correo">Ingresa tu correo electrónico: </label>
@@ -78,6 +147,12 @@
                         <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"><br><br>
                         <label for="pwd">Confirma tu contraseña: </label>
                         <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"><br><br>
+<<<<<<< HEAD:vistas/login.html
+<<<<<<< HEAD
+                        <input type="submit" value="Registrarse">
+=======
+=======
+>>>>>>> 3a7092f70fabdd05e63ead8e8474f7fa03f62dbf:RedInvestigadores/core/templates/blog/log_in.html
                         <label for="selector">¿Con qué perfil?:</label>
                         <select id="selector" name="selector">
                           <option value="">Ninguno</option>
@@ -86,11 +161,30 @@
                           <option value="3">Posdoctorado</option>
                         </select><br><br>
                         <button type="button" name="button" id="button">Registrarse</button>
+<<<<<<< HEAD:vistas/login.html
+>>>>>>> 60c760dfdabdc3085ef53273cbb2be606aaa5a03
+=======
+>>>>>>> 3a7092f70fabdd05e63ead8e8474f7fa03f62dbf:RedInvestigadores/core/templates/blog/log_in.html
                       </form>
                     </p>
                 </div>
               </div>
             </div>
+<<<<<<< HEAD:vistas/login.html
+<<<<<<< HEAD
+=======
+            <div class="tab-pane  fade" id="tabBody1" role="tabpanel" aria-labelledby="tab1" aria-hidden="true" tabindex="0">
+              <div class="row">
+                <div class="col-md-12">
+                  <h2>Entra al sitio como invitado</h2>
+                    <p><input type="button" value="Entrar" onClick=" window.location.href='guest.html' ">
+                    </p>      
+                </div>
+              </div>
+            </div>
+>>>>>>> 60c760dfdabdc3085ef53273cbb2be606aaa5a03
+=======
+>>>>>>> 3a7092f70fabdd05e63ead8e8474f7fa03f62dbf:RedInvestigadores/core/templates/blog/log_in.html
         </div>
       </section>
     </div>

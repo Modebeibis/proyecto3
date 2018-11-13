@@ -1,6 +1,5 @@
 from django.shortcuts import render
 
-
 def home(request):
     return render(request, 'blog/home.html')
 
@@ -12,7 +11,3 @@ def research(request):
 
 def about_of(request):
     return render(request, 'blog/about_of.html')
-
-def search_view(request):
-    return render(request, 'blog/search_view.html')
-

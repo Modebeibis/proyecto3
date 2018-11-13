@@ -4,14 +4,14 @@
   <head>
     <meta charset="utf-8">
     <title>Home</title>
-    <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_53775_53775.ico" %}">
+    <link rel="shortcut icon" href="img/keyword-research_icon-icons.com_53775_53775.ico">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,700'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     {% block css %}
     <style type="text/css">
       html {
@@ -65,20 +65,13 @@
       }
 
     </style>
-    {% endblock %}
+   {% endblock %}
 
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
-
-    <link href="{% static "css/jsmaps.css" %}" rel="stylesheet" type="text/css" />
-    <script src="{% static "js/jsmaps-libs.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/jsmaps-panzoom.js" %}"></script>
-    <script src="{% static "js/jsmaps.min.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/mexico.js" %}" type="text/javascript"></script>
 
   </head>
 
   <body>
-    {% block contenido %}
+   {% block contenido %}
     <header id = "main-header">
       <a id="logo-header" href="#">
         <span class="site-name">Red nacional de investigadores</span>
@@ -92,28 +85,11 @@
   		    </ul>
      </nav>
    </header>
-    <div class="container">
-
-      <div class="jsmaps-wrapper" id="mexico-map"></div>
-
-    </div>
-    {% block js %}
-    <script type="text/javascript">
-
-      $(function() {
-
-        $('#mexico-map').JSMaps({
-          map: 'mexico'
-        });
-
-      });
-
-    </script>
     {% endblock %}
     <footer id="main-footer">
       <p>&copy; 2018 <a href=""></a></p>
     </footer>
-    {% endblock %}
+	 {% endblock %}
   </body>
 
 </html>
