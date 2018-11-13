@@ -182,6 +182,7 @@ class AuthorOf(models.Model):
         unique_together = (('person', 'publication'),)
 
 class ExternalAuthor(models.Model):
+    doi = models.TextField()
     first_name = models.TextField()
     last_name  = models.TextField()
     def __str__(self):
@@ -249,3 +250,54 @@ class StudentOf(models.Model):
 
     class Meta:
         unique_together = (('student', 'tutor'),)
+
+class UserPetition(models.Model):
+    name = models.TextField()
+    first_surname = models.TextField()
+    second_surname = models.TextField()
+    email = models.TextField()
+
+class AffiliationPetition(models.Model):
+    name = models.TextField()
+    email = models.TextField()
+    address = models.TextField()
+    id_super_level = models.ForeignKey(Affiliation, on_delete = models.SET_NULL)
+
+class PublicationPetition(models.Model):
+    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
+    title   = models.TextField()
+    journal = models.ForeignKey(Journal, on_delete=models.PROTECT)
+    volume  = models.IntegerField()
+    issue   = models.IntegerField()
+    date    = models.DateField()
+    doi     = models.TextField()
+
+class JournalPetition(models.Model):
+    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
+    name = models.TextField()
+    issn = models.TextField(max_length=9, unique=True)
+
+class ExternalAuthorPetition(models.Model):
+    doi = models.TextField()
+    first_name = models.TextField()
+    last_name  = models.TextField()
+
+class GroupPetition(models.Model):
+    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
+    name = models.TextField()
+
+class GroupAddPetition(models.Model):
+    id_researcher_owner = models.ForeignKey(Researcher, on_delete = models.CASCADE)
+    id_person_to_add = models.ForeignKey(Person, on_delete = models.CASCADE)
+    id_group = models.ForeignKey(Group, on_delete = models.SET_NULL)
+    id_petition_group = models.ForeignKey(GroupPetition, on_delete = models.SET_NULL)
+
+    def save(self, *args, **kwargs):
+       """
+
+       Checks that id_group and id_petition_group are not NULL at the same time.
+       
+       """
+       if not id_group and not id_person_group:
+           raise Exception("You can't have a group petition that points to no group.")
+       super(self, GroupAddPetition).save(*args, **kwargs)
