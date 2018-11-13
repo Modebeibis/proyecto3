@@ -182,7 +182,6 @@ class AuthorOf(models.Model):
         unique_together = (('person', 'publication'),)
 
 class ExternalAuthor(models.Model):
-    doi = models.TextField()
     first_name = models.TextField()
     last_name  = models.TextField()
     def __str__(self):
@@ -278,7 +277,6 @@ class JournalPetition(models.Model):
     issn = models.TextField(max_length=9, unique=True)
 
 class ExternalAuthorPetition(models.Model):
-    doi = models.TextField()
     first_name = models.TextField()
     last_name  = models.TextField()
 
@@ -296,7 +294,7 @@ class GroupAddPetition(models.Model):
        """
 
        Checks that id_group and id_petition_group are not NULL at the same time.
-       
+
        """
        if not id_group and not id_person_group:
            raise Exception("You can't have a group petition that points to no group.")
