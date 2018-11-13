@@ -29,7 +29,7 @@ class Person(models.Model):
     email       = models.EmailField()
     orcid       = models.TextField(unique=True)
     role        = models.ForeignKey(Role, on_delete=models.PROTECT)
-    state       = models.OneToOneField(State, on_delete=models.PROTECT)
+    state       = models.ForeignKey(State, on_delete=models.PROTECT)
 
     BACHELOR = 'BSC'
     MASTERS  = 'MSC'
