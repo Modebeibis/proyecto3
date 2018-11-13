@@ -261,7 +261,7 @@ class AffiliationPetition(models.Model):
     name = models.TextField()
     email = models.TextField()
     address = models.TextField()
-    id_super_level = models.ForeignKey(Affiliation, on_delete = models.SET_NULL)
+    id_super_level = models.ForeignKey(Affiliation, null = True, on_delete = models.SET_NULL)
 
 class PublicationPetition(models.Model):
     id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
@@ -289,8 +289,8 @@ class GroupPetition(models.Model):
 class GroupAddPetition(models.Model):
     id_researcher_owner = models.ForeignKey(Researcher, on_delete = models.CASCADE)
     id_person_to_add = models.ForeignKey(Person, on_delete = models.CASCADE)
-    id_group = models.ForeignKey(Group, on_delete = models.SET_NULL)
-    id_petition_group = models.ForeignKey(GroupPetition, on_delete = models.SET_NULL)
+    id_group = models.ForeignKey(Group, null = True, on_delete = models.SET_NULL)
+    id_petition_group = models.ForeignKey(GroupPetition, null = True, on_delete = models.SET_NULL)
 
     def save(self, *args, **kwargs):
        """
