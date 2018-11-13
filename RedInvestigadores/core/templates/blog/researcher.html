@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Investigador</title>
+    <link rel="shortcut icon" href="{% static "img/books.ico" %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,700'>
+    <link rel="stylesheet" type="text/css" href="{% static "css/styles.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="{% static "js/jquery-example.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <link href="{% static "css/personalizado.css" %}" rel="stylesheet">
+    <link href="{% static "css/starter-template.css" %}" rel="stylesheet">
+  </head>
+  <body>
+    {% block contenido %}
+    <header id = "main-header">
+      <a id="logo-header" href="#">
+        <span class="site-name">Red nacional de investigadores</span>
+      </a>
+      <nav>
+  		    <ul>
+      			<li><a href="{% url 'home' %}">Inicio</a></li>
+            <li><a href="{% url 'research' %}">Perfiles</a></li>
+      			<li><a href="{% url 'about_of' %}">Acerca de</a></li>
+      			<li><a href="{% url 'log_in' %}">Registro</a></li>
+  		    </ul>
+     </nav>
+   </header>
+   <div class="container">
+
+       <div class="row">
+           <div class="col-md-12">
+               <h1 class="page-header">Perfil de usuario
+                   <small>editando datos</small>
+               </h1>
+           </div>
+       </div>
+     </div>
+     <div class="row">
+       <div class="col-md-3">
+         <div class="col-md-12" align="center">
+           <img class="img-responsive img-portfolio img-hover" src="img/profile.jpg">
+         </div>
+         <div class="col-md-12">
+           <p class="text-center"><strong>Nombre Apellido</strong></p>
+           <p class="text-center"><em>Título del perfil de usuario</em></p>
+         </div>
+
+         <div class="col-md-12 text-center">
+              <ul class="list-unstyled list-inline list-social-icons">
+                     <li>
+                         <a href="#"><i class="editIcons icon-facebook-square editSizeIcons"></i></a>
+                     </li>
+                     <li>
+                         <a href="#"><i class="editIcons icon-linkedin-square editSizeIcons"></i></a>
+                     </li>
+                     <li>
+                         <a href="#"><i class="editIcons icon-twitter-square editSizeIcons"></i></a>
+                     </li>
+                     <li>
+                         <a href="#"><i class="editIcons icon-google-plus-square editSizeIcons"></i></a>
+                     </li>
+                 </ul>
+         </div>
+
+         <div class="col-md-12">
+           <br >
+           <ul class="list-group list-primary">
+             <a href="#" class="list-group-item">Ver perfil público</a>
+             <a href="#" class="list-group-item">Mi perfil</a>
+             <a href="#" class="list-group-item">Fotografia</a>
+             <a href="#" class="list-group-item">Cuenta</a>
+             <a href="#" class="list-group-item">Preferencias</a>
+         </ul>
+       </div>
+       </div>
+         <div class="col-md-9">
+             <div class="col-md-12" style="border-width: 1px 1px 0px 1px; border-style: solid; border-color: lightgrey;">
+                 <h3 style="text-align: center">Mi perfil <p><small>Añade información personal para compartir tu perfil</small></p></h3>
+             </div>
+             <form name="modifyProfile" id="profileForm" novalidate>
+             <div class="col-md-12" style="border-width: 1px 1px 0px 1px; border-style: solid; border-color: lightgrey; background: #f1f3f6;">
+               <div class="col-md-8 col-md-offset-2">
+
+                       <div class="control-group form-group">
+                           <div class="controls">
+                             <br >
+                               <label>Información básica</label>
+                               <span id="alertName" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                                 <input type="text" class="form-control" id="txtName" placeholder="Introduzca su nombre" required data-validation-required-message="Por favor introduzca su nomnbre.">
+                               </span>
+                               <br >
+                               <span id="alertSurname" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                                 <input type="text" class="form-control" id="txtSurname" placeholder="Introduzca sus apellidos" required data-validation-required-message="Por favor introduzca sus apellidos.">
+                               </span>
+                               <br >
+                               <span id="alertQualification" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                                 <input type="text" class="form-control" id="txtQualification" placeholder="Introduzca su título" required data-validation-required-message="Por favor introduzca su título.">
+                               </span>
+                               <br >
+                               <span id="alertEmail" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                                 <input type="email" class="form-control" id="txtEmail" placeholder="Introduzca su email" required data-validation-required-message="Por favor introduzca su email.">
+                               </span>
+                               <p class="help-block"></p>
+                           </div>
+                       </div>
+                       <div class="control-group form-group">
+                           <div class="controls">
+                               <label>Biografía:</label>
+                               <span id="alertBiography" data-toggle="popover" data-trigger="hover" data-placement="auto" title="" data-content="">
+                                 <textarea rows="6" cols="30" class="form-control" id="txtBiography" required maxlength="999" style="resize:none"
+                                 data-validation-required-message="Por favor introduzca su biografía deseada."></textarea>
+                             </span>
+                                 <br >
+                           </div>
+                       </div>
+                 </div>
+             </div>
+             <div class="col-md-12" style="border: 1px solid lightgrey; background: #e5eaf2;">
+                 <div class="col-md-8 col-md-offset-2">
+                 <div class="control-group form-group">
+                         <div class="controls">
+                           <br >
+                             <label>Enlaces:</label>
+                             <input type="text" class="form-control" id="txtMyWeb" placeholder="Introduzca su web personal o profesional">
+                             <br>
+                             <div class="input-group">
+                               <span class="input-group-addon">https://plus.google.com</span><input type="text" class="form-control" id="txtPlus" placeholder="Introduzca su usuario de Google+">
+                             </div>
+                             <br>
+                             <div class="input-group">
+                               <span class="input-group-addon">http://twitter.com</span><input type="text" class="form-control" id="txtTwitter" placeholder="Introduzca su usuario de Twitter">
+                             </div>
+                             <br>
+                             <div class="input-group">
+                               <span class="input-group-addon">https://www.facebook.com</span><input type="text" class="form-control" id="txtFacebook" placeholder="Introduzca su usuario de Facebook">
+                             </div>
+                             <br>
+                             <div class="input-group">
+                               <span class="input-group-addon">https://www.linkedin.com</span><input type="text" class="form-control" id="txtLinkedin" placeholder="Introduzca su usuario de Linkedin">
+                             </div>
+                             <br >
+                         </div>
+                     </div>
+                 </div>
+                 <!-- Fin Parte de redes sociales en el alta de perfil -->
+
+
+               <div class="col-md-12 container allFormButtons">
+                 <br >
+                   <div class="col-md-2 col-md-offset-2">
+                         <div class="form-group">
+                       <button type="button" id="btnCancel" class="btn btn-danger">Cancelar</button>
+                         </div>
+                 </div>
+                   <div class="col-md-5 col-md-offset-3">
+                         <div class="form-group">
+                         <button type="button" id="btnClean" class="btn btn-warning">Limpiar</button>
+                         <button type="submit" id="btnEnviar" class="btn btn-primary">Actualizar</button>
+                         </div>
+                     </div>
+               </div>
+             </div>
+         </form>
+         </div>
+     </div>
+     &nbsp;
+   <footer id="main-footer">
+     <p>&copy; 2018 <a href=""></a></p>
+   </footer>
+    {% endblock %}
+  </body>
+</html>
