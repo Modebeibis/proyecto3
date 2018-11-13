@@ -15,6 +15,13 @@ class Role(models.Model):
     def __str__(self):
         return self.description
 
+class State(models.Model):
+    name = models.TextField()
+    def __str__(self):
+        return self.name
+    def relative_density(self):
+        return Person.objects.filter(state=self).count()
+
 class Person(models.Model):
     first_name  = models.TextField()
     last_name   = models.TextField()
@@ -22,6 +29,7 @@ class Person(models.Model):
     email       = models.EmailField()
     orcid       = models.TextField(unique=True)
     role        = models.ForeignKey(Role, on_delete=models.PROTECT)
+    state       = models.OneToOneField(State, on_delete=models.PROTECT)
 
     BACHELOR = 'BSC'
     MASTERS  = 'MSC'
@@ -35,78 +43,6 @@ class Person(models.Model):
         max_length=3,
         choices=DEGREE_CHOICES,
         default=BACHELOR
-    )
-
-    AGUASCALIENTES      = 'AGS'
-    BAJA_CALIFORNIA     = 'BC'
-    BAJA_CALIFORNIA_SUR = 'BCS'
-    CAMPECHE            = 'CAMP'
-    CHIAPAS             = 'CHIS'
-    CHIHUAHUA           = 'CHIH'
-    CIUDAD_DE_MEXICO    = 'CDMX'
-    COAHUILA            = 'COAH'
-    COLIMA              = 'COL'
-    DURANGO             = 'DGO'
-    GUANAJUATO          = 'GTO'
-    GUERRERO            = 'GRO'
-    HIDALGO             = 'HGO'
-    JALISGO             = 'JAL'
-    MEXICO              = 'MEX'
-    MICHOACAN           = 'MICH'
-    MORELOS             = 'MOR'
-    NAYARIT             = 'NAY'
-    NUEVO_LEON          = 'NL'
-    OAXACA              = 'OAX'
-    PUEBLA              = 'PUE'
-    QUERETARO           = 'QRO'
-    QUINTANA_ROO        = 'QR'
-    SAN_LUIS_POTOSI     = 'SLP'
-    SINALOA             = 'SIN'
-    SONORA              = 'SON'
-    TABASCO             = 'TAB'
-    TAMAULIPAS          = 'TAMPS'
-    TLAXCALA            = 'TLAX'
-    VERACRUZ            = 'VER'
-    YUCATAN             = 'YUC'
-    ZACATECAS           = 'ZAC'
-    STATE_CHOICES = (
-        (AGUASCALIENTES,      'Aguascalientes'),
-        (BAJA_CALIFORNIA,     'Baja California'),
-        (BAJA_CALIFORNIA_SUR, 'Baja California Sur'),
-        (CAMPECHE,            'Campeche'),
-        (CHIAPAS,             'Chiapas'),
-        (CHIHUAHUA,           'Chihuahua'),
-        (CIUDAD_DE_MEXICO,    'Ciudad de México'),
-        (COAHUILA,            'Coahuila'),
-        (COLIMA,              'Colima'),
-        (DURANGO,             'Durango'),
-        (GUANAJUATO,          'Guanajuato'),
-        (GUERRERO,            'Guerrero'),
-        (HIDALGO,             'Hidalgo'),
-        (JALISGO,             'Jalisco'),
-        (MEXICO,              'Estado de México'),
-        (MICHOACAN,           'Michoacán'),
-        (MORELOS,             'Morelos'),
-        (NAYARIT,             'Nayarit'),
-        (NUEVO_LEON,          'Nuevo León'),
-        (OAXACA,              'Oaxaca'),
-        (PUEBLA,              'Puebla'),
-        (QUERETARO,           'Querétaro'),
-        (QUINTANA_ROO,        'Quintana Roo'),
-        (SAN_LUIS_POTOSI,     'San Luis Potosí'),
-        (SINALOA,             'Sinaloa'),
-        (SONORA,              'Sonora'),
-        (TABASCO,             'Tabasco'),
-        (TAMAULIPAS,          'Tamaulipas'),
-        (TLAXCALA,            'Tlaxcala'),
-        (VERACRUZ,            'Veracruz'),
-        (YUCATAN,             'Yucatán'),
-        (ZACATECAS,           'Zacatecas'),
-    )
-    state = models.CharField(
-        max_length=4,
-        choices=STATE_CHOICES,
-        default=CIUDAD_DE_MEXICO
     )
 
     NOT_A_MEMBER = 'N'
