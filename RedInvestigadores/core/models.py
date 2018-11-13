@@ -2,10 +2,10 @@ from django.db import models
 
 class Affiliation(models.Model):
     name        = models.TextField()
-    super_level = models.ForeignKey('self', on_delete=models.CASCADE)
+    super_level = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
     address     = models.TextField()
     def __str__(self):
-        if self.id < 3:
+        if self.super_level is None:
             return self.name
         else:
             return '%s - %s' % (self.super_level.__str__(), self.name)

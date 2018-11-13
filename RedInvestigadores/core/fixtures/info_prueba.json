@@ -3,26 +3,16 @@
     "model": "core.affiliation",
     "pk": 1,
     "fields": {
-      "name": "Base",
-      "super_level": 1,
-      "address": ""
+      "name": "Centro de Investigación y de Estudios Avanzados del IPN",
+      "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
     }
   },
   {
     "model": "core.affiliation",
     "pk": 2,
     "fields": {
-      "name": "Centro de Investigación y de Estudios Avanzados del IPN",
-      "super_level": 1,
-      "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
-    }
-  },
-  {
-    "model": "core.affiliation",
-    "pk": 3,
-    "fields": {
       "name": "Departamento de Computación",
-      "super_level": 2,
+      "super_level": 1,
       "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
     }
   },
