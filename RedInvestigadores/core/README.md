@@ -28,11 +28,11 @@ DATABASES = {
 
 Migrar la base de datos y cargar algunos datos de prueba:
 ```Bash
-$ python manage.py migrate
-$ python manage.py makemigrations core
-$ python manage.py sqlmigrate core 0001
-$ python manage.py migrate
-& python manage.py loaddata info_prueba
+$ python3 manage.py migrate
+$ python3 manage.py makemigrations core
+$ python3 manage.py sqlmigrate core 0001
+$ python3 manage.py migrate
+& python3 manage.py loaddata info_prueba
 ```
 
 No debería de haberse copiado ningun archido de migración al repositorio,
