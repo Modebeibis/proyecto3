@@ -77,22 +77,6 @@ class PersonRole(models.Model):
 
 class Administrator(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
-
-# class AffiliationSublevel(models.Model):
-#     sub = models.ForeignKey(
-#         Affiliation,
-#         related_name='sub',
-#         on_delete=models.CASCADE
-#     )
-#     super = models.ForeignKey(
-#         Affiliation,
-#         related_name='super',
-#         on_delete=models.CASCADE
-#         )
-#
-#     class Meta:
-#         unique_together = (('super', 'sub'),)
 
 class Journal(models.Model):
     name = models.TextField(unique=True)
@@ -135,7 +119,6 @@ class AuthorOfExternal(models.Model):
 
 class Researcher(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
 
 class Grant(models.Model):
     responsible = models.ForeignKey(Researcher, on_delete=models.CASCADE)
@@ -173,11 +156,9 @@ class GroupMember(models.Model):
 
 class Postdoc(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
 
 class Student(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
 
 class StudentOf(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -188,8 +169,7 @@ class StudentOf(models.Model):
 
 class UserPetition(models.Model):
     name = models.TextField()
-    first_surname = models.TextField()
-    second_surname = models.TextField()
+    last_name = models.TextField()
     email = models.TextField()
 
 class AffiliationPetition(models.Model):
@@ -213,6 +193,7 @@ class JournalPetition(models.Model):
     issn = models.TextField(max_length=9, unique=True)
 
 class ExternalAuthorPetition(models.Model):
+    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
     first_name = models.TextField()
     last_name  = models.TextField()
 
