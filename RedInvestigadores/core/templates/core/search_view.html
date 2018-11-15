@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="utf-8">
+    <title>Busqueda</title>
+    <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_53775_53775.ico" %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,700'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+    {% block css %}
+    <style type="text/css">
+      html {
+        box-sizing: border-box;
+      }
+      *, *:before, *:after {
+        box-sizing: inherit;
+      }
+
+      body {
+        font-family: 'Droid Sans', sans-serif;
+        background:#f2f2f2;
+        font-size:14px;
+        line-height:21px;
+      }
+
+      .container {
+        width: 960px;
+        margin:20px auto;
+      }
+
+      @media only screen and (min-width: 768px) and (max-width: 1000px) {
+        .container {
+          width: 768px;
+        }
+      }
+      @media only screen and (max-width: 767px) {
+        .container {
+          width: 420px;
+        }
+      }
+      @media only screen and (max-width: 480px) {
+        .container {
+          width: 300px;
+        }
+      }
+
+      a img {
+        border:none;
+      }
+
+      h1, h2, h3, h4, h5, h6{
+        font-weight:normal;
+      }
+      h1{
+        font-size:26px;
+        line-height:32px;
+      }
+      p, ul{
+        margin-bottom:10px;
+      }
+
+    </style>
+    {% endblock %}
+  </head>
+
+  <body>
+    {% block contenido %}
+    <header id = "main-header">
+      <a id="logo-header" href="#">
+        <span class="site-name">Red nacional de investigadores</span>
+      </a>
+      <nav>
+  		    <ul>
+      			<li><a href="{% url 'home' %}">Inicio</a></li>
+            <li><a href="{% url 'research' %}">Perfiles</a></li>
+      			<li><a href="{% url 'about_of' %}">Acerca de</a></li>
+      			<li><a href="{% url 'log_in' %}">Registro</a></li>
+  		    </ul>
+     </nav>
+   </header>
+    <footer id="main-footer">
+      <p>&copy; 2018 <a href=""></a></p>
+    </footer>
+    <!--Comentario de separacion -->
+
+
+
+
+    {% endblock %}
+  </body>
+
+</html>
