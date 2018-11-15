@@ -1,5 +1,9 @@
 from django_seed import Seed
-from core.models import Affiliation, Person, Journal
+from core.models import Affiliation, Person, PersonRole, Administrator, Journal, Publication
+from core.models import AuthorOf, ExternalAuthor, AuthorOfExternal, Researcher, Grant
+from core.models import GrantParticipant, Group, GroupMember, Postdoc, Student, StudentOf
+from core.models import UserPetition, AffiliationPetition, PublicationPetition, JournalPetition
+from core.models import ExternalAuthorPetition, GroupPetition, GroupAddPetition
 
 from random import randint
 
@@ -15,13 +19,13 @@ seeder.add_entity(Affiliation, 10, {
 
 seeder.add_entity(Affiliation, 25, {
     'name': lambda x, seeder = seeder: seeder.faker.company(),
-    'super_level': lambda x: randint(1, 10),
+    'super_level': lambda x, randint = randint: randint(1, 10),
     'address': lambda x, seeder = seeder: seeder.faker.address(),
 })
 
 seeder.add_entity(Affiliation, 35, {
     'name': lambda x, seeder = seeder: seeder.faker.company(),
-    'super_level': lambda x: randint(10, 35),
+    'super_level': lambda x, randint = randint: randint(10, 35),
     'address': lambda x, seeder = seeder: seeder.faker.address(),
 })
 
@@ -30,7 +34,7 @@ seeder.add_entity(Affiliation, 35, {
 seeder.add_entity(Person, 500, {
     'first_name': lambda x, seeder = seeder: seeder.faker.first_name(),
     'last_name': lambda x, seeder = seeder: seeder.faker.first_name(),
-    'affiliation': lambda x, seeder = seeder: randint(1, 70),
+    'affiliation': lambda x, randint = randint: randint(1, 70),
     'email': lambda x, seeder = seeder: seeder.faker.email(),
     'orcid': lambda x, seeder = seeder: seeder.faker.isbn10(),
     'role': lambda x, seeder = seeder: randint(1, 4),
@@ -97,7 +101,7 @@ for i in range(351, 501):
 
 ## Grant Seeder ##
 seeder.add_entity(Grant, 100, {
-    'responsible': lambda x: randint(1, 350),
+    'responsible': lambda x, randint = randint: randint(1, 350),
     'title': lambda x, seeder = seeder: seeder.faker.username(),
     'start_date': lambda x, seeder = seeder: seeder.faker.date_time(),
     'end_date': lambda x, seeder = seeder: seeder.faker.date_time(),
@@ -106,8 +110,8 @@ seeder.add_entity(Grant, 100, {
 ## GrantParticipant Seeder ##
 
 seeder.add_entity(Grant, 100, {
-    'person': lambda x: randint(1, 500),
-    'grant': lambda x: randint(1, 100),
+    'person': lambda x, randint = randint: randint(1, 500),
+    'grant': lambda x, randint = randint: randint(1, 100),
 })
 
 ## Journal Seeder ##
@@ -121,16 +125,16 @@ seeder.add_entity(Journal, 50, {
 
 seeder.add_entity(Publication, 1000, {
     'title': lambda x, seeder = seeder: seeder.faker.sentence(),
-    'journal': lambda x, seeder = seeder: randint(1, 50),
-    'volume': lambda x, seeder = seeder: randint(1, 200),
+    'journal': lambda x, randint = randint: randint(1, 50),
+    'volume': lambda x, randint = randint: randint(1, 200),
     'issue': lambda x, seeder = seeder: seeder.faker.paragraph(),
     'date': lambda x, seeder = seeder: seeder.faker.date(),
     'doi': lambda x, seeder = seeder: seeder.faker.isbn10(),
 })
 
 seeder.add_entity(AuthorOf, 1000, {
-    'person': lambda x, seeder = seeder: randint(1, 500),
-    'publication': lambda x, seeder = seeder: randint(1, 1000),
+    'person': lambda x, randint = randint: randint(1, 500),
+    'publication': lambda x, randint = randint: randint(1, 1000),
 })
 
 seeder.add_entity(ExternalAuthor, 20, {
@@ -139,21 +143,21 @@ seeder.add_entity(ExternalAuthor, 20, {
 })
 
 seeder.add_entity(AuthorOfExternal, 100, {
-    'author': lambda x, seeder = seeder: randint(1, 20),
-    'publication': lambda x, seeder = seeder: randint(1, 1000),
+    'author': lambda x, randint = randint: randint(1, 20),
+    'publication': lambda x, randint = randint: randint(1, 1000),
 })
 
 ## Group Seeder ##
 
 seeder.add_entity(Group, 300, {
     'name': lambda x, seeder = seeder: seeder.faker.username(),
-    'owner': lambda x, seeder = seeder: randint(1, 500),
+    'owner': lambda x, randint = randint: randint(1, 500),
 })
 
-seeder.add_entity(GroupMember, 50) {
-    'group': lambda x, seeder = seeder: randint(1, 300),
-    'person': lambda x, seeder = seeder: randint(1, 500),
-}
+seeder.add_entity(GroupMember, 50, {
+    'group': lambda x, randint = randint: randint(1, 300),
+    'person': lambda x, randint = randint: randint(1, 500),
+})
 
 ## Petitions ##
 
@@ -179,8 +183,8 @@ seeder.add_entity(AffiliationPetition, 200, {
 seeder.add_entity(PublicationPetition, 300, {
     'id_researcher': lambda x: randint(1, 350),
     'title': lambda x, seeder = seeder: seeder.faker.sentence(),
-    'journal': lambda x, seeder = seeder: randint(1, 50),
-    'volume': lambda x, seeder = seeder: randint(1, 200),
+    'journal': lambda x, randint = randint: randint(1, 50),
+    'volume': lambda x, randint = randint: randint(1, 200),
     'issue': lambda x, seeder = seeder: seeder.faker.paragraph(),
     'date': lambda x, seeder = seeder: seeder.faker.date(),
     'doi': lambda x, seeder = seeder: seeder.faker.isbn10(),
@@ -188,21 +192,21 @@ seeder.add_entity(PublicationPetition, 300, {
 
 ### JournalPetition ###
 seeder.add_entity(JournalPetition, 50, {
-    'id_researcher': lambda x: randint(1, 350),
+    'id_researcher': lambda x, randint = randint: randint(1, 350),
     'name': lambda x, seeder = seeder: seeder.faker.username(),
     'issn': lambda x, seeder = seeder: seeder.faker.isbn10()
 })
 
 ### ExternalAuthorPetition ###
 seeder.add_entity(ExternalAuthorPetition, 20, {
-    'id_researcher': lambda x: randint(1, 350),
+    'id_researcher': lambda x, randint = randint: randint(1, 350),
     'first_name': lambda x, seeder = seeder: seeder.faker.first_name(),
     'last_name': lambda x, seeder = seeder: seeder.faker.first_name(),
 })
 
 ### GroupPetition ###
 seeder.add_entity(ExternalAuthorPetition, 150, {
-    'id_researcher': lambda x: randint(1, 350),
+    'id_researcher': lambda x, randint = randint: randint(1, 350),
     'name': lambda x, seeder = seeder: seeder.faker.username(),
 })
 
