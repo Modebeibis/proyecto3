@@ -3,15 +3,15 @@
   {% load static %}
   <head>
     <meta charset="utf-8">
-    <title>Home</title>
-    <link rel="shortcut icon" href="img/keyword-research_icon-icons.com_53775_53775.ico">
+    <title>Busqueda</title>
+    <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_53775_53775.ico" %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,700'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
     {% block css %}
     <style type="text/css">
       html {
@@ -65,13 +65,11 @@
       }
 
     </style>
-   {% endblock %}
-
-
+    {% endblock %}
   </head>
 
   <body>
-   {% block contenido %}
+    {% block contenido %}
     <header id = "main-header">
       <a id="logo-header" href="#">
         <span class="site-name">Red nacional de investigadores</span>
@@ -85,11 +83,15 @@
   		    </ul>
      </nav>
    </header>
-    {% endblock %}
     <footer id="main-footer">
       <p>&copy; 2018 <a href=""></a></p>
     </footer>
-	 {% endblock %}
+    <!--Comentario de separacion -->
+
+
+
+
+    {% endblock %}
   </body>
 
 </html>

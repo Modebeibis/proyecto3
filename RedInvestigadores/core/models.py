@@ -15,12 +15,31 @@ class Role(models.Model):
     def __str__(self):
         return self.description
 
+class StateManager(models.Manager):
+    def max_population(self):
+        '''
+
+        Calculates the maximum population of researchers/postdocs in the states.
+
+        '''
+        max = 0
+        current = 0
+        for state in State.objects.all():
+            current = state.population()
+            if current > max:
+                max = state.population()
+        return max
+
 class State(models.Model):
     name = models.TextField()
+    objects = StateManager()
     def __str__(self):
         return self.name
-    def relative_density(self):
+    def population(self):
         return Person.objects.filter(state=self).count()
+    def relative_density(self):
+        pop = self.population()
+        return pop / State.objects.max_population()
 
 class Person(models.Model):
     first_name  = models.TextField()
@@ -29,7 +48,7 @@ class Person(models.Model):
     email       = models.EmailField()
     orcid       = models.TextField(unique=True)
     role        = models.ForeignKey(Role, on_delete=models.PROTECT)
-    state       = models.ForeignKey(State, on_delete=models.PROTECT)
+    state       = models.OneToOneField(State, on_delete=models.PROTECT)
 
     BACHELOR = 'BSC'
     MASTERS  = 'MSC'
@@ -185,53 +204,3 @@ class StudentOf(models.Model):
 
     class Meta:
         unique_together = (('student', 'tutor'),)
-
-class UserPetition(models.Model):
-    name = models.TextField()
-    first_surname = models.TextField()
-    second_surname = models.TextField()
-    email = models.TextField()
-
-class AffiliationPetition(models.Model):
-    name = models.TextField()
-    email = models.TextField()
-    address = models.TextField()
-    id_super_level = models.ForeignKey(Affiliation, null = True, on_delete = models.SET_NULL)
-
-class PublicationPetition(models.Model):
-    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
-    title   = models.TextField()
-    journal = models.ForeignKey(Journal, on_delete=models.PROTECT)
-    volume  = models.IntegerField()
-    issue   = models.IntegerField()
-    date    = models.DateField()
-    doi     = models.TextField()
-
-class JournalPetition(models.Model):
-    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
-    name = models.TextField()
-    issn = models.TextField(max_length=9, unique=True)
-
-class ExternalAuthorPetition(models.Model):
-    first_name = models.TextField()
-    last_name  = models.TextField()
-
-class GroupPetition(models.Model):
-    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
-    name = models.TextField()
-
-class GroupAddPetition(models.Model):
-    id_researcher_owner = models.ForeignKey(Researcher, on_delete = models.CASCADE)
-    id_person_to_add = models.ForeignKey(Person, on_delete = models.CASCADE)
-    id_group = models.ForeignKey(Group, null = True, on_delete = models.SET_NULL)
-    id_petition_group = models.ForeignKey(GroupPetition, null = True, on_delete = models.SET_NULL)
-
-    def save(self, *args, **kwargs):
-       """
-
-       Checks that id_group and id_petition_group are not NULL at the same time.
-
-       """
-       if not id_group and not id_person_group:
-           raise Exception("You can't have a group petition that points to no group.")
-       super(self, GroupAddPetition).save(*args, **kwargs)
