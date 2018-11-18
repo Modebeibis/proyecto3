@@ -23,12 +23,12 @@
       "first_name": "César",
       "last_name": "Hernández Cruz",
       "orcid": "https://orcid.org/0000-0002-5867-3801",
-      "email": "japo@ciencias.unam.mx",
       "affiliation": 2,
       "degree": "PHD",
       "role": 3,
       "state": 7,
-      "sni": "2"
+      "sni": "2",
+      "user": 1
     }
   }
 ]

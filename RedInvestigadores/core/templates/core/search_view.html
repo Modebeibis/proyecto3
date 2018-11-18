@@ -71,7 +71,7 @@
   <body>
     {% block contenido %}
     <header id = "main-header">
-      <a id="logo-header" href="#">
+      <a id="logo-header" href="{% url 'home' %}">
         <span class="site-name">Red nacional de investigadores</span>
       </a>
       <nav>
@@ -79,7 +79,11 @@
       			<li><a href="{% url 'home' %}">Inicio</a></li>
             <li><a href="{% url 'research' %}">Perfiles</a></li>
       			<li><a href="{% url 'about_of' %}">Acerca de</a></li>
-      			<li><a href="{% url 'log_in' %}">Registro</a></li>
+            {% if user.is_authenticated %}
+              <li><a href="{% url 'logout' %}">Salir</a></li>
+            {% else %}
+              <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
+            {% endif %}
   		    </ul>
      </nav>
    </header>
