@@ -206,13 +206,3 @@ class GroupAddPetition(models.Model):
     id_person_to_add = models.ForeignKey(Person, on_delete = models.CASCADE)
     id_group = models.ForeignKey(Group, null = True, on_delete = models.SET_NULL)
     id_petition_group = models.ForeignKey(GroupPetition, null = True, on_delete = models.SET_NULL)
-
-    def save(self, *args, **kwargs):
-       """
-
-       Checks that id_group and id_petition_group are not NULL at the same time.
-
-       """
-       if not id_group and not id_person_group:
-           raise Exception("You can't have a group petition that points to no group.")
-       super(self, GroupAddPetition).save(*args, **kwargs)
