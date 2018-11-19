@@ -1,0 +1,34 @@
+[
+  {
+    "model": "core.affiliation",
+    "pk": 1,
+    "fields": {
+      "name": "Centro de Investigación y de Estudios Avanzados del IPN",
+      "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
+    }
+  },
+  {
+    "model": "core.affiliation",
+    "pk": 2,
+    "fields": {
+      "name": "Departamento de Computación",
+      "super_level": 1,
+      "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
+    }
+  },
+  {
+    "model": "core.person",
+    "pk": 1,
+    "fields": {
+      "first_name": "César",
+      "last_name": "Hernández Cruz",
+      "orcid": "https://orcid.org/0000-0002-5867-3801",
+      "affiliation": 2,
+      "degree": "PHD",
+      "role": 3,
+      "state": 7,
+      "sni": "2",
+      "user": 1
+    }
+  }
+]

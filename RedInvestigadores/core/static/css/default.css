@@ -1,0 +1,222 @@
+
+/*********************************************************************************/
+/* Image Style                                                                   */
+/*********************************************************************************/
+
+.image
+{
+	display: inline-block;
+}
+
+.image img
+{
+	display: block;
+	width: 100%;
+}
+
+.image-full
+{
+	display: block;
+	width: 100%;
+	margin: 0 0 2em 0;
+}
+
+.image-left
+{
+	float: left;
+	margin: 0 2em 2em 0;
+}
+
+.image-centered
+{
+	display: block;
+	margin: 0 0 2em 0;
+}
+
+.image-centered img
+{
+	margin: 0 auto;
+	width: auto;
+}
+
+
+/*********************************************************************************/
+/* Button Style                                                                  */
+/*********************************************************************************/
+
+.button
+{
+	display: inline-block;
+	padding: 1em 2em 1em 2em;
+	letter-spacing: 0.10em;
+	margin-top: 2em;
+	padding: 1.40em 3em;
+	border: 2px solid rgba(255,255,255,1);
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 1em;
+	color: #FFF;
+}
+
+.button-alt
+{
+	padding: 1em 2em;
+	border-color: rgba(0,0,0,.8);
+	color: rgba(0,0,0,.8);
+}
+
+/*********************************************************************************/
+/* 4-column                                                                      */
+/*********************************************************************************/
+
+.box1,
+.box2,
+.box3,
+.box4
+{
+	width: 235px;
+}
+
+.box1,
+.box2,
+.box3,
+{
+	float: left;
+	margin-right: 20px;
+}
+
+.box4
+{
+	float: right;
+}
+
+/*********************************************************************************/
+/* 3-column                                                                      */
+/*********************************************************************************/
+
+.boxA
+{
+	float: left;
+	padding: 10px;
+  margin: 10px;
+
+  /* IMPORTANTE */
+  display: inline-block;
+}
+
+.boxA p
+{
+	font-size: 3em;
+}
+
+.boxB
+{
+	float:  inherit;
+	padding: 10px;
+  margin: 10px;
+
+  /* IMPORTANTE */
+  display: inline-block;
+}
+
+.boxB p
+{
+	font-size: 3em;
+}
+
+.boxC
+{
+	float: right;
+	padding: 10px;
+  margin: 10px;
+
+  /* IMPORTANTE */
+  display: inline-block;
+}
+
+.boxC p
+{
+	font-size: 3em;
+}
+
+/*********************************************************************************/
+/* Heading Titles                                                                */
+/*********************************************************************************/
+
+.title
+{
+	margin-bottom: 3em;
+}
+
+.title h2
+{
+	font-size: 4em;
+}
+
+.title .byline
+{
+	font-size: 4em;
+	color: rgba(255,255,255,0.60);
+}
+
+/*********************************************************************************/
+/* Header                                                                        */
+/*********************************************************************************/
+
+#wrapper
+{
+	position: relative;
+	padding: 5em 0em 7em 0em;
+	background: #FFF;
+	text-align: center;
+}
+
+/*********************************************************************************/
+/* Header                                                                        */
+/*********************************************************************************/
+
+#header-wrapper
+{
+	position: relative;
+	padding: 5em 0em 7em 0em;
+	background: #111111 url(images/header-bg.jpg) no-repeat center;
+	background-size: cover;
+}
+
+#header
+{
+	position: relative;
+	padding: 5em 0em;
+}
+
+
+/*********************************************************************************/
+/* Extra                                                                         */
+/*********************************************************************************/
+
+#three-column
+{
+	text-align: center;
+	color: rgba(0,0,0,0.6);
+}
+
+#three-column .fa
+{
+	display: block;
+	padding: 1em 0em;
+	color: rgba(0,0,0,1);
+	font-size: 6em;
+}
+
+#three-column .title h2
+{
+	font-weight: bold;
+	color: rgba(0,0,0,0.8);
+}
+
+#three-column .title .byline
+{
+	text-align: center;
+	color: rgba(0,0,0,.5);
+}
