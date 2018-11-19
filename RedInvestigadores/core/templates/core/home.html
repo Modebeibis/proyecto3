@@ -3,6 +3,7 @@
   {% load static %}
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <title>Home</title>
     <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_53775_53775.ico" %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -85,7 +86,7 @@
       <nav>
   		    <ul>
       			<li><a href="{% url 'home' %}">Inicio</a></li>
-            <li><a href="{% url 'research' %}">Perfiles</a></li>
+            <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
       			<li><a href="{% url 'about_of' %}">Acerca de</a></li>
             {% if user.is_authenticated %}
               <li><a href="{% url 'logout' %}">Salir</a></li>

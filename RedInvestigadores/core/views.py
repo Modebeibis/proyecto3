@@ -20,3 +20,6 @@ def about_of(request):
 
 def search_view(request):
     return render(request, 'core/search_view.html')
+
+def list_profiles(request):
+    return render(request, 'core/list_profiles.html')
