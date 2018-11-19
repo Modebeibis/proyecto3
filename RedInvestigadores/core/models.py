@@ -1,4 +1,6 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 class Affiliation(models.Model):
     name        = models.TextField()
@@ -41,14 +43,22 @@ class State(models.Model):
         pop = self.population()
         return pop / State.objects.max_population()
 
+class CustomUser(AbstractUser):
+    email    = models.EmailField(_('email address'), unique=True)
+    username = models.TextField(max_length=30, unique=True)
+    password = models.TextField()
+
+    def __str__(self):
+        return self.email
+
 class Person(models.Model):
     first_name  = models.TextField()
     last_name   = models.TextField()
-    affiliation = models.ForeignKey(Affiliation, on_delete=models.PROTECT)
-    email       = models.EmailField()
+    affiliation = models.ForeignKey(Affiliation, default=1, on_delete=models.PROTECT)
     orcid       = models.TextField(unique=True)
-    role        = models.ForeignKey(Role, on_delete=models.PROTECT)
-    state       = models.OneToOneField(State, on_delete=models.PROTECT)
+    role        = models.ForeignKey(Role, default=1, on_delete=models.PROTECT)
+    state       = models.OneToOneField(State, default=1, on_delete=models.PROTECT)
+    user        = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
     BACHELOR = 'BSC'
     MASTERS  = 'MSC'
@@ -97,21 +107,6 @@ class PersonRole(models.Model):
 class Administrator(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
     role   = models.ForeignKey(Role, on_delete=models.PROTECT)
-
-# class AffiliationSublevel(models.Model):
-#     sub = models.ForeignKey(
-#         Affiliation,
-#         related_name='sub',
-#         on_delete=models.CASCADE
-#     )
-#     super = models.ForeignKey(
-#         Affiliation,
-#         related_name='super',
-#         on_delete=models.CASCADE
-#         )
-#
-#     class Meta:
-#         unique_together = (('super', 'sub'),)
 
 class Journal(models.Model):
     name = models.TextField(unique=True)

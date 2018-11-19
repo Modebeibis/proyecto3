@@ -1,10 +1,16 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views import generic
+
+from .forms import CustomUserCreationForm
+
+class SignUp(generic.CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'login.html'
 
 def home(request):
     return render(request, 'core/home.html')
-
-def log_in(request):
-    return render(request, 'core/log_in.html')
 
 def research(request):
     return render(request, 'core/researcher.html')
@@ -14,3 +20,12 @@ def about_of(request):
 
 def search_view(request):
     return render(request, 'core/search_view.html')
+
+def list_profiles(request):
+    return render(request, 'core/list_profiles.html')
+
+def profile(request):
+    return render(request, 'core/profile.html')
+
+def sedes(request):
+    return render(request, 'core/sedes.html')

@@ -13,63 +13,7 @@
     <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
-    {% block css %}
-    <style type="text/css">
-    .demo, .demo-2 {
-        position:relative;
-        height:100px;
-        width:500px;
-      }
-      .demo .form-search, .demo-2 .form-search {
-        position:absolute;
-        right:0px;
-        top:0px;
-      }
-      .demo .form-search input[type=text],
-      .demo-2 .form-search input[type=text] {
-        -webkit-appearance: textfield;
-        -webkit-box-sizing: content-box;
-        font-family: inherit;
-        font-size: 100%;
-        border: solid 1px #ccc;
-        padding: 9px 18px;
-        width: 200px;
-        -webkit-transition: all .5s;
-        -moz-transition: all .5s;
-        transition: all .5s;
-      }
-      .demo-2 .form-search input[type=text] {
-        width:60px;
-        position:absolute;
-        right:0px;
-        z-index:1000;
-        padding:8px 12px;
-        cursor:pointer;
-      }
-      .demo-2 .form-search div.input-group {
-        width:60px;
-      }
-      .demo .form-search input[type=text]:focus {
-        width: 350px;
-        background-color: #fff;
-      }
-      .demo-2 .form-search input[type=text]:focus {
-        position:absolute;
-        right:60px;
-        width:250px;
-      }
-      .demo .form-search button.btn,
-      .demo-2 .form-search button.btn {
-        padding:16px 12px;
-        border-top-right-radius:4px;
-        border-bottom-right-radius: 4px;
-        cursor:not-allowed;
-      }
-      .demo-2 .form-search button.btn {
-      padding:15px 12px;
-      }
-    </style>
-    {% endblock %}
+  
   </head>
 
   <body>
@@ -92,14 +36,7 @@
      </nav>
    </header>
 
-   <div class="demo">
-  <form class="form-search">
-    <div class="input-group">
-      <input class="form-control form-text" maxlength="128" placeholder="Buscar" size="15" type="text" />
-      <span class="input-group-btn"><button class="btn btn-primary"><i class="fa fa-search fa-lg">&nbsp;</i></button></span>
-    </div>
-  </form>
-</div>
+
 
     <footer id="main-footer">
       <p>&copy; 2018 <a href=""></a></p>

@@ -17,16 +17,19 @@
   <body>
     {% block contenido %}
     <header id = "main-header">
-      <a id="logo-header" href="#">
+      <a id="logo-header" href="{% url 'home' %}">
         <span class="site-name">Red nacional de investigadores</span>
       </a>
       <nav>
   		    <ul>
-
               <li><a href="{% url 'home' %}">Inicio</a></li>
-              <li><a href="{% url 'research' %}">Perfiles</a></li>
+              <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
               <li><a href="{% url 'about_of' %}">Acerca de</a></li>
-              <li><a href="{% url 'log_in' %}">Registro</a></li>
+              {% if user.is_authenticated %}
+                <li><a href="{% url 'logout' %}">Salir</a></li>
+              {% else %}
+                <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
+              {% endif %}
   		    </ul>
      </nav>
    </header>
@@ -57,14 +60,18 @@
                           <input type="text" placeholder="Escribe algo" name="nombre" id="nombre"><br><br>
                           <label for="pwd">Ingresa tu contraseña: </label>
                           <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"> <br>
-                          <button type="button" name="button" id="button">Entrar</button>
+                          <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" name="button" id="button">Entrar</button>
+                          </form>
                       </p>
                     </div>
                     </div>
                   </div>
             </div>
 
-            <div class="tab-pane  fade" id="tabBody4" role="tabpanel" aria-labelledby="tab4" aria-hidden="true" tabindex="0">
+            <div class="tab-pane  fade" id="tabBody1" role="tabpanel" aria-labelledby="tab1" aria-hidden="true" tabindex="1">
               <div class="row">
                 <div class="col-md-12">
             			<h2>¿No tienes cuenta?</h2>
@@ -85,8 +92,11 @@
                           <option value="2">Investigador</option>
                           <option value="3">Posdoctorado</option>
                         </select><br><br>
-                        <button type="button" name="button" id="button">Registrarse</button>
-                      </form>
+                        <form method="post">
+                          {% csrf_token %}
+                          {{ form.as_p }}
+                          <button type="submit">Registrarse</button>
+                        </form>
                     </p>
                 </div>
               </div>
