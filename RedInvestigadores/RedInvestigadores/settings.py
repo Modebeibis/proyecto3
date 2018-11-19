@@ -72,6 +72,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'RedInvestigadores.wsgi.application'
 
+# User authentication
+AUTH_USER_MODEL = 'core.CustomUser'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -133,3 +135,6 @@ STATICFILES_FINDERS = (
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
