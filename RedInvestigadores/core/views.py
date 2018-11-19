@@ -23,3 +23,6 @@ def search_view(request):
 
 def list_profiles(request):
     return render(request, 'core/list_profiles.html')
+
+def profile(request):
+    return render(request, 'core/profile.html')
