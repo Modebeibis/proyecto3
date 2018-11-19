@@ -1,236 +1,56 @@
-from django_seed import Seed
-from core.models import Affiliation, Person, PersonRole, Administrator, Journal, Publication
-from core.models import AuthorOf, ExternalAuthor, AuthorOfExternal, Researcher, Grant
-from core.models import GrantParticipant, Group, GroupMember, Postdoc, Student, StudentOf
-from core.models import UserPetition, AffiliationPetition, PublicationPetition, JournalPetition
-from core.models import ExternalAuthorPetition, GroupPetition, GroupAddPetition
+from core.seeds.AffiliationSeeder import AffiliationSeeder
+from core.seeds.PersonSeeder import PersonSeeder
+from core.seeds.GrantSeeder import GrantSeeder
+from core.seeds.JournalSeeder import JournalSeeder
+from core.seeds.PublicationSeeder import PublicationSeeder
+from core.seeds.GroupSeeder import GroupSeeder
+from core.seeds.PetitionSeeder import PetitionSeeder
 
-from random import randint
-
-seeder = Seed.seeder()
-
-## Affiliation Seeder ##
-
-seeder.add_entity(Affiliation, 10, {
-    'name': lambda x, seeder = seeder: seeder.faker.company(),
-    'super_level': lambda x: None,
-    'address': lambda x, seeder = seeder: seeder.faker.address(),
-})
-
-seeder.add_entity(Affiliation, 25, {
-    'name': lambda x, seeder = seeder: seeder.faker.company(),
-    'super_level': lambda x, randint = randint: randint(1, 10),
-    'address': lambda x, seeder = seeder: seeder.faker.address(),
-})
-
-seeder.add_entity(Affiliation, 35, {
-    'name': lambda x, seeder = seeder: seeder.faker.company(),
-    'super_level': lambda x, randint = randint: randint(10, 35),
-    'address': lambda x, seeder = seeder: seeder.faker.address(),
-})
-
-## Person Seeder ##
-
-seeder.add_entity(Person, 500, {
-    'first_name': lambda x, seeder = seeder: seeder.faker.first_name(),
-    'last_name': lambda x, seeder = seeder: seeder.faker.first_name(),
-    'affiliation': lambda x, randint = randint: randint(1, 70),
-    'email': lambda x, seeder = seeder: seeder.faker.email(),
-    'orcid': lambda x, seeder = seeder: seeder.faker.isbn10(),
-    'role': lambda x, seeder = seeder: randint(1, 4),
-    'state': lambda x, seeder = seeder: randint(1, 29),
-})
-
-## Role Seeder ##
-### Admin ###
-for i in range(25):
-    r = randint(1, 350)
-
-    seeder.add_entity(PersonRole, 1, {
-        'person': lambda x, r = r: r,
-        'role': lambda x: 4,
-    })
-
-    seeder.add_entity(Administrator, 1, {
-        'person': lambda x, r = r: r,
-    })
-
-### Researcher ###
-for i in range(350):
-
-    seeder.add_entity(PersonRole, 1, {
-        'person': lambda x, i = i: i,
-        'role': lambda x: 3,
-    })
-
-    seeder.add_entity(Researcher, 1, {
-        'person': lambda x, i = i: i,
-    })
-
-### Postdoc ###
-for i in range(150):
-    r = randint(1, 500)
-
-    seeder.add_entity(PersonRole, 1, {
-        'person': lambda x, r = r: r,
-        'role': lambda x: 2,
-    })
-
-    seeder.add_entity(Postdoc, 1, {
-        'person': lambda x, r = r: r,
-    })
-### Student ###
-for i in range(351, 501):
-    seeder.add_entity(PersonRole, 1, {
-        'person': lambda x, i = i: i,
-        'role': lambda x: 1,
-    })
-
-    seeder.add_entity(Student, 1, {
-        'person': lambda x, i = i: i,
-    })
-
-#### StudentOf ####
-for i in range(351, 501):
-    r = randint(1, 350)
-
-    seeder.add_entity(StudentOf, 1, {
-        'student': lambda x, i = i: i,
-        'tutor': lambda x, r = r: r,
-    })
-
-## Grant Seeder ##
-seeder.add_entity(Grant, 100, {
-    'responsible': lambda x, randint = randint: randint(1, 350),
-    'title': lambda x, seeder = seeder: seeder.faker.username(),
-    'start_date': lambda x, seeder = seeder: seeder.faker.date_time(),
-    'end_date': lambda x, seeder = seeder: seeder.faker.date_time(),
-})
-
-## GrantParticipant Seeder ##
-
-seeder.add_entity(Grant, 100, {
-    'person': lambda x, randint = randint: randint(1, 500),
-    'grant': lambda x, randint = randint: randint(1, 100),
-})
-
-## Journal Seeder ##
-
-seeder.add_entity(Journal, 50, {
-    'name': lambda x, seeder = seeder: seeder.faker.username(),
-    'issn': lambda x, seeder = seeder: seeder.faker.isbn10()
-})
-
-## Publication Seeder ##
-
-seeder.add_entity(Publication, 1000, {
-    'title': lambda x, seeder = seeder: seeder.faker.sentence(),
-    'journal': lambda x, randint = randint: randint(1, 50),
-    'volume': lambda x, randint = randint: randint(1, 200),
-    'issue': lambda x, seeder = seeder: seeder.faker.paragraph(),
-    'date': lambda x, seeder = seeder: seeder.faker.date(),
-    'doi': lambda x, seeder = seeder: seeder.faker.isbn10(),
-})
-
-seeder.add_entity(AuthorOf, 1000, {
-    'person': lambda x, randint = randint: randint(1, 500),
-    'publication': lambda x, randint = randint: randint(1, 1000),
-})
-
-seeder.add_entity(ExternalAuthor, 20, {
-    'first_name': lambda x, seeder = seeder: seeder.faker.first_name(),
-    'last_name': lambda x, seeder = seeder: seeder.faker.first_name(),
-})
-
-seeder.add_entity(AuthorOfExternal, 100, {
-    'author': lambda x, randint = randint: randint(1, 20),
-    'publication': lambda x, randint = randint: randint(1, 1000),
-})
-
-## Group Seeder ##
-
-seeder.add_entity(Group, 300, {
-    'name': lambda x, seeder = seeder: seeder.faker.username(),
-    'owner': lambda x, randint = randint: randint(1, 500),
-})
-
-seeder.add_entity(GroupMember, 50, {
-    'group': lambda x, randint = randint: randint(1, 300),
-    'person': lambda x, randint = randint: randint(1, 500),
-})
-
-## Petitions ##
-
-### UserPetition ###
-seeder.add_entity(UserPetition, 200, {
-    'name': lambda x, seeder = seeder: seeder.faker.name(),
-    'last_name': lambda x, seeder = seeder: seeder.faker.last_name(),
-    'email': lambda x, seeder = seeder: seeder.faker.email(),
-})
-
-### AffiliationPetition ###
-r = randint(1, 80)
-r = r if r <= 70 else None
-
-seeder.add_entity(AffiliationPetition, 200, {
-    'name': lambda x, seeder = seeder: seeder.faker.company(),
-    'email': lambda x, seeder = seeder: seeder.faker.email(),
-    'address': lambda x, seeder = seeder: seeder.faker.address(),
-    'id_super_level': lambda x, r = r: r,
-})
-
-### PublicationPetition ###
-seeder.add_entity(PublicationPetition, 300, {
-    'id_researcher': lambda x: randint(1, 350),
-    'title': lambda x, seeder = seeder: seeder.faker.sentence(),
-    'journal': lambda x, randint = randint: randint(1, 50),
-    'volume': lambda x, randint = randint: randint(1, 200),
-    'issue': lambda x, seeder = seeder: seeder.faker.paragraph(),
-    'date': lambda x, seeder = seeder: seeder.faker.date(),
-    'doi': lambda x, seeder = seeder: seeder.faker.isbn10(),
-})
-
-### JournalPetition ###
-seeder.add_entity(JournalPetition, 50, {
-    'id_researcher': lambda x, randint = randint: randint(1, 350),
-    'name': lambda x, seeder = seeder: seeder.faker.username(),
-    'issn': lambda x, seeder = seeder: seeder.faker.isbn10()
-})
-
-### ExternalAuthorPetition ###
-seeder.add_entity(ExternalAuthorPetition, 20, {
-    'id_researcher': lambda x, randint = randint: randint(1, 350),
-    'first_name': lambda x, seeder = seeder: seeder.faker.first_name(),
-    'last_name': lambda x, seeder = seeder: seeder.faker.first_name(),
-})
-
-### GroupPetition ###
-seeder.add_entity(ExternalAuthorPetition, 150, {
-    'id_researcher': lambda x, randint = randint: randint(1, 350),
-    'name': lambda x, seeder = seeder: seeder.faker.username(),
-})
-
-### GroupAddPetition ###
-for i in range(1, 300):
-    researcher_owner_id = randint(1, 350)
-    person_to_add_id = researcher_owner_id
-    while person_to_add_id == researcher_owner_id:
-        person_to_add_id = randint(1, 350)
-
-    b = randint(0,1)
-    r = randint(1, 300)
-    group_id = r if b else None
-    r = randint(1, 150)
-    petition_group_id = r if not b else None
-
-
-    seeder.add_entity(GroupAddPetition, 1, {
-        'id_researcher_owner': lambda x, id = researcher_owner_id: id,
-        'id_person_to_add': lambda x, id = person_to_add_id: id,
-        'id_group': lambda x, id = group_id: id,
-        'id_petition_group': lambda x, id = petition_group_id: id,
-    })
-
-seeder.execute()
-
-print('Your database is now seeded')
+print('Seeding Database:')
+print('- - - - Seeding Affiliations...')
+AffiliationSeeder().seed()
+print('- - - - Seeding Persons...')
+PersonSeeder().seed()
+print('- - - - Seeding Administrators...')
+PersonSeeder().seed_admins()
+print('- - - - Seeding Researchers...')
+PersonSeeder().seed_researchers()
+print('- - - - Seeding Postdocs...')
+PersonSeeder().seed_postdocs()
+print('- - - - Seeding Students...')
+PersonSeeder().seed_students()
+print('- - - - Seeding relationships between Researchers and Students.')
+PersonSeeder().seed_student_of_relationships()
+PersonSeeder().fill_person_and_roles()
+print('- - - - Now all persons on the DB have a role.')
+print('- - - - Seeding Grants')
+GrantSeeder().seed()
+print('- - - - Seeding Grant participants')
+GrantSeeder().seed_participants()
+print('- - - - Seeding Journals')
+JournalSeeder().seed()
+print('- - - - Seeding Publications')
+PublicationSeeder().seed()
+print('- - - - Seeding Publications authors')
+PublicationSeeder().seed_authors()
+print('- - - - Seeding External authors')
+PublicationSeeder().seed_external_authors()
+print('- - - - Seeding Groups')
+GroupSeeder().seed()
+print('- - - - Seeding Groups members')
+GroupSeeder().seed_members()
+print('- - - - Seeding User petitions')
+PetitionSeeder().seed_user_petitions()
+print('- - - - Seeding Affiliation petitions')
+PetitionSeeder().seed_affiliation_petitions()
+print('- - - - Seeding Journal petitions')
+PetitionSeeder().seed_journal_petitions()
+print('- - - - Seeding publication petitions')
+PetitionSeeder().seed_publication_petitions()
+print('- - - - Seeding external author petitions')
+PetitionSeeder().seed_external_authors_petitions()
+print('- - - - Seeding group petitions')
+PetitionSeeder().seed_group_petitions()
+print('- - - - Seeding group add members petitions')
+PetitionSeeder().seed_group_adding_petitions()
+print('Seeding Complete')
