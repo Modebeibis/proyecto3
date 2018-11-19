@@ -26,3 +26,6 @@ def list_profiles(request):
 
 def profile(request):
     return render(request, 'core/profile.html')
+
+def sedes(request):
+    return render(request, 'core/sedes.html')
