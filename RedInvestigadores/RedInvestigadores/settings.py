@@ -83,10 +83,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'db_red_investigadores',
 <<<<<<< HEAD
+<<<<<<< HEAD
         'USER': 'angel',
 =======
         'USER': '',
 >>>>>>> a4942cd9b8ef10a51ce1b320e60dd0d5d10862a2
+=======
+        'USER': '',
+>>>>>>> master
         'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '5432',
