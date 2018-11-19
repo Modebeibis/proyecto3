@@ -1,4 +1,6 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 class Affiliation(models.Model):
     name        = models.TextField()
@@ -15,21 +17,48 @@ class Role(models.Model):
     def __str__(self):
         return self.description
 
+class StateManager(models.Manager):
+    def max_population(self):
+        '''
+
+        Calculates the maximum population of researchers/postdocs in the states.
+
+        '''
+        max = 0
+        current = 0
+        for state in State.objects.all():
+            current = state.population()
+            if current > max:
+                max = state.population()
+        return max
+
 class State(models.Model):
     name = models.TextField()
+    objects = StateManager()
     def __str__(self):
         return self.name
-    def relative_density(self):
+    def population(self):
         return Person.objects.filter(state=self).count()
+    def relative_density(self):
+        pop = self.population()
+        return pop / State.objects.max_population()
+
+class CustomUser(AbstractUser):
+    email    = models.EmailField(_('email address'), unique=True)
+    username = models.TextField(max_length=30, unique=True)
+    password = models.TextField()
+
+    def __str__(self):
+        return self.email
 
 class Person(models.Model):
     first_name  = models.TextField()
     last_name   = models.TextField()
-    affiliation = models.ForeignKey(Affiliation, on_delete=models.PROTECT)
-    email       = models.EmailField()
+    affiliation = models.ForeignKey(Affiliation, default=1, on_delete=models.PROTECT)
     orcid       = models.TextField(unique=True)
-    role        = models.ForeignKey(Role, on_delete=models.PROTECT)
-    state       = models.ForeignKey(State, on_delete=models.PROTECT)
+    role        = models.ForeignKey(Role, default=1, on_delete=models.PROTECT)
+    state       = models.OneToOneField(State, default=1, on_delete=models.PROTECT)
+    user        = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
     BACHELOR = 'BSC'
     MASTERS  = 'MSC'

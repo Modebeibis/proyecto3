@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +72,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'RedInvestigadores.wsgi.application'
 
+# User authentication
+AUTH_USER_MODEL = 'core.CustomUser'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -81,7 +82,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'db_red_investigadores',
-        'USER': 'user_name',
+        'USER': 'japo',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '5432',
@@ -134,3 +135,6 @@ STATICFILES_FINDERS = (
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
