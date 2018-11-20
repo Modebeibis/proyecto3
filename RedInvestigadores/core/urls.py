@@ -11,7 +11,9 @@ urlpatterns = [
     path('', views.about_of, name='about_of'),
     path('', views.research, name='research'),
     path('', views.search_view, name='search_view'),
+    path('', views.search, name='search'),
     path('', views.list_profiles, name='list_profiles'),
     path('', views.profile, name='profile'),
     path('', views.sedes, name='sedes'),
+    #url(r'^search-view/$', views.search_view),
 ]
