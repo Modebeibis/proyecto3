@@ -106,7 +106,6 @@ class PersonRole(models.Model):
 
 class Administrator(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
 
 class Journal(models.Model):
     name = models.TextField(unique=True)
@@ -149,7 +148,6 @@ class AuthorOfExternal(models.Model):
 
 class Researcher(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
 
 class Grant(models.Model):
     responsible = models.ForeignKey(Researcher, on_delete=models.CASCADE)
@@ -187,11 +185,9 @@ class GroupMember(models.Model):
 
 class Postdoc(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
 
 class Student(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    role   = models.ForeignKey(Role, on_delete=models.PROTECT)
 
 class StudentOf(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -199,3 +195,43 @@ class StudentOf(models.Model):
 
     class Meta:
         unique_together = (('student', 'tutor'),)
+
+class UserPetition(models.Model):
+    name = models.TextField()
+    last_name = models.TextField()
+    email = models.TextField()
+
+class AffiliationPetition(models.Model):
+    name = models.TextField()
+    email = models.TextField()
+    address = models.TextField()
+    id_super_level = models.ForeignKey(Affiliation, null = True, on_delete = models.SET_NULL)
+
+class PublicationPetition(models.Model):
+    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
+    title   = models.TextField()
+    journal = models.ForeignKey(Journal, on_delete=models.PROTECT)
+    volume  = models.IntegerField()
+    issue   = models.IntegerField()
+    date    = models.DateField()
+    doi     = models.TextField()
+
+class JournalPetition(models.Model):
+    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
+    name = models.TextField()
+    issn = models.TextField(max_length=9, unique=True)
+
+class ExternalAuthorPetition(models.Model):
+    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
+    first_name = models.TextField()
+    last_name  = models.TextField()
+
+class GroupPetition(models.Model):
+    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
+    name = models.TextField()
+
+class GroupAddPetition(models.Model):
+    id_researcher_owner = models.ForeignKey(Researcher, on_delete = models.CASCADE)
+    id_person_to_add = models.ForeignKey(Person, on_delete = models.CASCADE)
+    id_group = models.ForeignKey(Group, null = True, on_delete = models.SET_NULL)
+    id_petition_group = models.ForeignKey(GroupPetition, null = True, on_delete = models.SET_NULL)
