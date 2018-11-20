@@ -4,7 +4,7 @@ from django.views import generic
 from django.http import HttpResponse
 
 from .forms import CustomUserCreationForm
-from .models import Person
+from .models import Person, CustomUser
 
 class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
@@ -26,11 +26,15 @@ def search_view(request):
 def list_profiles(request):
     return render(request, 'core/list_profiles.html')
 
-def profile(request):
-    return render(request, 'core/profile.html')
-
 def sedes(request):
     return render(request, 'core/sedes.html')
+
+def get_user_profile(request, user_id):
+    user = CustomUser.objects.get(pk = user_id)
+    person = Person.objects.get(user = user_id)
+    return render(request, 'core/profile.html',
+                  {'person': person, 'user': user})
+
 
 def search(request):
     if 'q' in request.GET and request.GET['q']:
