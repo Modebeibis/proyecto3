@@ -13,27 +13,23 @@ class PersonSeeder(object):
             first_name  = faker.first_name()
             last_name   = faker.last_name()
             affiliation = Affiliation.objects.get(pk = randint(1, 70))
+            email       = faker.email()
             orcid       = faker.isbn10()
             role        = Role.objects.get(pk = randint(1, 4))
             state       = State.objects.get(pk = randint(1, 29))
-            
-            username    = "user%d" % i
-            password    = make_password("pw%d" % i)
-            email       = faker.email()
-            
-            user        = CustomUser.objects.get_or_create(username = username,
-                                                           password = password,
-                                                           email    = email)
 
-            
-            Person.objects.get_or_create(first_name  = first_name,
-                                         last_name   = last_name,
-                                         affiliation = affiliation,
-                                         email       = email,
-                                         orcid       = orcid,
-                                         role        = role,
-                                         state       = state,
-                                         user        = CustomUser.objects.get(username=username))
+            username = "user%d" % (i+1)
+            user     = CustomUser.objects.get_or_create(username = username,
+                                                        password = make_password("pw%d" % (i+1)),
+                                                        email    = email)
+
+            Person.objects.get_or_create(first_name = first_name,
+                                 last_name   = last_name,
+                                 affiliation = affiliation,
+                                 orcid       = orcid,
+                                 role        = role,
+                                 state       = state,
+                                 user        = CustomUser.objects.get(username=username))
 
     def seed_admins(self):
         faker = Faker()
@@ -48,7 +44,7 @@ class PersonSeeder(object):
             person = Person.objects.get(pk = person_id)
 
             PersonRole.objects.get_or_create(person = person,
-                                     role = role)
+                                             role   = role)
 
             Administrator.objects.get_or_create(person = person)
 
@@ -60,7 +56,7 @@ class PersonSeeder(object):
             person = Person.objects.get(pk = (i+1))
 
             PersonRole.objects.get_or_create(person = person,
-                                     role = role)
+                                             role   = role)
 
             Researcher.objects.get_or_create(person = person)
 
@@ -77,7 +73,7 @@ class PersonSeeder(object):
             person = Person.objects.get(pk = person_id)
 
             PersonRole.objects.get_or_create(person = person,
-                                     role = role)
+                                             role   = role)
 
             Postdoc.objects.get_or_create(person = person)
 
@@ -89,7 +85,7 @@ class PersonSeeder(object):
             person = Person.objects.get(pk = (i+1))
 
             PersonRole.objects.get_or_create(person = person,
-                                     role = role)
+                                             role   = role)
 
             Student.objects.get_or_create(person = person)
 
@@ -101,13 +97,13 @@ class PersonSeeder(object):
 
             while True:
                 researcher_id = randint(1, 350)
-                researcher = Researcher.objects.get(pk = researcher_id)
+                researcher = Researcher.objects.get(pk   = researcher_id)
                 if not (StudentOf.objects.filter(student = student,
-                                                 tutor = researcher).exists()):
+                                                 tutor   = researcher).exists()):
                     break
 
             StudentOf.objects.get_or_create(student = student,
-                                            tutor = researcher)
+                                            tutor   = researcher)
 
     def fill_person_and_roles(self):
         for i in range(500):
@@ -117,7 +113,7 @@ class PersonSeeder(object):
                 person = Person.objects.get(pk = (i+1))
 
                 PersonRole.objects.get_or_create(person = person,
-                                                 role = role)
+                                                 role   = role)
 
                 if (random_role == 1):
                     Student.objects.get_or_create(person = person)
