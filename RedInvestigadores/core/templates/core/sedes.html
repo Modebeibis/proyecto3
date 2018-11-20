@@ -13,7 +13,7 @@
     <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
-  
+
   </head>
 
   <body>
@@ -28,6 +28,7 @@
             <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
       			<li><a href="{% url 'about_of' %}">Acerca de</a></li>
             {% if user.is_authenticated %}
+              <li><a href="{% url 'profile' request.user.id %}">Mi Perfil</a></li>
               <li><a href="{% url 'logout' %}">Salir</a></li>
             {% else %}
               <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
