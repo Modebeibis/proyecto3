@@ -1,6 +1,7 @@
 from faker import Faker
 from core.models import Affiliation, Role, State
-from core.models import Person, PersonRole, Administrator, Postdoc, Student, StudentOf, Researcher
+from core.models import CustomUser, Person, PersonRole, Administrator, Postdoc, Student, StudentOf, Researcher
+from django.contrib.auth.hashers import make_password
 from random import randint
 
 class PersonSeeder(object):
@@ -9,21 +10,30 @@ class PersonSeeder(object):
         faker = Faker()
 
         for i in range(500):
-            first_name = faker.first_name()
-            last_name = faker.last_name()
+            first_name  = faker.first_name()
+            last_name   = faker.last_name()
             affiliation = Affiliation.objects.get(pk = randint(1, 70))
-            email = faker.email()
-            orcid = faker.isbn10()
-            role = Role.objects.get(pk = randint(1, 4))
-            state = State.objects.get(pk = randint(1, 29))
+            orcid       = faker.isbn10()
+            role        = Role.objects.get(pk = randint(1, 4))
+            state       = State.objects.get(pk = randint(1, 29))
+            
+            username    = "user%d" % i
+            password    = make_password("pw%d" % i)
+            email       = faker.email()
+            
+            user        = CustomUser.objects.get_or_create(username = username,
+                                                           password = password,
+                                                           email    = email)
 
-            Person.objects.get_or_create(first_name = first_name,
-                                 last_name = last_name,
-                                 affiliation = affiliation,
-                                 email = email,
-                                 orcid = orcid,
-                                 role = role,
-                                 state = state)
+            
+            Person.objects.get_or_create(first_name  = first_name,
+                                         last_name   = last_name,
+                                         affiliation = affiliation,
+                                         email       = email,
+                                         orcid       = orcid,
+                                         role        = role,
+                                         state       = state,
+                                         user        = CustomUser.objects.get(username=username))
 
     def seed_admins(self):
         faker = Faker()
