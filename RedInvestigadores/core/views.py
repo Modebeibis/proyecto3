@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
+from django.http import HttpResponse
 
 from .forms import CustomUserCreationForm
+from .models import Person
 
 class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
@@ -29,3 +31,12 @@ def profile(request):
 
 def sedes(request):
     return render(request, 'core/sedes.html')
+
+def search(request):
+    if 'q' in request.GET and request.GET['q']:
+        q = request.GET['q']
+        persons = Person.objects.filter(first_name__icontains=q)
+        return render(request, 'core/search.html',
+                      {'persons': persons, 'query': q})
+    else:
+        return HttpResponse('Please submit a search term.')
