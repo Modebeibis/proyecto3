@@ -56,10 +56,6 @@
                     <div class="col-md-12">
                 			<h2>Ingresa a tu cuenta</h2>
                         <p>
-                          <label for="nombre">Escribe tu usuario o correo: </label>
-                          <input type="text" placeholder="Escribe algo" name="nombre" id="nombre"><br><br>
-                          <label for="pwd">Ingresa tu contraseña: </label>
-                          <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"> <br>
                           <form method="post">
                             {% csrf_token %}
                             {{ form.as_p }}

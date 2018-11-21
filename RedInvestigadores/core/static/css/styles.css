@@ -62,6 +62,9 @@ color: white;
 text-align: center;
 padding: 20px;
 margin-top: 400px;
+position: fixed;
+bottom: 0px;
+width: 100%;
 }
 
 #main-footer p {
@@ -313,11 +316,6 @@ li.fancyTab.active a {
 	}
 
 }
-<<<<<<< HEAD:vistas/css/styles.css
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 3a7092f70fabdd05e63ead8e8474f7fa03f62dbf:RedInvestigadores/core/static/css/styles.css
 
 #button {
   -webkit-appearance: button;
@@ -327,7 +325,4 @@ li.fancyTab.active a {
   text-decoration: none;
   color: initial;
 }
-<<<<<<< HEAD:vistas/css/styles.css
->>>>>>> 60c760dfdabdc3085ef53273cbb2be606aaa5a03
-=======
->>>>>>> 3a7092f70fabdd05e63ead8e8474f7fa03f62dbf:RedInvestigadores/core/static/css/styles.css
+
