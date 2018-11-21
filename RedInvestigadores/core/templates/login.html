@@ -26,6 +26,7 @@
               <li><a href="{% url 'research' %}">Perfiles</a></li>
               <li><a href="{% url 'about_of' %}">Acerca de</a></li>
               {% if user.is_authenticated %}
+                <li><a href="{% url 'password_reset' %}">Restaurar contraseña</a></li>
                 <li><a href="{% url 'logout' %}">Salir</a></li>
               {% else %}
                 <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
