@@ -82,7 +82,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'db_red_investigadores',
-        'USER': 'postgres',
+        'USER': 'username',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '5432',

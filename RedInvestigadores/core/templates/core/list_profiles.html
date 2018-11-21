@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="utf-8">
+    <title>Perfiles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="shortcut icon" href="{% static "" %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,700'>
+    <link href='{% url 'logout' %}'>
+    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/default.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/fonts.css" %}">
+    <link href="http://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet" />
+  </head>
+
+  <body>
+    {% block contenido %}
+    <header id = "main-header">
+      <a id="logo-header" href="{% url 'home' %}">
+        <span class="site-name">Red nacional de investigadores</span>
+      </a>
+      <nav>
+  		    <ul>
+      			<li><a href="{% url 'home' %}">Inicio</a></li>
+            <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
+      			<li><a href="{% url 'about_of' %}">Acerca de</a></li>
+            {% if user.is_authenticated %}
+              <li><a href="{% url 'profile' request.user.id %}">Mi Perfil</a></li>
+              <li><a href="{% url 'logout' %}">Salir</a></li>
+            {% else %}
+              <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
+            {% endif %}
+  		    </ul>
+     </nav>
+   </header>
+   <div id="wrapper">
+   	<div id="three-column" class="container">
+   		<div class="title">
+   			<h2>Perfiles</h2>
+   		</div>
+   		<div class="boxA">
+   			<span class="fa fa-list-alt"></span>
+   			<p>Estudiantes</p>
+   			<a href="{% url 'search_view' %}" class="button button-alt">VER</a>
+   		</div>
+   		<div class="boxB">
+   			<span class="fa fa-book"></span>
+   			<p>Investigadores</p>
+   			<a href="{% url 'search_view' %}" class="button button-alt">VER</a>
+   		</div>
+   		<div class="boxC">
+   			<span class="fa fa-apple"></span>
+   			<p>Posdoctorado</p>
+   			<a href="{% url 'search_view' %}" class="button button-alt">VER</a>
+   		</div>
+   	</div>
+   </div>
+
+    <footer id="main-footer">
+      <p>&copy; 2018 <a href=""></a></p>
+    </footer>
+    {% endblock %}
+  </body>
+
+</html>

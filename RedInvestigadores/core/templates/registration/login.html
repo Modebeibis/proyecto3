@@ -23,7 +23,7 @@
       <nav>
   		    <ul>
               <li><a href="{% url 'home' %}">Inicio</a></li>
-              <li><a href="{% url 'research' %}">Perfiles</a></li>
+              <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
               <li><a href="{% url 'about_of' %}">Acerca de</a></li>
               {% if user.is_authenticated %}
                 <li><a href="{% url 'password_reset' %}">Restaurar contraseña</a></li>

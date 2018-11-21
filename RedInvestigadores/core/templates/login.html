@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <title>Login</title>
     <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_537756_537756.ico" %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
@@ -23,10 +24,11 @@
       <nav>
   		    <ul>
               <li><a href="{% url 'home' %}">Inicio</a></li>
-              <li><a href="{% url 'research' %}">Perfiles</a></li>
+              <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
               <li><a href="{% url 'about_of' %}">Acerca de</a></li>
               {% if user.is_authenticated %}
                 <li><a href="{% url 'password_reset' %}">Restaurar contraseña</a></li>
+                <li><a href="{% url 'profile' request.user.id %}">Mi Perfil</a></li>
                 <li><a href="{% url 'logout' %}">Salir</a></li>
               {% else %}
                 <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
