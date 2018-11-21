@@ -64,6 +64,7 @@
                             <input type="text" placeholder="Escribe algo" name="nombre" id="nombre"><br><br>
                             <label for="pwd">Ingresa tu contraseña: </label>
                             <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"> <br>
+                            <p><a href="{% url 'password_reset' %}">Restaurar contraseña</a></p>
                             <button type="submit" name="button" id="button">Entrar</button>
                             {% if form.errors %}
                               <p class=" label label-danger">

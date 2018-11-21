@@ -92,6 +92,7 @@
               <li><a href="{% url 'profile' request.user.id %}">Mi Perfil</a></li>
               <li><a href="{% url 'logout' %}">Salir</a></li>
             {% else %}
+              <li><a href="{% url 'password_reset' %}">Restaurar contraseña</a></li>
               <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
             {% endif %}
   		    </ul>
