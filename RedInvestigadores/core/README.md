@@ -18,7 +18,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'db_red_investigadores',
-        'USER': 'username',                       #El username que usan para postgres
+        'USER': 'username',                  #El username que usan para postgres
         'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '5432',
@@ -28,11 +28,12 @@ DATABASES = {
 
 Migrar la base de datos y cargar algunos datos de prueba:
 ```Bash
-$ python3 manage.py migrate
 $ python3 manage.py makemigrations core
+$ python3 manage.py migrate core
 $ python3 manage.py sqlmigrate core 0001
 $ python3 manage.py migrate
-& python3 manage.py loaddata info_prueba
+$ python3 manage.py loaddata roles
+$ python3 manage.py loaddata states
 ```
 
 No debería de haberse copiado ningun archido de migración al repositorio,
