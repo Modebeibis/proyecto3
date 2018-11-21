@@ -31,6 +31,7 @@
             <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
       			<li><a href="{% url 'about_of' %}">Acerca de</a></li>
             {% if user.is_authenticated %}
+              <li><a href="{% url 'profile' request.user.id %}">Mi Perfil</a></li>
               <li><a href="{% url 'logout' %}">Salir</a></li>
             {% else %}
               <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
@@ -47,14 +48,17 @@
            </div>
        </div>
      </div>
+     {% if person %}
      <div class="row">
        <div class="col-md-3">
          <div class="col-md-12" align="center">
            <img class="img-responsive img-portfolio img-hover" src="img/profile.jpg">
          </div>
          <div class="col-md-12">
-           <p class="text-center"><strong>Nombre Apellido</strong></p>
-           <p class="text-center"><em>Título del perfil de usuario</em></p>
+           <p class="text-center"><strong>{{ person.first_name }} {{ person.last_name }}</strong></p>
+           <p class="text-center">Grado de estudios: <em> {{ person.get_degree_display }} </em></p>
+           <p class="text-center">SNI: <em>{{ person.get_sni_display }}</em></p>
+           <p class="text-center">Sede: <em>{{ person.affiliation }}</em></p>
          </div>
 
          <div class="col-md-12 text-center">
@@ -86,19 +90,19 @@
                              <br >
                                <label>Información básica</label>
                                <span id="alertName" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
-                                 <p>Nombre(s):</p>
+                                 <p>Nombre(s): {{ person.first_name }} </p>
                                </span>
                                <br >
                                <span id="alertSurname" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
-                                 <p>Apellidos:</p>
+                                 <p>Apellidos: {{ person.last_name }} </p>
                                </span>
                                <br >
                                <span id="alertQualification" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
-                                 <p>Título:</p>
+                                 <p>Título: {{ person.get_degree_display }} </p>
                                </span>
                                <br >
                                <span id="alertEmail" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
-                                 <p>Email: </p>
+                                 <p>Email: {{ user.email }} </p>
                                </span>
                                <p class="help-block"></p>
                            </div>
@@ -146,6 +150,7 @@
          </form>
          </div>
      </div>
+     {% endif %}
      &nbsp;
    <footer id="main-footer">
      <p>&copy; 2018 <a href=""></a></p>
