@@ -1,4 +1,4 @@
-Instrucciones temporales para los miembros del equipo para correr la base de datos:
+## Instrucciones temporales para los miembros del equipo para correr la base de datos:
 
 - Instalar postgres:
 ```Bash
@@ -43,4 +43,10 @@ La base de datos ya debería de funcionar, puede verificarse su
 funcionalidad usando
 ```Bash
 $ python manage.py shell
+```
+
+# Poblar la Base de Datos
+* La base de datos ya debió de haber sido creada y migrada
+```Bash
+$ python manage.py shell < core/seeder.py
 ```
