@@ -55,7 +55,12 @@
            <img class="img-responsive img-portfolio img-hover" src="img/profile.jpg">
          </div>
          <div class="col-md-12">
-           <p class="text-center"><strong>{{ person.first_name }} {{ person.last_name }}</strong></p>
+           {% if person.first_name == "No ha introducido esta información" %}
+             <p class="text-center"><strong>Nombre - Apellidos:</strong></p>
+             <p class="text-center"><strong>{{ person.first_name }}</strong></p>
+           {% else %}
+             <p class="text-center"><strong>{{ person.first_name }} {{ person.last_name }}</strong></p>
+           {% endif %}
            <p class="text-center">Grado de estudios: <em> {{ person.get_degree_display }} </em></p>
            <p class="text-center">SNI: <em>{{ person.get_sni_display }}</em></p>
            <p class="text-center">Sede: <em>{{ person.affiliation }}</em></p>
