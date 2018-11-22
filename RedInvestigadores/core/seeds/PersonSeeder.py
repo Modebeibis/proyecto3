@@ -42,6 +42,10 @@ class PersonSeeder(object):
                     break
 
             person = Person.objects.get(pk = person_id)
+            user = CustomUser.objects.get(pk = person.user_id)
+
+            user.is_staff = user.is_superuser = True
+            user.save()
 
             PersonRole.objects.get_or_create(person = person,
                                              role   = role)
@@ -122,4 +126,8 @@ class PersonSeeder(object):
                 elif (random_role == 3):
                     Researcher.objects.get_or_create(person = person)
                 else:
+                    user = CustomUser.objects.get(pk = person.user_id)
+
+                    user.is_staff = user.is_superuser = True
+                    user.save()
                     Administrator.objects.get_or_create(person = person)
