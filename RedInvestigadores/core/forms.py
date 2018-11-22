@@ -1,7 +1,18 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import  AuthenticationForm, UserCreationForm, UserChangeForm
 from .models import CustomUser
 from django.utils.translation import ugettext_lazy as _
+
+class LoginForm(AuthenticationForm):
+    def __init__(self, request,*args, **kwargs):
+        super().__init__(request,*args,**kwargs)
+        self.fields['username'].label = 'Escribe tu usuario'
+        self.fields['password'].label = 'Ingresa tu contraseña'
+
+    class Meta(AuthenticationForm):
+        model = CustomUser
+        fields=('username','password')
+
 
 class CustomUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
@@ -13,7 +24,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
         model = CustomUser
-        fields = ('username', 'email',)
+        fields = ('username', 'email')
         widgets = {
           'username': forms.Textarea(attrs={'rows':1,
                                             'cols':60,

@@ -26,7 +26,6 @@
               <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
               <li><a href="{% url 'about_of' %}">Acerca de</a></li>
               {% if user.is_authenticated %}
-                <li><a href="{% url 'password_reset' %}">Restaurar contraseña</a></li>
                 <li><a href="{% url 'logout' %}">Salir</a></li>
               {% else %}
                 <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
@@ -60,10 +59,6 @@
                           <form method="post">
                             {% csrf_token %}
                             {{ form.as_p }}
-                            <label for="nombre">Escribe tu usuario o correo: </label>
-                            <input type="text" placeholder="Escribe algo" name="nombre" id="nombre"><br><br>
-                            <label for="pwd">Ingresa tu contraseña: </label>
-                            <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"> <br>
                             <p><a href="{% url 'password_reset' %}">Restaurar contraseña</a></p>
                             <button type="submit" name="button" id="button">Entrar</button>
                             {% if form.errors %}
