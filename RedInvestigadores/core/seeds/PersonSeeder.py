@@ -7,7 +7,9 @@ from random import randint
 class PersonSeeder(object):
 
     def seed(self):
-        faker = Faker()
+        faker   = Faker()
+        degrees = ["BSC", "MSC", "PHD"]
+        sni     = ["N", "C", "1", "2", "3", "E"]
 
         for i in range(500):
             first_name  = faker.first_name()
@@ -26,8 +28,10 @@ class PersonSeeder(object):
             Person.objects.get_or_create(first_name = first_name,
                                  last_name   = last_name,
                                  affiliation = affiliation,
+                                 degree      = degrees[randint(0,2)],
                                  orcid       = orcid,
                                  role        = role,
+                                 sni         = sni[randint(0, 5)],
                                  state       = state,
                                  user        = CustomUser.objects.get(username=username))
 
