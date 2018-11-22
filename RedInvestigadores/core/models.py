@@ -104,7 +104,7 @@ def create_person_profile(sender, instance, created, **kwargs):
     if created:
         Person.objects.create(first_name = 'No ha introducido esta información',
                               last_name = 'No ha introducido esta información',
-                              orcid = 'No ha introducido esta información',
+                              orcid = instance.__str__(),
                               user = instance)
 
 class PersonRole(models.Model):
