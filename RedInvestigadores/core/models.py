@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser
+from django.dispatch import receiver
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
 class Affiliation(models.Model):
@@ -96,6 +98,14 @@ class Person(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
+
+@receiver(post_save, sender = CustomUser)
+def create_person_profile(sender, instance, created, **kwargs):
+    if created:
+        Person.objects.create(first_name = 'No ha introducido esta información',
+                              last_name = 'No ha introducido esta información',
+                              orcid = 'No ha introducido esta información',
+                              user = instance)
 
 class PersonRole(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
