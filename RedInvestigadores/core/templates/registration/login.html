@@ -56,14 +56,17 @@
                     <div class="col-md-12">
                 			<h2>Ingresa a tu cuenta</h2>
                         <p>
-                          <label for="nombre">Escribe tu usuario o correo: </label>
-                          <input type="text" placeholder="Escribe algo" name="nombre" id="nombre"><br><br>
-                          <label for="pwd">Ingresa tu contraseña: </label>
-                          <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"> <br>
                           <form method="post">
                             {% csrf_token %}
                             {{ form.as_p }}
+                            <p><a href="{% url 'password_reset' %}">Restaurar contraseña</a></p>
                             <button type="submit" name="button" id="button">Entrar</button>
+                            {% if form.errors %}
+                              <p class=" label label-danger">
+                                Your username and password didn't match.
+                                Please try again.
+                              </p>
+                            {% endif %}
                           </form>
                       </p>
                     </div>
@@ -77,14 +80,6 @@
             			<h2>¿No tienes cuenta?</h2>
                     <p>
                       <form class="forms">
-                        <label for="nombre">Ingresa tu nombre: </label>
-                        <input type="text" placeholder="Escribe algo" name="nombre" id="nombre"><br><br>
-                        <label for="correo">Ingresa tu correo electrónico: </label>
-                        <input type="text" placeholder="Escribe algo" name="correo" id="correo"><br><br>
-                        <label for="pwd">Ingresa tu contraseña: </label>
-                        <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"><br><br>
-                        <label for="pwd">Confirma tu contraseña: </label>
-                        <input type="password" placeholder="Escribe algo" name="pwd" id="pwd"><br><br>
                         <label for="selector">¿Con qué perfil?:</label>
                         <select id="selector" name="selector">
                           <option value="">Ninguno</option>
