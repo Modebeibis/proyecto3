@@ -61,7 +61,7 @@ class Person(models.Model):
     role        = models.ForeignKey(Role, default=1, on_delete=models.PROTECT)
     state       = models.ForeignKey(State, default=1, on_delete=models.PROTECT)
     user        = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-
+    email_confirmed = models.BooleanField(default=False)
     BACHELOR = 'BSC'
     MASTERS  = 'MSC'
     DOCTORAL = 'PHD'
@@ -102,6 +102,7 @@ class Person(models.Model):
 @receiver(post_save, sender = CustomUser)
 def create_person_profile(sender, instance, created, **kwargs):
     if created:
+        print('person')
         Person.objects.create(first_name = 'No ha introducido esta información',
                               last_name = 'No ha introducido esta información',
                               orcid = 'No ha introducido esta información',
