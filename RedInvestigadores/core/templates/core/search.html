@@ -14,6 +14,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/styles.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/accordion-search.css" %}">
     {% block css %}
     <style type="text/css">
     .demo, .demo-2 {
@@ -94,10 +95,12 @@
      </nav>
    </header>
 
+   <!-- RESULTADOS DE BUSQUEDA-->
    <div class="demo">
      <p>You searched for: <strong>{{ query }}</strong></p>
      <br>
-
+     <button class="accordion">Pesonas</button>
+     <div class="panel">
         {% if persons %}
             <p>Found {{ persons|length }} person{{ persons|pluralize }}.</p>
             <ul>
@@ -111,9 +114,47 @@
         {% else %}
             <p>No persons matched your search criteria.</p>
         {% endif %}
+     </div>
+
+     <!-- BLOQUE DE POR MODIFICAR PARA BUSQUEDAS POR INSTITUCIONES-->
+     <button class="accordion">Instituciones.</button>
+     <div class="panel">
+        {% if persons %}
+            <p>Found {{ persons|length }} person{{ persons|pluralize }}.</p>
+            <ul>
+                {% for person in persons %}
+                <li>Nombre: {{ person.first_name }} {{ person.last_name }}</li>
+                <li>Rol: {{ person.role }} </li>
+                <li>Adscripción: {{ person.affiliation}} </li>
+                <br>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No persons matched your search criteria.</p>
+        {% endif %}
+     </div>
 
 
-</div>
+     <!-- BLOQUE DE POR MODIFICAR PARA BUSQUEDAS POR PUBLICACIONES-->
+     <button class="accordion">Publicaciones.</button>
+     <div class="panel">
+        {% if persons %}
+            <p>Found {{ persons|length }} person{{ persons|pluralize }}.</p>
+            <ul>
+                {% for person in persons %}
+                <li>Nombre: {{ person.first_name }} {{ person.last_name }}</li>
+                <li>Rol: {{ person.role }} </li>
+                <li>Adscripción: {{ person.affiliation}} </li>
+                <br>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No persons matched your search criteria.</p>
+        {% endif %}
+     </div>
+
+
+   </div>
 
     <footer id="main-footer">
       <p>&copy; 2018 <a href=""></a></p>
