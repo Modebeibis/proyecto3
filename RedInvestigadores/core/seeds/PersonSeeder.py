@@ -25,15 +25,17 @@ class PersonSeeder(object):
                                                         password = make_password("pw%d" % (i+1)),
                                                         email    = email)
 
-            Person.objects.get_or_create(first_name = first_name,
-                                 last_name   = last_name,
-                                 affiliation = affiliation,
-                                 degree      = degrees[randint(0,2)],
-                                 orcid       = orcid,
-                                 role        = role,
-                                 sni         = sni[randint(0, 5)],
-                                 state       = state,
-                                 user        = CustomUser.objects.get(username=username))
+            person = Person.objects.get(pk=(i+1))
+            person.first_name  = first_name
+            person.last_name   = last_name
+            person.affiliation = affiliation
+            person.degree      = degrees[randint(0,2)]
+            person.orcid       = orcid
+            person.role        = role
+            person.sni         = sni[randint(0, 5)]
+            person.state       = state
+            person.user        = CustomUser.objects.get(username=username)
+            person.save()
 
     def seed_admins(self):
         faker = Faker()
