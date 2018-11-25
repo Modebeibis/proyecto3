@@ -37,14 +37,18 @@
   		    </ul>
       </nav>
     </header>
-    {% if affiliations %}
-      <h1> {{affiliation}} </h1>
-      <h2> Sedes </h2>
+    {% if affiliation %}
+    <h1> {{affiliation}} </h1>
+
+      {% if register %}
+      <h2> Personas </h2>
       <ul>
-        {% for affiliation in affiliations %}
-        <li> {{affiliation}} </li>
+        {% for entry in register %}
+        <li> {{entry.person}} - {% for role in entry.roles %} {{role}}/ {% endfor %} <a href="{% url 'profile' entry.person.user.id %}"> Perfil </a></li>
         {% endfor %}
       </ul>
+      {% endif %}
+
     {% endif %}
 
 
