@@ -42,7 +42,7 @@
       <h2> Sedes </h2>
       <ul>
         {% for affiliation in affiliations %}
-        <li> {{affiliation}} </li>
+        <li> {{affiliation}} <a href="{% url 'sede' affiliation.id %}">Perfil</a> </li>
         {% endfor %}
       </ul>
     {% endif %}

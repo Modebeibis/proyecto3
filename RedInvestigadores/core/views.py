@@ -37,6 +37,7 @@ def get_affiliations(request):
 
 def get_affiliation(request, affiliation_id):
     affiliation = Affiliation.objects.get(pk = affiliation_id)
+    sub_levels = Affiliation.objects.filter(super_level = affiliation)
     persons = Person.objects.filter(affiliation = affiliation_id)
     register = []
     for person in persons:
@@ -48,7 +49,7 @@ def get_affiliation(request, affiliation_id):
         register.append(PersonInformation(person, roles))
 
     return render(request, 'core/sede.html',
-                  {'affiliation': affiliation, 'register':register})
+                  {'affiliation': affiliation, 'sub_levels':sub_levels, 'register':register})
 
 def get_user_profile(request, user_id):
     user = CustomUser.objects.get(pk = user_id)

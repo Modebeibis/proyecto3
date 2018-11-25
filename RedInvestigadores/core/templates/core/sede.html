@@ -40,6 +40,17 @@
     {% if affiliation %}
     <h1> {{affiliation}} </h1>
 
+      {% if sub_levels %}
+        <h2> Dependencias </h2>
+        <ul>
+          {% for sub_level in sub_levels %}
+          <li> {{sub_level}} <a href="{% url 'sede' sub_level.id %}">Perfil</a> </li>
+          {% endfor %}
+        </ul>
+
+        <br/>
+      {% endif %}
+
       {% if register %}
       <h2> Personas </h2>
       <ul>
