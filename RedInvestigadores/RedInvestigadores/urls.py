@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path,re_path, include
 from core import views
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
@@ -32,7 +32,10 @@ urlpatterns = [
     path('list_profiles/search_view/', views.search_view, name='search_view'),
     path('list_profiles/search_view/search', views.search, name='search'),
     path('list_profiles/', views.list_profiles, name='list_profiles'),
-    path('signup/', views.SignUp.as_view(), name='signup'),
+    path('signup/', views.signup, name='signup'),
+    path('signup/core/account_activation_sent/',views.account_activation_sent, name='account_activation_sent'),
+    re_path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',
+        views.activate, name='activate'),
     path('sedes/', views.sedes, name='sedes'),
     path('', include('django.contrib.auth.urls')),
 ]
