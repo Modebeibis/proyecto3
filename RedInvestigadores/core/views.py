@@ -24,7 +24,7 @@ def signup(request):
             message = render_to_string('core/account_activation_email.html', {
                 'user': user,
                 'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject, message)
@@ -45,7 +45,7 @@ def activate(request, uidb64, token):
 
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
-        user.profile.email_confirmed = True
+        user.person.email_confirmed = True
         user.save()
         login(request, user)
         return redirect('home')
