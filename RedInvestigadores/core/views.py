@@ -2,14 +2,15 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponse
+from allauth.account.views import *
+from allauth.account.forms import LoginForm, SignupForm
 
-from .forms import CustomUserCreationForm
-from .models import Person, CustomUser
+from .forms import CustomLoginForm, CustomUserCreationForm
 
 class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
-    template_name = 'login.html'
+    template_name = 'registration/login.html'
 
 def home(request):
     return render(request, 'core/home.html')

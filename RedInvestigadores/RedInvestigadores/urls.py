@@ -18,12 +18,13 @@ from django.urls import path, include
 from core import views
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
-from core.forms import LoginForm
+from core.forms import LoginForm, CustomUserCreationForm
 
 urlpatterns = [
     path('login/',auth_views.LoginView.as_view(template_name='registration/login.html',
-        authentication_form=LoginForm)),
+        authentication_form=LoginForm), name='login'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
     path('', views.home, name = 'home'),
     path('home/', views.home, name='home'),
     path('profile/<int:user_id>', views.get_user_profile, name='profile'),

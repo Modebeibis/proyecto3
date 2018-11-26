@@ -38,6 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +87,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'db_red_investigadores',
-        'USER': 'postgres',
+        'USER': 'username',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '5432',
@@ -114,19 +119,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE     = 'UTC'
 
-USE_I18N = True
+USE_I18N      = True
 
-USE_L10N = True
+USE_L10N      = True
 
-USE_TZ = True
+USE_TZ        = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL  = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_FINDERS = (
   'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -135,7 +140,24 @@ STATICFILES_FINDERS = (
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
-EMAIL_BACKEND= 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR,"sent_emails")
-LOGIN_REDIRECT_URL = 'home'
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_REQUIRED              = True
+ACCOUNT_USERNAME_REQUIRED           = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_SESSION_REMEMBER            = True
+ACCOUNT_AUTHENTICATION_METHOD       = 'email'
+ACCOUNT_UNIQUE_EMAIL                = True
+ACCOUNT_FORMS                       = {'login': 'core.forms.CustomLoginForm',
+                                       'signup': 'core.forms.CustomSignupForm'}
+
+EMAIL_BACKEND       = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_FILE_PATH     = os.path.join(BASE_DIR,"sent_emails")
+LOGIN_REDIRECT_URL  = 'home'
 LOGOUT_REDIRECT_URL = 'home'

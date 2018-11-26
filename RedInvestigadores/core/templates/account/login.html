@@ -63,8 +63,7 @@
                             <button type="submit" name="button" id="button">Entrar</button>
                             {% if form.errors %}
                               <p class=" label label-danger">
-                                Your username and password didn't match.
-                                Please try again.
+                                Tu nombre de usuario o contraseña no son correctos.
                               </p>
                             {% endif %}
                           </form>
@@ -79,19 +78,16 @@
                 <div class="col-md-12">
             			<h2>¿No tienes cuenta?</h2>
                     <p>
-                      <form class="forms">
-                        <label for="selector">¿Con qué perfil?:</label>
-                        <select id="selector" name="selector">
-                          <option value="">Ninguno</option>
-                          <option value="1">Estudiante</option>
-                          <option value="2">Investigador</option>
-                          <option value="3">Posdoctorado</option>
-                        </select><br><br>
-                        <form method="post">
+                      <form class="signup" id="signup_form" method="post">
                           {% csrf_token %}
                           {{ signupform.as_p }}
                           <button type="submit">Registrarse</button>
-                        </form>
+                          {% if form.errors %}
+                            <p class=" label label-danger">
+                              Ya existe el
+                            </p>
+                          {% endif %}
+                      </form>
                     </p>
                 </div>
               </div>
