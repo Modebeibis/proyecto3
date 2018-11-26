@@ -37,14 +37,35 @@
   		    </ul>
       </nav>
     </header>
-    {% if affiliations %}
-      <h1> {{affiliation}} </h1>
-      <h2> Sedes </h2>
+    {% if affiliation %}
+    <h1> {{affiliation}} </h1>
+
+      {% if affiliation.super_level %}
+        <h2> Dependencia <h2>
+        <h3> {{affiliation.super_level}} <a href="{% url 'sede' affiliation.super_level.id %}"> Perfil </a> </h3>
+        <br/>
+      {% endif %}
+
+      {% if sub_levels %}
+        <h2> Dependencias </h2>
+        <ul>
+          {% for sub_level in sub_levels %}
+          <li> {{sub_level}} <a href="{% url 'sede' sub_level.id %}">Perfil</a> </li>
+          {% endfor %}
+        </ul>
+
+        <br/>
+      {% endif %}
+
+      {% if register %}
+      <h2> Personas </h2>
       <ul>
-        {% for affiliation in affiliations %}
-        <li> {{affiliation}} <a href="{% url 'sede' affiliation.id %}">Perfil</a> </li>
+        {% for entry in register %}
+        <li> {{entry.person}} - {% for role in entry.roles %} {{role}}/ {% endfor %} <a href="{% url 'profile' entry.person.user.id %}"> Perfil </a></li>
         {% endfor %}
       </ul>
+      {% endif %}
+
     {% endif %}
 
 

@@ -58,7 +58,6 @@ class Person(models.Model):
     last_name   = models.TextField()
     affiliation = models.ForeignKey(Affiliation, default=1, on_delete=models.PROTECT)
     orcid       = models.TextField(unique=True)
-    role        = models.ForeignKey(Role, default=1, on_delete=models.PROTECT)
     state       = models.ForeignKey(State, default=1, on_delete=models.PROTECT)
     user        = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
