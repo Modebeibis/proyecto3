@@ -9,8 +9,11 @@ from django.utils.http import urlsafe_base64_encode,  urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login
-from .forms import CustomUserCreationForm
+from .forms import CustomLoginForm, CustomUserCreationForm
 from .models import Person, CustomUser, Affiliation, PersonRole, Role
+
+from allauth.account.views import *
+from allauth.account.forms import LoginForm, SignupForm
 
 def signup(request):
     if request.method == 'POST':

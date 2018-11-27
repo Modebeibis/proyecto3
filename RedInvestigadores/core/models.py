@@ -101,11 +101,18 @@ class Person(models.Model):
 @receiver(post_save, sender = CustomUser)
 def create_person_profile(sender, instance, created, **kwargs):
     if created:
+<<<<<<< HEAD
         print('person')
         Person.objects.create(first_name = 'No ha introducido esta información',
                               last_name = 'No ha introducido esta información',
                               orcid = instance.__str__(),
                               user = instance)
+=======
+        Person.objects.create(first_name = instance.first_name,
+                              last_name  = instance.last_name,
+                              orcid      = instance.__str__(),
+                              user       = instance)
+>>>>>>> DB
 
 class PersonRole(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)

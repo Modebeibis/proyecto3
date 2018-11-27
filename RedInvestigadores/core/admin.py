@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from .forms import LoginForm,CustomUserCreationForm, CustomUserChangeForm
+from .forms import LoginForm, CustomUserCreationForm, CustomUserChangeForm
 
 from .models import *
 
@@ -24,5 +24,4 @@ admin.site.register(Person)
 admin.site.register(Postdoc)
 admin.site.register(Publication)
 admin.site.register(Researcher)
-admin.site.register(Role)
 admin.site.register(Student)
