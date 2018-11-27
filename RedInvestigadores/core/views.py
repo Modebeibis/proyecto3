@@ -11,7 +11,7 @@ from .tokens import account_activation_token
 from django.contrib.auth import login
 from .forms import CustomUserCreationForm
 from .models import Person, CustomUser, Affiliation, PersonRole, Role, Publication, AuthorOf
-from .models import Group, GroupMember
+from .models import Group, GroupMember, Grant, GrantParticipant, Researcher
 
 def signup(request):
     if request.method == 'POST':
@@ -72,6 +72,19 @@ def search_view(request):
 
 def list_profiles(request):
     return render(request, 'core/list_profiles.html')
+
+def get_grant(request, grant_id):
+    grant = Grant.objects.get(pk = grant_id)
+    responsible = Person.objects.get(pk = grant.responsible.person.id)
+    grant_participants = GrantParticipant.objects.filter(grant = grant.id)
+    participants = []
+    for grant_participant in grant_participants:
+        participant = Person.objects.get(pk = grant_participant.person.id)
+        participants.append(participant)
+
+    return render(request, 'core/grant.html',
+                  {'grant': grant, 'responsible': responsible,
+                   'participants':participants})
 
 def get_group(request, group_id):
     group = Group.objects.get(pk = group_id)
@@ -137,9 +150,28 @@ def get_user_profile(request, user_id):
         member_group = Group.objects.get(pk = member_of_group.group.id)
         member_groups.append(member_group)
 
+    if (Researcher.objects.filter(person = person.id).exists()):
+        researcher =  Researcher.objects.get(person = person.id)
+        responsible_of_grants = Grant.objects.filter(responsible = researcher)
+        responsible_grants = []
+        for responsible_of_grant in responsible_of_grants:
+            responsible_grant = Grant.objects.get(pk = responsible_of_grant.id)
+            responsible_grants.append(responsible_grant)
+
+    participant_of_grants = GrantParticipant.objects.filter(person = person)
+    participant_grants = []
+    for participant_of_grant in participant_of_grants:
+        participant_grant = Grant.objects.get(pk = participant_of_grant.grant.id)
+        participant_grants.append(participant_grant)
+
     return render(request, 'core/profile.html',
-                  {'person': person, 'user': user, 'papers':papers,
-                   'owner_groups':owner_groups, 'member_groups':member_groups})
+                  {'person': person,
+                   'user': user, 
+                   'papers':papers,
+                   'owner_groups':owner_groups,
+                   'member_groups':member_groups,
+                   'responsible_grants': responsible_grants,
+                   'participant_grants': participant_grants})
 
 
 def search(request):

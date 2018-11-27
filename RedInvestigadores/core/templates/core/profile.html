@@ -156,6 +156,22 @@
                             {% endfor %}
                        </ul>
                        {% endif %}
+                       {% if responsible_grants %}
+                       <p> Responsable de los proyectos </p>
+                       <ul>
+                            {% for grant in responsible_grants %}
+                            <li> {{grant}} - <a href="{% url 'grant' grant.id %}">Proyecto</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if participant_grants %}
+                       <p> Participe de los proyectos </p>
+                       <ul>
+                            {% for grant in participant_grants %}
+                            <li> {{grant}} - <a href="{% url 'grant' grant.id %}">Proyecto</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
                  </div>
              </div>
              <div class="col-md-12" style="border: 1px solid lightgrey; background: #e5eaf2;">
