@@ -134,6 +134,8 @@ def get_user_profile(request, user_id):
     person = Person.objects.get(user = user_id)
     papers_author_of = AuthorOf.objects.filter(person = person)
     papers = []
+    responsible_grants = []
+    
     for paper_author in papers_author_of:
         paper = Publication.objects.get(pk = paper_author.publication.id)
         papers.append(paper)
@@ -166,7 +168,7 @@ def get_user_profile(request, user_id):
 
     return render(request, 'core/profile.html',
                   {'person': person,
-                   'user': user, 
+                   'user': user,
                    'papers':papers,
                    'owner_groups':owner_groups,
                    'member_groups':member_groups,

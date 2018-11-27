@@ -101,7 +101,6 @@ class Person(models.Model):
 @receiver(post_save, sender = CustomUser)
 def create_person_profile(sender, instance, created, **kwargs):
     if created:
-        print('person')
         Person.objects.create(first_name = 'No ha introducido esta información',
                               last_name = 'No ha introducido esta información',
                               orcid = instance.__str__(),
