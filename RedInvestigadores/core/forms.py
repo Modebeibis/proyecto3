@@ -54,3 +54,5 @@ class CustomUserChangeForm(UserChangeForm):
                                               'cols':33,
                                               'style':'resize:none;'}),
         }
+
+#class ProfileForm(forms.Form):
