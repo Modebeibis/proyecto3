@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login
 
-from .forms import CustomLoginForm, CustomSignupForm, CustomUserCreationForm
+from .forms import CustomLoginForm, CustomSignupForm, CustomUserCreationForm, ProfileForm
 from .models import Person, CustomUser, Affiliation, PersonRole, Role, Publication, AuthorOf
 from .models import Group, GroupMember, Grant, GrantParticipant, Researcher
 
@@ -140,7 +140,7 @@ def get_user_profile(request, user_id):
     papers_author_of = AuthorOf.objects.filter(person = person)
     papers = []
     responsible_grants = []
-    
+
     for paper_author in papers_author_of:
         paper = Publication.objects.get(pk = paper_author.publication.id)
         papers.append(paper)
@@ -189,3 +189,15 @@ def search(request):
                       {'persons': persons, 'query': q})
     else:
         return HttpResponse('Please submit a search term.')
+
+def profileChanges(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+    if request.method == 'POST':
+        form=ProfileForm(request.POST, instance=request.user.person)
+        if form.is_valid():
+            profile.save()
+            return redirect('core/researcher/'+ str(profile.user.id))
+    else:
+        form = ProfileForm()
+        return render(request, 'core/researcher.html')

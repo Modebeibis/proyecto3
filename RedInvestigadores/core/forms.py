@@ -76,4 +76,18 @@ class CustomUserChangeForm(UserChangeForm):
                                               'style':'resize:none;'}),
         }
 
-#class ProfileForm(forms.Form):
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model=Person
+        fields=('first_name','last_name','degree','affiliation','sni','orcid')
+        field_classes:{
+            'email': CustomUserCreationForm,
+        }
+        labels={
+            'first_name' :_('Nombres'),
+            'last_name'  :_('Apellidos'),
+            'degree'     :_('Título'),
+            'affiliation':_('Sede'),
+            'sni'        :_('SNI'),
+        }

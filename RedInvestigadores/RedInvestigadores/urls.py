@@ -27,7 +27,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('home/', views.home, name='home'),
     path('profile/<int:user_id>', views.get_user_profile, name='profile'),
-    path('research/',views.research, name='research'),
+    path('research/',views.profileChanges, name='research'),
     path('about_of/', views.about_of, name='about_of'),
     path('list_profiles/search_view/', views.search_view, name='search_view'),
     path('list_profiles/search_view/search', views.search, name='search'),
