@@ -9,15 +9,19 @@ from django.utils.http import urlsafe_base64_encode,  urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login
-from .forms import CustomUserCreationForm
+
+from .forms import CustomLoginForm, CustomSignupForm, CustomUserCreationForm
 from .models import Person, CustomUser, Affiliation, PersonRole, Role, Publication, AuthorOf
 from .models import Group, GroupMember, Grant, GrantParticipant, Researcher
 
+from allauth.account.views import *
+from allauth.account.forms import LoginForm, SignupForm
+
 def signup(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = CustomSignupForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
+            user = form.save(request)
             user.is_active = False
             user.save()
             current_site = get_current_site(request)
@@ -31,7 +35,8 @@ def signup(request):
             user.email_user(subject, message)
             return redirect('core/account_activation_sent')
     else:
-        form = CustomUserCreationForm()
+        form = CustomSignupForm()
+        lform = CustomLoginForm(request.POST)
     return render(request, 'login.html', {'form': form})
 
 def account_activation_sent(request):
@@ -44,7 +49,7 @@ def activate(request, uidb64, token):
     except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
         user = None
 
-    if user is not None and account_activation_token.check_token(user, token):
+    if user is not None and not (user.is_active) and account_activation_token.check_token(user, token):
         user.is_active = True
         user.person.email_confirmed = True
         user.save()
