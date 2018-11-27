@@ -26,15 +26,16 @@ class PersonSeeder(object):
                                                         email    = email)
 
             person = Person.objects.get(pk=(i+1))
-            person.first_name  = first_name
-            person.last_name   = last_name
-            person.affiliation = affiliation
-            person.degree      = degrees[randint(0,2)]
-            person.orcid       = orcid
-            person.role        = role
-            person.sni         = sni[randint(0, 5)]
-            person.state       = state
-            person.user        = CustomUser.objects.get(username=username)
+            person.first_name      = first_name
+            person.last_name       = last_name
+            person.affiliation     = affiliation
+            person.degree          = degrees[randint(0,2)]
+            person.orcid           = orcid
+            person.role            = role
+            person.sni             = sni[randint(0, 5)]
+            person.state           = state
+            person.user            = CustomUser.objects.get(username=username)
+            person.email_confirmed = True
             person.save()
 
     def seed_admins(self):
