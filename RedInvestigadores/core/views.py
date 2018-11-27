@@ -11,6 +11,7 @@ from .tokens import account_activation_token
 from django.contrib.auth import login
 from .forms import CustomUserCreationForm
 from .models import Person, CustomUser, Affiliation, PersonRole, Role, Publication, AuthorOf
+from .models import Group, GroupMember
 
 def signup(request):
     if request.method == 'POST':
@@ -72,6 +73,18 @@ def search_view(request):
 def list_profiles(request):
     return render(request, 'core/list_profiles.html')
 
+def get_group(request, group_id):
+    group = Group.objects.get(pk = group_id)
+    members = []
+    members.append(Person.objects.get(pk = group.owner.id))
+    group_members = GroupMember.objects.filter(group = group.id)
+    for group_member in group_members:
+        individual = Person.objects.get(pk = group_member.id)
+        members.append(individual)
+
+    return render(request, 'core/group.html',
+                 {'group': group, 'members': members})
+
 def get_publication(request, publication_id):
     publication = Publication.objects.get(pk = publication_id)
     authors_of = AuthorOf.objects.filter(publication = publication)
@@ -112,8 +125,21 @@ def get_user_profile(request, user_id):
         paper = Publication.objects.get(pk = paper_author.publication.id)
         papers.append(paper)
 
+    owner_of_groups = Group.objects.filter(owner = person.id)
+    owner_groups = []
+    for owner_of_group in owner_of_groups:
+        owner_group = Group.objects.get(pk = owner_of_group.id)
+        owner_groups.append(owner_group)
+
+    member_of_groups = GroupMember.objects.filter(person = person.id)
+    member_groups = []
+    for member_of_group in member_of_groups:
+        member_group = Group.objects.get(pk = member_of_group.group.id)
+        member_groups.append(member_group)
+
     return render(request, 'core/profile.html',
-                  {'person': person, 'user': user, 'papers':papers})
+                  {'person': person, 'user': user, 'papers':papers,
+                   'owner_groups':owner_groups, 'member_groups':member_groups})
 
 
 def search(request):

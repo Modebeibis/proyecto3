@@ -140,6 +140,22 @@
                             {% endfor %}
                        </ul>
                        {% endif %}
+                       {% if owner_groups %}
+                       <p> Dueñ@ de los grupos </p>
+                       <ul>
+                            {% for group in owner_groups %}
+                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if owner_groups %}
+                       <p> Miembr@ de los grupos </p>
+                       <ul>
+                            {% for group in member_groups %}
+                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
                  </div>
              </div>
              <div class="col-md-12" style="border: 1px solid lightgrey; background: #e5eaf2;">
