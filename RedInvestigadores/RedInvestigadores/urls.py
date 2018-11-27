@@ -40,4 +40,5 @@ urlpatterns = [
     path('sedes/', views.get_affiliations, name='sedes'),
     path('sedes/<int:affiliation_id>', views.get_affiliation, name='sede'),
     path('', include('django.contrib.auth.urls')),
+    path('', views.home, name='home'),
 ]
