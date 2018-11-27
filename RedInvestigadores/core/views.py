@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login
 from .forms import CustomUserCreationForm
-from .models import Person, CustomUser, Affiliation, PersonRole, Role
+from .models import Person, CustomUser, Affiliation, PersonRole, Role, Publication, AuthorOf
 
 def signup(request):
     if request.method == 'POST':
@@ -72,6 +72,17 @@ def search_view(request):
 def list_profiles(request):
     return render(request, 'core/list_profiles.html')
 
+def get_publication(request, publication_id):
+    publication = Publication.objects.get(pk = publication_id)
+    authors_of = AuthorOf.objects.filter(publication = publication)
+    authors = []
+    for author_of in authors_of:
+        author = Person.objects.get(pk = author_of.person.id)
+        authors.append(author)
+
+    return render(request, 'core/publication.html',
+                  {'publication': publication, 'authors': authors})
+
 def get_affiliations(request):
     affiliations = Affiliation.objects.all()
     return render(request, 'core/sedes.html', {'affiliations':affiliations})
@@ -95,8 +106,14 @@ def get_affiliation(request, affiliation_id):
 def get_user_profile(request, user_id):
     user = CustomUser.objects.get(pk = user_id)
     person = Person.objects.get(user = user_id)
+    papers_author_of = AuthorOf.objects.filter(person = person)
+    papers = []
+    for paper_author in papers_author_of:
+        paper = Publication.objects.get(pk = paper_author.publication.id)
+        papers.append(paper)
+
     return render(request, 'core/profile.html',
-                  {'person': person, 'user': user})
+                  {'person': person, 'user': user, 'papers':papers})
 
 
 def search(request):

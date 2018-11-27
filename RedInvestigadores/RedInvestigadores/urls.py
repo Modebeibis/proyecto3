@@ -24,6 +24,7 @@ urlpatterns = [
     path('login/',auth_views.LoginView.as_view(template_name='registration/login.html',
         authentication_form=LoginForm)),
     path('admin/', admin.site.urls),
+    path('', views.home, name='home'),
     path('home/', views.home, name='home'),
     path('profile/<int:user_id>', views.get_user_profile, name='profile'),
     path('research/',views.research, name='research'),
@@ -38,5 +39,6 @@ urlpatterns = [
     views.activate, name='activate'),
     path('sedes/', views.get_affiliations, name='sedes'),
     path('sedes/<int:affiliation_id>', views.get_affiliation, name='sede'),
+    path('publicacion/<int:publication_id>', views.get_publication, name='publication'),
     path('', include('django.contrib.auth.urls')),
 ]
