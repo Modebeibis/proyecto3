@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login
 from .forms import CustomUserCreationForm
-from .models import Person, CustomUser
+from .models import Person, CustomUser, Affiliation, PersonRole, Role
 
 def signup(request):
     if request.method == 'POST':
@@ -52,6 +52,11 @@ def activate(request, uidb64, token):
     else:
         return render(request, 'core/account_activation_invalid.html')
 
+class PersonInformation(object):
+    def __init__(self, person, roles):
+        self.person = person
+        self.roles = roles
+
 def home(request):
     return render(request, 'core/home.html')
 
@@ -67,8 +72,25 @@ def search_view(request):
 def list_profiles(request):
     return render(request, 'core/list_profiles.html')
 
-def sedes(request):
-    return render(request, 'core/sedes.html')
+def get_affiliations(request):
+    affiliations = Affiliation.objects.all()
+    return render(request, 'core/sedes.html', {'affiliations':affiliations})
+
+def get_affiliation(request, affiliation_id):
+    affiliation = Affiliation.objects.get(pk = affiliation_id)
+    sub_levels = Affiliation.objects.filter(super_level = affiliation)
+    persons = Person.objects.filter(affiliation = affiliation_id)
+    register = []
+    for person in persons:
+        person_roles = PersonRole.objects.filter(person = person.id)
+        roles = []
+        for person_role in person_roles:
+            roles.append(person_role.role)
+
+        register.append(PersonInformation(person, roles))
+
+    return render(request, 'core/sede.html',
+                  {'affiliation': affiliation, 'sub_levels':sub_levels, 'register':register})
 
 def get_user_profile(request, user_id):
     user = CustomUser.objects.get(pk = user_id)
