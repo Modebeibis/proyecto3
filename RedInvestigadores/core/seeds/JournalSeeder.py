@@ -7,7 +7,7 @@ class JournalSeeder(object):
         faker = Faker()
 
         for i in range(50):
-            name = faker.company(),
+            name = faker.company()
             issn = faker.isbn10()
 
             Journal.objects.get_or_create(name = name,

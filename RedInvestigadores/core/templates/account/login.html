@@ -6,7 +6,6 @@
     <meta charset="utf-8">
     <title>Login</title>
     <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_537756_537756.ico" %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
@@ -27,7 +26,6 @@
               <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
               <li><a href="{% url 'about_of' %}">Acerca de</a></li>
               {% if user.is_authenticated %}
-                <li><a href="{% url 'profile' request.user.id %}">Mi Perfil</a></li>
                 <li><a href="{% url 'logout' %}">Salir</a></li>
               {% else %}
                 <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
@@ -61,7 +59,13 @@
                           <form method="post">
                             {% csrf_token %}
                             {{ form.as_p }}
+                            <p><a href="{% url 'password_reset' %}">Restaurar contraseña</a></p>
                             <button type="submit" name="button" id="button">Entrar</button>
+                            {% if form.errors %}
+                              <p class=" label label-danger">
+                                Tu nombre de usuario o contraseña no son correctos.
+                              </p>
+                            {% endif %}
                           </form>
                       </p>
                     </div>
@@ -74,19 +78,16 @@
                 <div class="col-md-12">
             			<h2>¿No tienes cuenta?</h2>
                     <p>
-                      <form class="forms">
-                        <label for="selector">¿Con qué perfil?:</label>
-                        <select id="selector" name="selector">
-                          <option value="">Ninguno</option>
-                          <option value="1">Estudiante</option>
-                          <option value="2">Investigador</option>
-                          <option value="3">Posdoctorado</option>
-                        </select><br><br>
-                        <form method="post">
+                      <form class="signup" id="signup_form" method="post">
                           {% csrf_token %}
-                          {{ form.as_p }}
+                          {{ signupform.as_p }}
                           <button type="submit">Registrarse</button>
-                        </form>
+                          {% if form.errors %}
+                            <p class=" label label-danger">
+                              Ya existe el
+                            </p>
+                          {% endif %}
+                      </form>
                     </p>
                 </div>
               </div>

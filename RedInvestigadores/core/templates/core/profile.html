@@ -30,7 +30,7 @@
       			<li><a href="{% url 'home' %}">Inicio</a></li>
             <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
       			<li><a href="{% url 'about_of' %}">Acerca de</a></li>
-            {% if user.is_authenticated %}
+            {% if request.user.is_authenticated %}
               <li><a href="{% url 'profile' request.user.id %}">Mi Perfil</a></li>
               <li><a href="{% url 'logout' %}">Salir</a></li>
             {% else %}
@@ -52,7 +52,7 @@
      <div class="row">
        <div class="col-md-3">
          <div class="col-md-12" align="center">
-           <img class="img-responsive img-portfolio img-hover" src="img/profile.jpg">
+           <img class="img-responsive img-portfolio img-hover" src="{% static "img/20344-200.png" %}">
          </div>
          <div class="col-md-12">
            {% if person.first_name == "No ha introducido esta información" %}
@@ -90,28 +90,41 @@
              <div class="col-md-12" style="border-width: 1px 1px 0px 1px; border-style: solid; border-color: lightgrey; background: #f1f3f6;">
                <div class="col-md-8 col-md-offset-2">
 
-                       <div class="control-group form-group">
-                           <div class="controls">
-                             <br >
-                               <label>Información básica</label>
-                               <span id="alertName" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
-                                 <p>Nombre(s): {{ person.first_name }} </p>
-                               </span>
-                               <br >
-                               <span id="alertSurname" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
-                                 <p>Apellidos: {{ person.last_name }} </p>
-                               </span>
-                               <br >
-                               <span id="alertQualification" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
-                                 <p>Título: {{ person.get_degree_display }} </p>
-                               </span>
-                               <br >
-                               <span id="alertEmail" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
-                                 <p>Email: {{ user.email }} </p>
-                               </span>
-                               <p class="help-block"></p>
-                           </div>
-                       </div>
+                 <div class="control-group form-group">
+                     <div class="controls">
+                       <br >
+                         <label>Información básica</label>
+                         <span id="alertName" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                           <p>Nombre(s): {{ person.first_name }} </p>
+                         </span>
+                         <br >
+                         <span id="alertSurname" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                           <p>Apellidos: {{ person.last_name }} </p>
+                         </span>
+                         <br >
+                         <span id="alertQualification" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                           <p>Título: {{ person.get_degree_display }} </p>
+                         </span>
+                         <br >
+                         <span id="alertEmail" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                           <p>Email: {{ user.email }} </p>
+                         </span>
+                         <br>
+                         <span id="alertAdscripcion" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                           <p>Adscripción: {{ person.affiliation}} </p>
+                         </span>
+                         <br >
+                         <span id="alertSNI" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                           <p>SNI: {{ person.get_sni_display }} </p>
+                         </span>
+                         <br >
+                         <span id="alertOrcid" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                           <p>ORCID: {{ person.orcid }} </p>
+                         </span>
+                         <br >
+                         <p class="help-block"></p>
+                     </div>
+                 </div>
                        <div class="control-group form-group">
                            <div class="controls">
                                <label>Biografía:</label>
@@ -119,6 +132,46 @@
                                  <br >
                            </div>
                        </div>
+                       {% if papers %}
+                       <p> Artículos </p>
+                       <ul>
+                            {% for paper in papers %}
+                            <li> {{paper}} - <a href="{% url 'publication' paper.id %}">Articulo</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if owner_groups %}
+                       <p> Dueñ@ de los grupos </p>
+                       <ul>
+                            {% for group in owner_groups %}
+                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if owner_groups %}
+                       <p> Miembr@ de los grupos </p>
+                       <ul>
+                            {% for group in member_groups %}
+                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if responsible_grants %}
+                       <p> Responsable de los proyectos </p>
+                       <ul>
+                            {% for grant in responsible_grants %}
+                            <li> {{grant}} - <a href="{% url 'grant' grant.id %}">Proyecto</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if participant_grants %}
+                       <p> Participe de los proyectos </p>
+                       <ul>
+                            {% for grant in participant_grants %}
+                            <li> {{grant}} - <a href="{% url 'grant' grant.id %}">Proyecto</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
                  </div>
              </div>
              <div class="col-md-12" style="border: 1px solid lightgrey; background: #e5eaf2;">
@@ -148,9 +201,37 @@
                          </div>
                      </div>
                  </div>
+                 <style>
+                 .enlaceboton {
+                   font-family: verdana, arial, sans-serif;
+                   font-size: 10pt;
+                   font-weight: bold;
+                   padding: 4px;
+                   background-color: #FA8072;
+                   color: white;
+                   text-decoration: none;
 
+                   margin-right: 40px;
+                  }
+                  .enlaceboton:link,
+                  .enlaceboton:visited {
+                   border-top: 1px solid #cccccc;
+                   border-bottom: 2px solid #666666;
+                   border-left: 1px solid #cccccc;
+                   border-right: 2px solid #666666;
+                  }
+                  .enlaceboton:hover {
+                   border-bottom: 1px solid #cccccc;
+                   border-top: 2px solid #666666;
+                   border-right: 1px solid #cccccc;
+                   border-left: 2px solid #666666;
+                  }
+                 </style>
+                   {% if request.user.is_authenticated %}
+                   <a class="enlaceboton" href="{% url 'research' %}">Editar perfil</a>
+                   {% else %}
 
-
+                   {% endif %}
              </div>
          </form>
          </div>
