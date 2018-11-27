@@ -1,0 +1,63 @@
+.container{
+	background-image: linear-gradient(to top, rgba(205, 156, 242, 0.40) 0%, rgba(246, 255, 255, 0.71) 100%);
+	box-shadow: 0 15px 30px 1px rgba(100, 100, 100, 0.31);
+	text-align: center;
+	border-radius: 5px;
+	margin: 3em auto;
+	background: rgba(255, 255, 255, 0.95);
+	height: 300px;
+	width: 480px;
+	padding: 1em;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	top: 0;
+}
+
+.container h2 {
+	background: blacks
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+	font-family: 'Playfair Display', serif;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size:cover;
+	letter-spacing: 2px;
+	font-size: 1.5em;
+	margin: 0;
+	margin-top: 70px;
+
+
+}
+
+.container p {
+	text-align: justify;
+}
+.container button {
+	font-family: 'Abel', sans-serif;
+	padding: 0.5em 1.9em;
+	margin: 2.3em 0 0 0;
+	border-radius: 7px;
+	font-size: 1.4em;
+	cursor: pointer;
+	color: #blue;
+	font-size: 1em;
+	outline: none;
+	border: none;
+	transition: 0.3s linear;
+
+}
+.container button:hover{transform: translatey(2px);}
+.container button:active{transform: translatey(5px);}
+
+header {
+	background: black;
+	height: 80px;
+}
+
+footer {
+	background: black;
+	height: 80px;
+	margin-top: 700px;
+}

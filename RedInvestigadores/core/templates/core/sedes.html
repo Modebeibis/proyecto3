@@ -12,7 +12,8 @@
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,700'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/personalizado.css" %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static "css/styles.css" %}">
 
   </head>
@@ -35,10 +36,35 @@
               <li><a href="{% url 'login' %}">Ingreso/Registro</a></li>
             {% endif %}
   		    </ul>
-     </nav>
-   </header>
+      </nav>
+    </header>
+    <div class="container">
+      {% if affiliations %}
+      <h1> {{affiliation}} </h1>
+      <h2> Sedes </h2>
+      <ul class="list">
+        {% for affiliation in affiliations %}
+        <li> {{affiliation}} <a href="{% url 'sede' affiliation.id %}">Perfil</a> </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
 
+    <style>
+      .container {
+        background: #cacfd2;
+      }
+      h1,h2 {
+        text-align: center;
+        font-size: 3em;
+      }
+      .list {
+        list-style: disc;
+        margin-left: 30px;
+        font-size: 1.5em;
+      }
 
+    </style>
 
     <footer id="main-footer">
       <p>&copy; 2018 <a href=""></a></p>
