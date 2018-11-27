@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
-from .models import CustomUser, Person, State
+from .models import CustomUser, Person, State, Journal
 from django.utils.translation import ugettext_lazy as _
 from allauth.account.forms import LoginForm, SignupForm
 
@@ -75,3 +75,15 @@ class CustomUserChangeForm(UserChangeForm):
                                               'cols':33,
                                               'style':'resize:none;'}),
         }
+
+class PublicationPetitionForm(forms.Form):
+    title     = forms.CharField(label = 'Título', max_length = 200)
+    J_CHOICES = ((journal.id, journal.__str__()) for journal in Journal.objects.all())
+    journal   = forms.ChoiceField(label = 'Revista', choices = J_CHOICES)
+    volume    = forms.IntegerField(label = 'Volumen')
+    issue     = forms.IntegerField(label = 'Edición')
+    date      = forms.DateField(label = 'Fecha publicación')
+    doi       = forms.CharField(label = 'DOI')
+    OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
+    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                          choices=OPTIONS)
