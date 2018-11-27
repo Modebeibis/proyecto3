@@ -132,6 +132,46 @@
                                  <br >
                            </div>
                        </div>
+                       {% if papers %}
+                       <p> Artículos </p>
+                       <ul>
+                            {% for paper in papers %}
+                            <li> {{paper}} - <a href="{% url 'publication' paper.id %}">Articulo</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if owner_groups %}
+                       <p> Dueñ@ de los grupos </p>
+                       <ul>
+                            {% for group in owner_groups %}
+                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if owner_groups %}
+                       <p> Miembr@ de los grupos </p>
+                       <ul>
+                            {% for group in member_groups %}
+                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if responsible_grants %}
+                       <p> Responsable de los proyectos </p>
+                       <ul>
+                            {% for grant in responsible_grants %}
+                            <li> {{grant}} - <a href="{% url 'grant' grant.id %}">Proyecto</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if participant_grants %}
+                       <p> Participe de los proyectos </p>
+                       <ul>
+                            {% for grant in participant_grants %}
+                            <li> {{grant}} - <a href="{% url 'grant' grant.id %}">Proyecto</a> </li>
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
                  </div>
              </div>
              <div class="col-md-12" style="border: 1px solid lightgrey; background: #e5eaf2;">
@@ -190,7 +230,7 @@
                    {% if request.user.is_authenticated %}
                    <a class="enlaceboton" href="{% url 'research' %}">Editar perfil</a>
                    {% else %}
-                   
+
                    {% endif %}
              </div>
          </form>
