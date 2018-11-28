@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
-from .models import CustomUser, Person, State
+from .models import *
 from django.utils.translation import ugettext_lazy as _
 from allauth.account.forms import LoginForm, SignupForm
 
@@ -76,18 +76,14 @@ class CustomUserChangeForm(UserChangeForm):
                                               'style':'resize:none;'}),
         }
 
-class ProfileForm(forms.ModelForm):
-
-    class Meta:
-        model=Person
-        fields=('first_name','last_name','degree','affiliation','sni','orcid')
-        field_classes:{
-            'email': CustomUserCreationForm,
-        }
-        labels={
-            'first_name' :_('Nombres'),
-            'last_name'  :_('Apellidos'),
-            'degree'     :_('Título'),
-            'affiliation':_('Sede'),
-            'sni'        :_('SNI'),
-        }
+class ProfileForm(forms.Form):
+    first_name   = forms.CharField(label = 'Nombres', max_length = 500)
+    last_name    = forms.CharField(label = 'Apellidos', max_length = 500)
+    AFF_CHOICES  = ((affiliation.id, affiliation.__str__()) for affiliation in Affiliation.objects.all())
+    affiliations = forms.ChoiceField(label = 'Sedes', choices = AFF_CHOICES)
+    orcid        = forms.CharField(label = 'ORCID', max_length = 500)
+    ST_CHOICES   = ((state.id, state.__str__()) for state in State.objects.all())
+    states       = forms.ChoiceField(label = 'Estados', choices = ST_CHOICES)
+    D_CHOICES    = Person.DEGREE_CHOICES
+    degree       = forms.ChoiceField(label = 'Título', choices = D_CHOICES)
+    sni          = forms.ChoiceField(label = 'SNI', choices = Person.SNI_CHOICES)

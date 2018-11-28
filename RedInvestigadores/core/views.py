@@ -9,10 +9,10 @@ from django.utils.http import urlsafe_base64_encode,  urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login
+from django.template import RequestContext
 
 from .forms import CustomLoginForm, CustomSignupForm, CustomUserCreationForm, ProfileForm
-from .models import Person, CustomUser, Affiliation, PersonRole, Role, Publication, AuthorOf
-from .models import Group, GroupMember, Grant, GrantParticipant, Researcher
+from .models import *
 
 from allauth.account.views import *
 from allauth.account.forms import LoginForm, SignupForm
@@ -192,12 +192,31 @@ def search(request):
 
 def profileChanges(request):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return render(request, 'core/profile.html')
+
     if request.method == 'POST':
-        form=ProfileForm(request.POST, instance=request.user.person)
+        form=ProfileForm(request.POST)
         if form.is_valid():
-            profile.save()
-            return redirect('core/researcher/'+ str(profile.user.id))
-    else:
-        form = ProfileForm()
-        return render(request, 'core/researcher.html')
+            first_name   = form.cleaned_data.get('first_name')
+            last_name    = form.cleaned_data.get('last_name')
+            affiliations = Affiliation.objects.get(pk = form.cleaned_data.get('affiliations'))
+            orcid        = form.cleaned_data.get('orcid')
+            state        = State.objects.get(pk = form.cleaned_data.get('states'))
+            degree       = form.cleaned_data.get('degree')
+            sni          = form.cleaned_data.get('sni')
+
+            person = Person.objects.get(user = request.user.id)
+            person.first_name  = first_name
+            person.last_name   = last_name
+            person.affiliation = affiliation
+            person.orcid       = orcid
+            person.state       = state
+            person.user        = request.user
+            person.degree      = degree
+            person.sni         = sni
+            person.save()
+
+            return redirect('core/profile/'+ str(profile.user.id))
+
+    form = ProfileForm()
+    return render(request, 'core/researcher.html', {'form':form}, RequestContext(request))
