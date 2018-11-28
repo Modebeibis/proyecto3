@@ -192,7 +192,7 @@ def search(request):
     else:
         return HttpResponse('Please submit a search term.')
 
-<<<<<<< HEAD
+
 def profileChanges(request):
     if not request.user.is_authenticated:
         return render(request, 'core/profile.html')
@@ -223,7 +223,7 @@ def profileChanges(request):
 
     form = ProfileForm()
     return render(request, 'core/researcher.html', {'form':form}, RequestContext(request))
-=======
+
 def get_publication_petition(request):
     if not request.user.is_authenticated:
         return render(request, 'core/home.html')
