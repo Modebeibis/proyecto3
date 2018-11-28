@@ -16,7 +16,7 @@ class CustomSignupForm(SignupForm):
     first_name = forms.CharField(max_length=30, label='Nombres')
     last_name  = forms.CharField(max_length=30, label='Apellidos')
     email      = forms.EmailField(label='Correo Electrónico')
-    state      = forms.ModelChoiceField(queryset=State.objects.all(), label='Estado')
+#    state      = forms.ModelChoiceField(queryset=State.objects.all(), label='Estado')
 
     def signup(self, request, user):
         user.first_name = self.cleaned_data['first_name']
@@ -77,12 +77,15 @@ class CustomUserChangeForm(UserChangeForm):
         }
 
 class PublicationPetitionForm(forms.Form):
+    years = []
+    for i in range (0, 90):
+        years.append(1940+i)
     title     = forms.CharField(label = 'Título', max_length = 200)
     J_CHOICES = ((journal.id, journal.__str__()) for journal in Journal.objects.all())
     journal   = forms.ChoiceField(label = 'Revista', choices = J_CHOICES)
     volume    = forms.IntegerField(label = 'Volumen')
-    issue     = forms.IntegerField(label = 'Edición')
-    date      = forms.DateField(label = 'Fecha publicación')
+    issue     = forms.IntegerField(label = 'Número')
+    date      = forms.DateField(widget=forms.SelectDateWidget(years=years), label = 'Fecha publicación')
     doi       = forms.CharField(label = 'DOI')
     OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
     authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,

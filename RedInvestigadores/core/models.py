@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class Affiliation(models.Model):
     name        = models.TextField()
-    super_level = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
+    super_level = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
     address     = models.TextField()
     def __str__(self):
         if self.super_level is None:
