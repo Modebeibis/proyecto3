@@ -4,7 +4,7 @@
 <html>
   <head lang="es">
     <meta charset="utf-8">
-    <title>Login</title>
+    <title>SignUp</title>
     <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_537756_537756.ico" %}">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -24,7 +24,7 @@
       <nav>
   		    <ul>
               <li><a href="{% url 'home' %}">Inicio</a></li>
-              <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
+              <li><a href="{% url 'search_view' %}">Buscar</a></li>
               <li><a href="{% url 'about_of' %}">Acerca de</a></li>
               {% if user.is_authenticated %}
                 <li><a href="{% url 'profile' request.user.id %}">Mi Perfil</a></li>
@@ -39,12 +39,13 @@
     <div class="container">
       <section id="fancyTabWidget" class="tabs t-tabs">
         <ul class="nav nav-tabs fancyTabs" role="tablist">
-          <li class="tab fancyTab active">
+          <li class="tab fancyTab">
           <div class="arrow-down"><div class="arrow-down-inner"></div></div>
-              <a id="tab0" href="#tabBody0" role="tab" aria-controls="tabBody0" aria-selected="true" data-toggle="tab" tabindex="0"><span class="fa fa-desktop"></span><span class="hidden-xs">Ingresa</span></a>
+              <a id="tab0" href="{% url 'login' %}"><span class="fa fa-desktop"></span><span class="hidden-xs">Ingresa</span></a>
           	<div class="whiteBlock"></div>
           </li>
-          <li class="tab fancyTab">
+
+          <li class="tab fancyTab active">
           <div class="arrow-down"><div class="arrow-down-inner"></div></div>
               <a id="tab1" href="#tabBody1" role="tab" aria-controls="tabBody1" aria-selected="true" data-toggle="tab" tabindex="1"><span class="fa fa-check"></span><span class="hidden-xs">Regístrate</span></a>
               <div class="whiteBlock"></div>
@@ -56,7 +57,7 @@
                 <div>
                 	<div class="row">
                     <div class="col-md-12">
-                			<h2>Ingresa a tu cuenta</h2>
+                			<h2>Ingresa tus datos</h2>
                         <p>
                           <form method="post">
                             {% csrf_token %}
@@ -70,26 +71,6 @@
             </div>
 
             <div class="tab-pane  fade" id="tabBody1" role="tabpanel" aria-labelledby="tab1" aria-hidden="true" tabindex="1">
-              <div class="row">
-                <div class="col-md-12">
-            			<h2>¿No tienes cuenta?</h2>
-                    <p>
-                      <form class="forms">
-                        <label for="selector">¿Con qué perfil?:</label>
-                        <select id="selector" name="selector">
-                          <option value="">Ninguno</option>
-                          <option value="1">Estudiante</option>
-                          <option value="2">Investigador</option>
-                          <option value="3">Posdoctorado</option>
-                        </select><br><br>
-                        <form method="post">
-                          {% csrf_token %}
-                          {{ form.as_p }}
-                          <button type="submit">Registrarse</button>
-                        </form>
-                    </p>
-                </div>
-              </div>
             </div>
         </div>
       </section>

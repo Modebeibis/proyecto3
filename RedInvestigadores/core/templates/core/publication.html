@@ -27,7 +27,7 @@
       <nav>
   		    <ul>
       			<li><a href="{% url 'home' %}">Inicio</a></li>
-            <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
+            <li><a href="{% url 'search_view' %}">Buscar</a></li>
       			<li><a href="{% url 'about_of' %}">Acerca de</a></li>
             {% if user.is_authenticated %}
               <li><a href="{% url 'profile' request.user.id %}">Mi Perfil</a></li>
@@ -57,7 +57,7 @@
                    <li> Revista: {{publication.journal}} </li>
                    <li> Volumen: {{publication.volume}} - {{publication.issue}} </li>
                    <li> Fecha: {{publication.date}} </li>
-                   <li> DOI: {{publication.doi}} </li>
+                   <li> DOI: <a href="https://doi.org/{{ publication.doi }}"> {{ publication.doi }} </a> </li>
               </ul>
          {% endif %}
     </div>

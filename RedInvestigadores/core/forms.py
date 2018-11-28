@@ -16,7 +16,7 @@ class CustomSignupForm(SignupForm):
     first_name = forms.CharField(max_length=30, label='Nombres')
     last_name  = forms.CharField(max_length=30, label='Apellidos')
     email      = forms.EmailField(label='Correo Electrónico')
-    state      = forms.ModelChoiceField(queryset=State.objects.all(), label='Estado')
+#    state      = forms.ModelChoiceField(queryset=State.objects.all(), label='Estado')
 
     def signup(self, request, user):
         user.first_name = self.cleaned_data['first_name']
@@ -80,22 +80,22 @@ class CustomUserChangeForm(UserChangeForm):
 class ProfileForm(forms.Form):
     first_name   = forms.CharField(label = 'Nombres', max_length = 500)
     last_name    = forms.CharField(label = 'Apellidos', max_length = 500)
-    AFF_CHOICES  = ((affiliation.id, affiliation.__str__()) for affiliation in Affiliation.objects.all())
-    affiliations = forms.ChoiceField(label = 'Sedes', choices = AFF_CHOICES)
+    affiliations = forms.ModelChoiceField(label = 'Sedes', queryset=Affiliation.objects.all())
     orcid        = forms.CharField(label = 'ORCID', max_length = 500, required=False)
-    ST_CHOICES   = ((state.id, state.__str__()) for state in State.objects.all())
-    states       = forms.ChoiceField(label = 'Estados', choices = ST_CHOICES)
-    D_CHOICES    = Person.DEGREE_CHOICES
-    degree       = forms.ChoiceField(label = 'Título', choices = D_CHOICES)
+    states       = forms.ModelChoiceField(queryset=State.objects.all(), label='Estado')
+    degree       = forms.ChoiceField(label = 'Título', choices = Person.DEGREE_CHOICES)
     sni          = forms.ChoiceField(label = 'SNI', choices = Person.SNI_CHOICES)
 
 class PublicationPetitionForm(forms.Form):
+    years = []
+    for i in range (0, 90):
+        years.append(1940+i)
     title     = forms.CharField(label = 'Título', max_length = 200)
     J_CHOICES = ((journal.id, journal.__str__()) for journal in Journal.objects.all())
     journal   = forms.ChoiceField(label = 'Revista', choices = J_CHOICES)
     volume    = forms.IntegerField(label = 'Volumen')
-    issue     = forms.IntegerField(label = 'Edición')
-    date      = forms.DateField(label = 'Fecha publicación')
+    issue     = forms.IntegerField(label = 'Número')
+    date      = forms.DateField(widget=forms.SelectDateWidget(years=years), label = 'Fecha publicación')
     doi       = forms.CharField(label = 'DOI')
     OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
     authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
