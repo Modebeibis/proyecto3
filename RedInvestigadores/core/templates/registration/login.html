@@ -23,7 +23,7 @@
       <nav>
   		    <ul>
               <li><a href="{% url 'home' %}">Inicio</a></li>
-              <li><a href="{% url 'list_profiles' %}">Perfiles</a></li>
+              <li><a href="{% url 'search_view' %}">Buscar</a></li>
               <li><a href="{% url 'about_of' %}">Acerca de</a></li>
               {% if user.is_authenticated %}
                 <li><a href="{% url 'logout' %}">Salir</a></li>
@@ -42,9 +42,10 @@
               <a id="tab0" href="#tabBody0" role="tab" aria-controls="tabBody0" aria-selected="true" data-toggle="tab" tabindex="0"><span class="fa fa-desktop"></span><span class="hidden-xs">Ingresa</span></a>
           	<div class="whiteBlock"></div>
           </li>
+
           <li class="tab fancyTab">
           <div class="arrow-down"><div class="arrow-down-inner"></div></div>
-              <a id="tab1" href="#tabBody1" role="tab" aria-controls="tabBody1" aria-selected="true" data-toggle="tab" tabindex="1"><span class="fa fa-check"></span><span class="hidden-xs">Regístrate</span></a>
+              <a id="tab1" href="{% url 'signup' %}"> <span class="fa fa-check"></span><span class="hidden-xs">Regístrate</span></a>
               <div class="whiteBlock"></div>
           </li>
 
