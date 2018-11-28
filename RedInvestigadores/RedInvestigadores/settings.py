@@ -141,7 +141,7 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
-EMAIL_BACKEND= 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_USE_TLS=True
 EMAIL_PORT=587
@@ -165,7 +165,5 @@ ACCOUNT_UNIQUE_EMAIL                = True
 ACCOUNT_FORMS                       = {'login': 'core.forms.CustomLoginForm',
                                        'signup': 'core.forms.CustomSignupForm'}
 
-EMAIL_BACKEND       = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FILE_PATH     = os.path.join(BASE_DIR,"sent_emails")
 LOGIN_REDIRECT_URL  = 'home'
 LOGOUT_REDIRECT_URL = 'home'
