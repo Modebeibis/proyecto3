@@ -140,7 +140,7 @@ def get_user_profile(request, user_id):
     papers_author_of = AuthorOf.objects.filter(person = person)
     papers = []
     responsible_grants = []
-    
+
     for paper_author in papers_author_of:
         paper = Publication.objects.get(pk = paper_author.publication.id)
         papers.append(paper)
@@ -185,7 +185,13 @@ def search(request):
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
         persons = Person.objects.filter(first_name__icontains=q)
+        affiliations = Affiliation.objects.filter(name__icontains=q)
+        publications = Publication.objects.filter(title__icontains=q)
         return render(request, 'core/search.html',
-                      {'persons': persons, 'query': q})
+                      {'persons': persons,
+                       'affiliations': affiliations,
+                       'publications': publications,
+                       'query': q})
+
     else:
         return HttpResponse('Please submit a search term.')
