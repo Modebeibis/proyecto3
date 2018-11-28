@@ -290,4 +290,3 @@ def get_group_petition(request):
     petition_form = GroupPetitionForm()
     return render(request, 'core/group_petition.html',
                   {'form':petition_form}, RequestContext(request))
->>>>>>> 292945088ac6b64534f68adeff76f4b57f22240e
