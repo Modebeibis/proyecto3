@@ -57,7 +57,7 @@
                    <li> Revista: {{publication.journal}} </li>
                    <li> Volumen: {{publication.volume}} - {{publication.issue}} </li>
                    <li> Fecha: {{publication.date}} </li>
-                   <li> DOI: {{publication.doi}} </li>
+                   <li> DOI: <a href="https://doi.org/{{ publication.doi }}"> {{ publication.doi }} </a> </li>
               </ul>
          {% endif %}
     </div>

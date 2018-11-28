@@ -118,9 +118,7 @@
                            <p>SNI: {{ person.get_sni_display }} </p>
                          </span>
                          <br >
-                         <span id="alertOrcid" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
-                           <p>ORCID: {{ person.orcid }} </p>
-                         </span>
+                         <div itemscope itemtype="https://schema.org/Person"><a itemprop="sameAs" content="https://orcid.org/{{ person.orcid }}" href="https://orcid.org/{{ person.orcid }}" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">orcid.org/{{ person.orcid }}</a></div>
                          <br >
                          <p class="help-block"></p>
                      </div>

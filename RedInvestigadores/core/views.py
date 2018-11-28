@@ -186,8 +186,14 @@ def search(request):
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
         persons = Person.objects.filter(first_name__icontains=q)
+        affiliations = Affiliation.objects.filter(name__icontains=q)
+        publications = Publication.objects.filter(title__icontains=q)
         return render(request, 'core/search.html',
-                      {'persons': persons, 'query': q})
+                      {'persons': persons,
+                       'affiliations': affiliations,
+                       'publications': publications,
+                       'query': q})
+
     else:
         return HttpResponse('Please submit a search term.')
 

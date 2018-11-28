@@ -102,69 +102,68 @@
     text-align:center;">
     You searched for: <strong>{{ query }}</strong></div>
       <div>
-      <button class="accordion">Pesonas ({{ persons|length }})</button>
+      <button class="accordion">Personas ({{ persons|length }})</button>
       <div class="panel">
           {% if persons %}
               <ul style="position: center;">
                   {% for person in persons %}
                   <div class="resultadoBusqueda">
-                    <li>Nombre: {{ person.first_name }} {{ person.last_name }}</li>
-                    <li>Rol: {{ person.role }} </li>
+                    <li>Nombre: <a href="{% url 'profile' person.user.id %}"> {{ person.first_name }} {{ person.last_name }} </a> </li>
                     <li>Adscripción: {{ person.affiliation}} </li>
+                    <li>Estado: {{ person.state }} </li>
                   </div>
                   <br>
                   {% endfor %}
               </ul>
           {% else %}
-          <p>No persons matched your search criteria.</p>
+          <p>Ninguna persona cumple los criterios de la búsqueda.</p>
           {% endif %}
-        </div>     
+        </div>
 
      <!-- BLOQUE DE POR MODIFICAR PARA BUSQUEDAS POR INSTITUCIONES-->
-     <button class="accordion">Instituciones ({{ persons|length }})</button>
+     <button class="accordion">Instituciones ({{ affiliations|length }})</button>
      <div class="panel">
-      {% if persons %}
+      {% if affiliations %}
           <ul style="position: center;">
-              {% for person in persons %}
+              {% for affiliation in affiliations %}
               <div class="resultadoBusqueda">
-                <li>Nombre: {{ person.first_name }} {{ person.last_name }}</li>
-                <li>Rol: {{ person.role }} </li>
-                <li>Adscripción: {{ person.affiliation}} </li>
+                <li>Institución: <a href="{% url 'sede' affiliation.id %}"> {{ affiliation }} </a> </li>
+                <li>Dirección: {{ affiliation.address }} </li>
               </div>
               <br>
               {% endfor %}
           </ul>
       {% else %}
-      <p>No persons matched your search criteria.</p>
+      <p>Ninguna institución cumple los criterios de la búsqueda.</p>
       {% endif %}
-    </div>     
+    </div>
 
      <!-- BLOQUE DE POR MODIFICAR PARA BUSQUEDAS POR PUBLICACIONES-->
-     <button class="accordion">Publicaciones ({{ persons|length }})</button>
+     <button class="accordion">Publicaciones ({{ publications|length }})</button>
      <div class="panel">
-      {% if persons %}
+      {% if publications %}
           <ul style="position: center;">
-              {% for person in persons %}
+              {% for publication in publications %}
               <div class="resultadoBusqueda">
-                <li>Nombre: {{ person.first_name }} {{ person.last_name }}</li>
-                <li>Rol: {{ person.role }} </li>
-                <li>Adscripción: {{ person.affiliation}} </li>
+                <li>Título: <a href="{% url 'publication' publication.id %}"> {{ publication.title }} </a> </li>
+                <li>Revista: {{ publication.journal }} </li>
+                <li>Fecha: {{ publication.date }} </li>
               </div>
               <br>
               {% endfor %}
           </ul>
       {% else %}
-      <p>No persons matched your search criteria.</p>
+      <p>Ninguna publicación cumple los criterios de la búsqueda.</p>
       {% endif %}
-    </div>     
+    </div>
 
-    
+
    </div>
 
    <script>
     var acc = document.getElementsByClassName("accordion");
     var i;
-    
+
     for (i = 0; i < acc.length; i++) {
         acc[i].addEventListener("click", function() {
             this.classList.toggle("active");
@@ -177,7 +176,7 @@
         });
     }
     </script>
-    
+
     <footer id="main-footer">
       <p>&copy; 2018 <a href=""></a></p>
     </footer>
