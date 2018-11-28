@@ -198,12 +198,15 @@ def search(request):
 
 
 def profileChanges(request):
+    person = Person.objects.get(user = request.user.id)
     if not request.user.is_authenticated:
         return render(request, 'core/profile.html')
 
     if request.method == 'POST':
+        print("hola")
         form = ProfileForm(request.POST)
         if form.is_valid():
+            print("hola")
             first_name   = form.cleaned_data.get('first_name')
             last_name    = form.cleaned_data.get('last_name')
             affiliations = Affiliation.objects.get(pk = form.cleaned_data.get('affiliations'))
@@ -212,7 +215,6 @@ def profileChanges(request):
             degree       = form.cleaned_data.get('degree')
             sni          = form.cleaned_data.get('sni')
 
-            person = Person.objects.get(user = request.user.id)
             person.first_name  = first_name
             person.last_name   = last_name
             person.affiliation = affiliation
@@ -225,7 +227,14 @@ def profileChanges(request):
 
             return redirect('core/profile/'+ str(profile.user.id))
 
-    form = ProfileForm()
+    form = ProfileForm(initial={'first_name':  person.first_name,
+                                'last_name':   person.last_name,
+                                'affiliation': person.affiliation,
+                                'orcid':       person.orcid,
+                                'state':       person.state,
+                                'degree':      person.degree,
+                                'sni':         person.sni
+                                })
     return render(request, 'core/researcher.html', {'form':form}, RequestContext(request))
 
 def get_publication_petition(request):
@@ -294,4 +303,3 @@ def get_group_petition(request):
     petition_form = GroupPetitionForm()
     return render(request, 'core/group_petition.html',
                   {'form':petition_form}, RequestContext(request))
->>>>>>> 292945088ac6b64534f68adeff76f4b57f22240e
