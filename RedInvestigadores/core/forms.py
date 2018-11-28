@@ -76,6 +76,7 @@ class CustomUserChangeForm(UserChangeForm):
                                               'style':'resize:none;'}),
         }
 
+<<<<<<< HEAD
 class ProfileForm(forms.Form):
     first_name   = forms.CharField(label = 'Nombres', max_length = 500)
     last_name    = forms.CharField(label = 'Apellidos', max_length = 500)
@@ -87,3 +88,22 @@ class ProfileForm(forms.Form):
     D_CHOICES    = Person.DEGREE_CHOICES
     degree       = forms.ChoiceField(label = 'Título', choices = D_CHOICES)
     sni          = forms.ChoiceField(label = 'SNI', choices = Person.SNI_CHOICES)
+=======
+class PublicationPetitionForm(forms.Form):
+    title     = forms.CharField(label = 'Título', max_length = 200)
+    J_CHOICES = ((journal.id, journal.__str__()) for journal in Journal.objects.all())
+    journal   = forms.ChoiceField(label = 'Revista', choices = J_CHOICES)
+    volume    = forms.IntegerField(label = 'Volumen')
+    issue     = forms.IntegerField(label = 'Edición')
+    date      = forms.DateField(label = 'Fecha publicación')
+    doi       = forms.CharField(label = 'DOI')
+    OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
+    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                          choices=OPTIONS)
+
+class GroupPetitionForm(forms.Form):
+    name = forms.CharField(label = 'Nombre', max_length = 200)
+    OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
+    members = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                          choices=OPTIONS)
+>>>>>>> 292945088ac6b64534f68adeff76f4b57f22240e

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,  redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponse
@@ -6,6 +6,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, redirect
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode,  urlsafe_base64_decode
+from django.template import RequestContext
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login
@@ -97,7 +98,7 @@ def get_group(request, group_id):
     members.append(Person.objects.get(pk = group.owner.id))
     group_members = GroupMember.objects.filter(group = group.id)
     for group_member in group_members:
-        individual = Person.objects.get(pk = group_member.id)
+        individual = Person.objects.get(pk = group_member.person.id)
         members.append(individual)
 
     return render(request, 'core/group.html',
@@ -152,6 +153,7 @@ def get_user_profile(request, user_id):
         owner_groups.append(owner_group)
 
     member_of_groups = GroupMember.objects.filter(person = person.id)
+    print(member_of_groups)
     member_groups = []
     for member_of_group in member_of_groups:
         member_group = Group.objects.get(pk = member_of_group.group.id)
@@ -190,6 +192,7 @@ def search(request):
     else:
         return HttpResponse('Please submit a search term.')
 
+<<<<<<< HEAD
 def profileChanges(request):
     if not request.user.is_authenticated:
         return render(request, 'core/profile.html')
@@ -220,3 +223,71 @@ def profileChanges(request):
 
     form = ProfileForm()
     return render(request, 'core/researcher.html', {'form':form}, RequestContext(request))
+=======
+def get_publication_petition(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        petition_form = PublicationPetitionForm(request.POST)
+
+        if petition_form.is_valid():
+            title   = petition_form.cleaned_data.get('title')
+            journal = Journal.objects.get(pk = petition_form.cleaned_data.get('journal'))
+            volume  = petition_form.cleaned_data.get('volume')
+            issue   = petition_form.cleaned_data.get('issue')
+            date    = petition_form.cleaned_data.get('date')
+            doi     = petition_form.cleaned_data.get('doi')
+            authors_id = petition_form.cleaned_data.get('authors')
+
+            if Publication.objects.filter(doi = doi).exists():
+                publication = Publication.objects.get(doi = doi)
+                return redirect('/publicacion/' + str(publication.id))
+
+            petitioner = Person.objects.get(user = request.user.id)
+
+            if petitioner.id not in authors_id:
+                authors_id.append(petitioner.id)
+
+            publication = Publication.objects.create(title   = title,
+                                                     journal = journal,
+                                                     volume  = volume,
+                                                     issue   = issue,
+                                                     date    = date,
+                                                     doi     = doi)
+
+            for author_id in authors_id:
+                author = Person.objects.get(pk = author_id)
+                AuthorOf.objects.create(publication = publication,
+                                        person = author)
+
+            return redirect('/publicacion/' + str(publication.id))
+
+    petition_form = PublicationPetitionForm()
+    return render(request, 'core/publication_petition.html',
+                  {'form':petition_form}, RequestContext(request))
+
+def get_group_petition(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        petition_form = GroupPetitionForm(request.POST)
+
+        if petition_form.is_valid():
+            name = petition_form.cleaned_data.get('name')
+            owner = Person.objects.get(user = request.user.id)
+            members_id = petition_form.cleaned_data.get('members')
+
+            group = Group.objects.create(name = name, owner = owner)
+
+            for member_id in members_id:
+                member = Person.objects.get(pk = member_id)
+                GroupMember.objects.create(group = group,
+                                           person = member)
+            return redirect('/grupo/' + str(group.id))
+
+    petition_form = GroupPetitionForm()
+    return render(request, 'core/group_petition.html',
+                  {'form':petition_form}, RequestContext(request))
+>>>>>>> 292945088ac6b64534f68adeff76f4b57f22240e
