@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,  redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponse
@@ -6,13 +6,15 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, redirect
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode,  urlsafe_base64_decode
+from django.template import RequestContext
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login
 
 from .forms import CustomLoginForm, CustomSignupForm, CustomUserCreationForm
+from .forms import PublicationPetitionForm
 from .models import Person, CustomUser, Affiliation, PersonRole, Role, Publication, AuthorOf
-from .models import Group, GroupMember, Grant, GrantParticipant, Researcher
+from .models import Group, GroupMember, Grant, GrantParticipant, Researcher, Journal
 
 from allauth.account.views import *
 from allauth.account.forms import LoginForm, SignupForm
@@ -140,7 +142,7 @@ def get_user_profile(request, user_id):
     papers_author_of = AuthorOf.objects.filter(person = person)
     papers = []
     responsible_grants = []
-    
+
     for paper_author in papers_author_of:
         paper = Publication.objects.get(pk = paper_author.publication.id)
         papers.append(paper)
@@ -189,3 +191,46 @@ def search(request):
                       {'persons': persons, 'query': q})
     else:
         return HttpResponse('Please submit a search term.')
+
+def get_publication_petition(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        petition_form = PublicationPetitionForm(request.POST)
+
+        if petition_form.is_valid():
+            title   = petition_form.cleaned_data.get('title')
+            journal = Journal.objects.get(pk = petition_form.cleaned_data.get('journal'))
+            volume  = petition_form.cleaned_data.get('volume')
+            issue   = petition_form.cleaned_data.get('issue')
+            date    = petition_form.cleaned_data.get('date')
+            doi     = petition_form.cleaned_data.get('doi')
+            authors_id = petition_form.cleaned_data.get('authors')
+
+            if Publication.objects.filter(doi = doi).exists():
+                publication = Publication.objects.get(doi = doi)
+                return redirect('/publicacion/' + str(publication.id))
+
+            petitioner = Person.objects.get(user = request.user.id)
+
+            if petitioner.id not in authors_id:
+                authors_id.append(petitioner.id)
+
+            publication = Publication.objects.create(title   = title,
+                                                     journal = journal,
+                                                     volume  = volume,
+                                                     issue   = issue,
+                                                     date    = date,
+                                                     doi     = doi)
+
+            for author_id in authors_id:
+                author = Person.objects.get(pk = author_id)
+                AuthorOf.objects.create(publication = publication,
+                                        person = author)
+
+            return redirect('/publicacion/' + str(publication.id))
+
+    petition_form = PublicationPetitionForm()
+    return render(request, 'core/publication_petition.html',
+                  {'form':petition_form}, RequestContext(request))
