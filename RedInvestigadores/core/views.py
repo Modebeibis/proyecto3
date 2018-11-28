@@ -12,7 +12,7 @@ from .tokens import account_activation_token
 from django.contrib.auth import login
 
 from .forms import CustomLoginForm, CustomSignupForm, CustomUserCreationForm
-from .forms import PublicationPetitionForm
+from .forms import PublicationPetitionForm, GroupPetitionForm
 from .models import Person, CustomUser, Affiliation, PersonRole, Role, Publication, AuthorOf
 from .models import Group, GroupMember, Grant, GrantParticipant, Researcher, Journal
 
@@ -99,7 +99,7 @@ def get_group(request, group_id):
     members.append(Person.objects.get(pk = group.owner.id))
     group_members = GroupMember.objects.filter(group = group.id)
     for group_member in group_members:
-        individual = Person.objects.get(pk = group_member.id)
+        individual = Person.objects.get(pk = group_member.person.id)
         members.append(individual)
 
     return render(request, 'core/group.html',
@@ -154,6 +154,7 @@ def get_user_profile(request, user_id):
         owner_groups.append(owner_group)
 
     member_of_groups = GroupMember.objects.filter(person = person.id)
+    print(member_of_groups)
     member_groups = []
     for member_of_group in member_of_groups:
         member_group = Group.objects.get(pk = member_of_group.group.id)
@@ -233,4 +234,28 @@ def get_publication_petition(request):
 
     petition_form = PublicationPetitionForm()
     return render(request, 'core/publication_petition.html',
+                  {'form':petition_form}, RequestContext(request))
+
+def get_group_petition(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        petition_form = GroupPetitionForm(request.POST)
+
+        if petition_form.is_valid():
+            name = petition_form.cleaned_data.get('name')
+            owner = Person.objects.get(user = request.user.id)
+            members_id = petition_form.cleaned_data.get('members')
+
+            group = Group.objects.create(name = name, owner = owner)
+
+            for member_id in members_id:
+                member = Person.objects.get(pk = member_id)
+                GroupMember.objects.create(group = group,
+                                           person = member)
+            return redirect('/grupo/' + str(group.id))
+
+    petition_form = GroupPetitionForm()
+    return render(request, 'core/group_petition.html',
                   {'form':petition_form}, RequestContext(request))

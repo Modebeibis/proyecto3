@@ -87,3 +87,9 @@ class PublicationPetitionForm(forms.Form):
     OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
     authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
                                           choices=OPTIONS)
+
+class GroupPetitionForm(forms.Form):
+    name = forms.CharField(label = 'Nombre', max_length = 200)
+    OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
+    members = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                          choices=OPTIONS)
