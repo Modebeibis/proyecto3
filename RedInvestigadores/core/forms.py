@@ -81,7 +81,7 @@ class ProfileForm(forms.Form):
     last_name    = forms.CharField(label = 'Apellidos', max_length = 500)
     AFF_CHOICES  = ((affiliation.id, affiliation.__str__()) for affiliation in Affiliation.objects.all())
     affiliations = forms.ChoiceField(label = 'Sedes', choices = AFF_CHOICES)
-    orcid        = forms.CharField(label = 'ORCID', max_length = 500)
+    orcid        = forms.CharField(label = 'ORCID', max_length = 500, required=False)
     ST_CHOICES   = ((state.id, state.__str__()) for state in State.objects.all())
     states       = forms.ChoiceField(label = 'Estados', choices = ST_CHOICES)
     D_CHOICES    = Person.DEGREE_CHOICES

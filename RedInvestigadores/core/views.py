@@ -195,7 +195,7 @@ def profileChanges(request):
         return render(request, 'core/profile.html')
 
     if request.method == 'POST':
-        form=ProfileForm(request.POST)
+        form = ProfileForm(request.POST)
         if form.is_valid():
             first_name   = form.cleaned_data.get('first_name')
             last_name    = form.cleaned_data.get('last_name')
