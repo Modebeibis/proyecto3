@@ -12,7 +12,7 @@ from .tokens import account_activation_token
 from django.contrib.auth import login
 from django.template import RequestContext
 
-from .forms import CustomLoginForm, CustomSignupForm, CustomUserCreationForm, ProfileForm
+from .forms import *
 from .models import *
 
 from allauth.account.views import *
@@ -53,6 +53,7 @@ def activate(request, uidb64, token):
     if user is not None and not (user.is_active) and account_activation_token.check_token(user, token):
         user.is_active = True
         user.person.email_confirmed = True
+        user.person.save()
         user.save()
         login(request, user)
         return redirect('home')
@@ -197,16 +198,17 @@ def search(request):
         return HttpResponse('Please submit a search term.')
 
 
-def profileChanges(request):
+def profile_changes(request):
+    print(request.method)
     person = Person.objects.get(user = request.user.id)
     if not request.user.is_authenticated:
         return render(request, 'core/profile.html')
 
     if request.method == 'POST':
-        print("hola")
+        print('hola')
         form = ProfileForm(request.POST)
         if form.is_valid():
-            print("hola")
+            print('hi')
             first_name   = form.cleaned_data.get('first_name')
             last_name    = form.cleaned_data.get('last_name')
             affiliations = Affiliation.objects.get(pk = form.cleaned_data.get('affiliations'))
@@ -235,6 +237,7 @@ def profileChanges(request):
                                 'degree':      person.degree,
                                 'sni':         person.sni
                                 })
+    print('hello')
     return render(request, 'core/researcher.html', {'form':form}, RequestContext(request))
 
 def get_publication_petition(request):
@@ -279,6 +282,45 @@ def get_publication_petition(request):
     petition_form = PublicationPetitionForm()
     return render(request, 'core/publication_petition.html',
                   {'form':petition_form}, RequestContext(request))
+
+def publication_changes(request,publication_id):
+    print('enter')
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        print('POST')
+        pub_instance=Publication.objects.get(pk = publication_id)
+        form = PublicationChangeForm(request.POST, instance= pub_instance)
+
+        if form.is_valid():
+            print('valid')
+            authors = form.cleaned_data.get('authors')
+            title   = form.cleaned_data.get('title')
+            doi     = form.cleaned_data.get('doi')
+            publication = form.save(commit = False)
+            publication.title = title
+            publication.doi = doi
+            publication.save()
+            for author in authors:
+                if AuthorOf.objects.filter(person = author,publication = publication).exists():
+                    continue
+                else:
+                    AuthorOf.objects.create(publication = publication,
+                                            person = author)
+            return redirect('/publicacion/' + str(publication_id))
+    print('get')
+    publication = Publication.objects.get(pk= publication_id)
+    form = PublicationChangeForm(initial={'title': publication.title,
+                                         'journal': publication.journal,
+                                         'volume': publication.volume,
+                                         'issue': publication.issue,
+                                         'date': publication.date,
+                                         'doi': publication.doi})
+    return render(request, 'core/publication_change.html',
+                  {'form':form,
+                  'publication': publication }, RequestContext(request))
+
 
 def get_group_petition(request):
     if not request.user.is_authenticated:
