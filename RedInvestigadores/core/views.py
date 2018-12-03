@@ -205,10 +205,8 @@ def profile_changes(request):
         return render(request, 'core/profile.html')
 
     if request.method == 'POST':
-        print('hola')
         form = ProfileForm(request.POST)
         if form.is_valid():
-            print('hi')
             first_name   = form.cleaned_data.get('first_name')
             last_name    = form.cleaned_data.get('last_name')
             affiliations = Affiliation.objects.get(pk = form.cleaned_data.get('affiliations'))
@@ -349,11 +347,9 @@ def group_changes(request,group_id):
         return render(request, 'core/home.html')
 
     if request.method == 'POST':
-        print('post')
         form = GroupPetitionForm(request.POST)
 
         if form.is_valid():
-            print('valid')
             name = form.cleaned_data.get('name')
             members_id = form.cleaned_data.get('members')
             group = Group.objects.get(pk = group_id)
@@ -366,7 +362,6 @@ def group_changes(request,group_id):
             return redirect('/grupo/' + str(group_id))
     group=Group.objects.get(pk= group_id)
     form = GroupPetitionForm(initial={'name': group.name})
-    print('get')
     return render(request, 'core/group_change.html',
                   {'form':form,
                   'group': group }, RequestContext(request))
