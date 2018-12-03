@@ -200,7 +200,7 @@ def search(request):
 
 def profile_changes(request):
     print(request.method)
-    person = Person.objects.get(user = request.user.id)
+    person = Person.objects.get(user = request.user)
     if not request.user.is_authenticated:
         return render(request, 'core/profile.html')
 
@@ -284,17 +284,14 @@ def get_publication_petition(request):
                   {'form':petition_form}, RequestContext(request))
 
 def publication_changes(request,publication_id):
-    print('enter')
     if not request.user.is_authenticated:
         return render(request, 'core/home.html')
 
     if request.method == 'POST':
-        print('POST')
         pub_instance=Publication.objects.get(pk = publication_id)
         form = PublicationChangeForm(request.POST, instance= pub_instance)
 
         if form.is_valid():
-            print('valid')
             authors = form.cleaned_data.get('authors')
             title   = form.cleaned_data.get('title')
             doi     = form.cleaned_data.get('doi')
@@ -302,14 +299,14 @@ def publication_changes(request,publication_id):
             publication.title = title
             publication.doi = doi
             publication.save()
-            for author in authors:
+            for author_id in authors:
+                author = Person.objects.get(pk = author_id)
                 if AuthorOf.objects.filter(person = author,publication = publication).exists():
                     continue
                 else:
-                    AuthorOf.objects.create(publication = publication,
-                                            person = author)
+                    AuthorOf.objects.create(publication = publication,person = author)
             return redirect('/publicacion/' + str(publication_id))
-    print('get')
+
     publication = Publication.objects.get(pk= publication_id)
     form = PublicationChangeForm(initial={'title': publication.title,
                                          'journal': publication.journal,
@@ -317,6 +314,7 @@ def publication_changes(request,publication_id):
                                          'issue': publication.issue,
                                          'date': publication.date,
                                          'doi': publication.doi})
+
     return render(request, 'core/publication_change.html',
                   {'form':form,
                   'publication': publication }, RequestContext(request))
@@ -345,3 +343,30 @@ def get_group_petition(request):
     petition_form = GroupPetitionForm()
     return render(request, 'core/group_petition.html',
                   {'form':petition_form}, RequestContext(request))
+
+def group_changes(request,group_id):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        print('post')
+        form = GroupPetitionForm(request.POST)
+
+        if form.is_valid():
+            print('valid')
+            name = form.cleaned_data.get('name')
+            members_id = form.cleaned_data.get('members')
+            group = Group.objects.get(pk = group_id)
+            group.name= name
+            group.save()
+            for member_id in members_id:
+                member = Person.objects.get(pk = member_id)
+                if not GroupMember.objects.filter(group = group, person = member).exists():
+                    GroupMember.objects.create(group = group,person = member)
+            return redirect('/grupo/' + str(group_id))
+    group=Group.objects.get(pk= group_id)
+    form = GroupPetitionForm(initial={'name': group.name})
+    print('get')
+    return render(request, 'core/group_change.html',
+                  {'form':form,
+                  'group': group }, RequestContext(request))

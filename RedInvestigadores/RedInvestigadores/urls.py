@@ -39,6 +39,7 @@ urlpatterns = [
     path('sedes/<int:affiliation_id>', views.get_affiliation, name='sede'),
     path('publicacion/<int:publication_id>', views.get_publication, name='publication'),
     path('grupo/<int:group_id>', views.get_group, name='group'),
+    path('actualizar/grupo/<int:group_id>',views.group_changes, name='group_change'),
     path('proyecto/<int:grant_id>', views.get_grant, name='grant'),
     path('crear/articulo', views.get_publication_petition, name='publication_petition'),
     path('crear/grupo', views.get_group_petition, name='group_petition'),
