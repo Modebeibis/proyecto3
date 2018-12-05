@@ -99,7 +99,7 @@
                            <div class="controls">
                              <br>
                                <label>Información básica</label>
-                               <form method="post">
+                               <form method="POST">
                                  {% csrf_token %}
                                  {{ form.as_p }}
                                  <button type="submit" name="button" id="button">Actualizar</button>
@@ -121,30 +121,6 @@
              </div>
              <div class="col-md-12" style="border: 1px solid lightgrey; background: #e5eaf2;">
                  <div class="col-md-8 col-md-offset-2">
-                 <div class="control-group form-group">
-                         <div class="controls">
-                           <br >
-                             <label>Enlaces:</label>
-                             <input type="text" class="form-control" id="txtMyWeb" placeholder="Introduzca su web personal o profesional">
-                             <br>
-                             <div class="input-group">
-                               <span class="input-group-addon">https://plus.google.com</span><input type="text" class="form-control" id="txtPlus" placeholder="Introduzca su usuario de Google+">
-                             </div>
-                             <br>
-                             <div class="input-group">
-                               <span class="input-group-addon">http://twitter.com</span><input type="text" class="form-control" id="txtTwitter" placeholder="Introduzca su usuario de Twitter">
-                             </div>
-                             <br>
-                             <div class="input-group">
-                               <span class="input-group-addon">https://www.facebook.com</span><input type="text" class="form-control" id="txtFacebook" placeholder="Introduzca su usuario de Facebook">
-                             </div>
-                             <br>
-                             <div class="input-group">
-                               <span class="input-group-addon">https://www.linkedin.com</span><input type="text" class="form-control" id="txtLinkedin" placeholder="Introduzca su usuario de Linkedin">
-                             </div>
-                             <br >
-                         </div>
-                     </div>
                  </div>
 
 

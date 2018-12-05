@@ -39,19 +39,11 @@
       </nav>
     </header>
     <div class="container">
-         {% if group %}
-              <h1> Grupo: {{group}} </h1>
-              {% if members %}
-              <br/>
-              <h2> Miembros </h2>
-              <ul>
-                   {% for member in members %}
-                   <li> {{member}} - <a href="{% url 'profile' member.user.id %}"> Perfil </a></li>
-                   {% endfor %}
-              </ul>
-              {% endif %}
-              <p><a href="{% url 'group_change' group.id %}">Cambiar</a>
-         {% endif %}
+         <form action = "{% url 'publication_change' publication.id  %}" method="post">
+              {% csrf_token %}
+              {{ form.as_ul }}
+              <input type = "submit" value = "Actualizar">
+         </form>
     </div>
 
 
