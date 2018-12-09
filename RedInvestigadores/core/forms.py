@@ -91,21 +91,26 @@ class PublicationPetitionForm(forms.Form):
     for i in range (0, 90):
         years.append(1940+i)
     title     = forms.CharField(label = 'Título', max_length = 200)
-    J_CHOICES = ((journal.id, journal.__str__()) for journal in Journal.objects.all())
-    journal   = forms.ChoiceField(label = 'Revista', choices = J_CHOICES)
+    journal   = forms.ChoiceField(label = 'Revista')
     volume    = forms.IntegerField(label = 'Volumen')
     issue     = forms.IntegerField(label = 'Número')
-    date      = forms.DateField(widget=forms.SelectDateWidget(years=years), label = 'Fecha publicación')
+    date      = forms.DateField(widget = forms.SelectDateWidget(years=years),
+                                label = 'Fecha publicación')
     doi       = forms.CharField(label = 'DOI')
-    OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
-    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                          choices=OPTIONS)
+    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+
+    def __init__(self, *args, **kwargs):
+        super(PublicationPetitionForm, self).__init__(*args, **kwargs)
+        J_CHOICES = ((journal.id, journal.__str__()) for journal in Journal.objects.all())
+        self.fields['journal'].choices = J_CHOICES
+        OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['authors'].choices = OPTIONS
+
 class PublicationChangeForm(forms.ModelForm):
     doi       = forms.CharField(label = 'DOI')
     title     = forms.CharField(label = 'Título', max_length = 200)
-    OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
-    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                          choices=OPTIONS)
+    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+
     class Meta:
         model=Publication
         fields=('journal', 'volume','issue','date')
@@ -116,12 +121,17 @@ class PublicationChangeForm(forms.ModelForm):
             'date' : _('Fecha'),
         }
     def __init__(self,*args, **kwargs):
-        super(PublicationChangeForm,self).__init__(*args, **kwargs)
+        super(PublicationChangeForm, self).__init__(*args, **kwargs)
         self.fields['journal'].queryset = Journal.objects.all()
+        OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['authors'].choices = OPTIONS
 
 
 class GroupPetitionForm(forms.Form):
     name = forms.CharField(label = 'Nombre', max_length = 200)
-    OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
-    members = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                          choices=OPTIONS)
+    members = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+
+    def __init__(self, *args, **kwargs):
+        super(GroupPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['members'].choices = OPTIONS
