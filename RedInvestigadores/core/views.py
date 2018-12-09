@@ -68,16 +68,15 @@ class PersonInformation(object):
         self.roles = roles
 
 def home(request):
-    total_persons = len(Person.objects.all())
     states = State.objects.all()
     census = []
     for state in states:
-        census.append([state.name, len(Person.objects.filter(state = state.id))])
+        census.append([state.name, state.relative_density()])
 
     census = json.dumps(census)
 
     return render(request, 'core/home.html',
-                 {'total_persons': total_persons, 'census': census})
+                 {'census': census})
 
 def research(request):
     return render(request, 'core/researcher.html')
