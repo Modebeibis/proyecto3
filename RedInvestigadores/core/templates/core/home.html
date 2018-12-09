@@ -24,6 +24,26 @@
     <script src="{% static "js/jsmaps-panzoom.js" %}"></script>
     <script src="{% static "js/jsmaps.min.js" %}" type="text/javascript"></script>
     <script src="{% static "js/mexico.js" %}" type="text/javascript"></script>
+    <script>
+         total_persons = "{{total_persons|escapejs}}";
+         census = {{census|safe}};
+         states = window.JSMaps.maps.mexico.paths;
+         console.log(total_persons)
+         console.log(states)
+         for (i in states) {
+              for (j in census) {
+                   state_name = census[j][0]
+
+                   if (state_name == states[i].name){
+                        persons_in_state = census[j][1]
+                        gradient = (500 * 255) / persons_in_state
+                        states[i].color = "rgb(255, 255,"+ (gradient) +")"
+                        states[i].hoverColor = "rgb(255, 255,"+ (gradient) +")"
+                        states[i].selectedColor = "rgb(255, 255,"+ (gradient) +")"
+                   }
+              }
+         }
+    </script>
 
   </head>
 
