@@ -18,7 +18,7 @@ class PersonSeeder(object):
             email       = faker.email()
             orcid       = faker.isbn10()
             role        = Role.objects.get(pk = randint(1, 4))
-            state       = State.objects.get(pk = randint(1, 29))
+            state       = State.objects.get(pk = randint(1, 32))
 
             username = "user%d" % (i+1)
             user     = CustomUser.objects.get_or_create(username = username,

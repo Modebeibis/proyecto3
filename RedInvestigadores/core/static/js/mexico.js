@@ -176,7 +176,7 @@ window.JSMaps.maps.mexico = {
 		},
 		{
 			"enable": true,
-			"name": "México",
+			"name": "Edo. de México",
 			"abbreviation": "",
 			"textX": 464,
 			"textY": 378,
