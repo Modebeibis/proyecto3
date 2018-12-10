@@ -40,20 +40,14 @@
     </header>
     <div class="container">
 
-      {% if affiliation %}
-      <h1> {{affiliation}} </h1>
+      {% if state %}
+      <h1> {{state}} </h1>
 
-      {% if affiliation.super_level %}
-      <h2> Nivel Superior <h2>
-        <h3> {{affiliation.super_level}} <a href="{% url 'sede' affiliation.super_level.id %}"> Perfil </a> </h3>
-        <br/>
-        {% endif %}
-
-        {% if sub_levels %}
-        <h2> Dependencias </h2>
+        {% if affiliations %}
+        <h2> Instituciones </h2>
         <ul class="list">
-          {% for sub_level in sub_levels %}
-          <li> {{sub_level}} <a href="{% url 'sede' sub_level.id %}">Perfil</a> </li>
+          {% for affiliation in affiliations %}
+          <li> {{affiliation}} <a href="{% url 'sede' affiliation.id %}">Perfil</a> </li>
           {% endfor %}
         </ul>
 

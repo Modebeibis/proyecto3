@@ -6,13 +6,33 @@ from django.utils.translation import ugettext_lazy as _
 
 class Affiliation(models.Model):
     name        = models.TextField()
+    acronym     = models.TextField(null=True, blank=True)
     super_level = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
     address     = models.TextField()
+
     def __str__(self):
         if self.super_level is None:
             return self.name
         else:
             return '%s - %s' % (self.super_level.__str__(), self.name)
+
+    def trailing_short_name(self):
+        if self.super_level is None:
+            return self.acronym
+        else:
+            return '%s - %s' % (self.super_level.short_name(), self.acronym)
+
+    def short_name(self):
+        if self.super_level is None:
+            return self.name
+        else:
+            return '%s - %s' % (self.super_level.trailing_short_name(), self.name)
+
+    def top_level(self):
+        if self.super_level is None:
+            return self
+        else:
+            return self.super_level.top_level()
 
 class Role(models.Model):
     description = models.TextField()
@@ -63,7 +83,7 @@ class State(models.Model):
     def affiliation_set(self):
         affiliations = set()
         for person in self.pop_list():
-            affiliations.add(person.affiliation)
+            affiliations.add(person.affiliation.top_level())
         return affiliations
 
 

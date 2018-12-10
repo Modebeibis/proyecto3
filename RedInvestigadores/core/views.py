@@ -145,6 +145,24 @@ def get_affiliation(request, affiliation_id):
     return render(request, 'core/sede.html',
                   {'affiliation': affiliation, 'sub_levels':sub_levels, 'register':register})
 
+def get_state_info(request, state_id):
+    state = State.objects.get(pk = state_id)
+    affiliations = state.affiliation_set()
+    persons = state.pop_list()
+    register = []
+    for person in persons:
+        person_roles = PersonRole.objects.filter(person = person.id)
+        roles = []
+        for person_role in person_roles:
+            roles.append(person_role.role)
+
+        register.append(PersonInformation(person, roles))
+
+    return render(request, 'core/estado.html',
+                  {'affiliations': affiliations,
+                   'state':        state,
+                   'register':     register})
+
 def get_user_profile(request, user_id):
     user = CustomUser.objects.get(pk = user_id)
     person = Person.objects.get(user = user_id)

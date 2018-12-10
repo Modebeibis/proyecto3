@@ -4,7 +4,6 @@ from core.seeds.GrantSeeder import GrantSeeder
 from core.seeds.JournalSeeder import JournalSeeder
 from core.seeds.PublicationSeeder import PublicationSeeder
 from core.seeds.GroupSeeder import GroupSeeder
-from core.seeds.PetitionSeeder import PetitionSeeder
 
 print('Seeding Database:')
 print('- - - - Seeding Affiliations...')
@@ -40,17 +39,4 @@ GroupSeeder().seed()
 print('- - - - Seeding Groups members')
 GroupSeeder().seed_members()
 print('- - - - Seeding User petitions')
-PetitionSeeder().seed_user_petitions()
-print('- - - - Seeding Affiliation petitions')
-PetitionSeeder().seed_affiliation_petitions()
-print('- - - - Seeding Journal petitions')
-PetitionSeeder().seed_journal_petitions()
-print('- - - - Seeding publication petitions')
-PetitionSeeder().seed_publication_petitions()
-print('- - - - Seeding external author petitions')
-PetitionSeeder().seed_external_authors_petitions()
-print('- - - - Seeding group petitions')
-PetitionSeeder().seed_group_petitions()
-print('- - - - Seeding group add members petitions')
-PetitionSeeder().seed_group_adding_petitions()
 print('Seeding Complete')
