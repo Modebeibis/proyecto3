@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login
 from django.template import RequestContext
+from django.db.models import Q
 
 from .forms import *
 from .models import *
@@ -69,9 +70,9 @@ class PersonInformation(object):
 
 def home(request):
     states = State.objects.all()
-    census = []
+    census = {}
     for state in states:
-        census.append([state.name, state.relative_density()])
+        census[state.name] = state.relative_density()
 
     census = json.dumps(census)
 
@@ -195,9 +196,9 @@ def get_user_profile(request, user_id):
 def search(request):
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
-        persons = Person.objects.filter(first_name__icontains=q)
-        affiliations = Affiliation.objects.filter(name__icontains=q)
-        publications = Publication.objects.filter(title__icontains=q)
+        persons = Person.objects.filter(Q(first_name__icontains=q) | Q(last_name__icontains=q)).order_by('last_name')
+        affiliations = Affiliation.objects.filter(name__icontains=q).order_by('name')
+        publications = Publication.objects.filter(title__icontains=q).order_by('date')
         return render(request, 'core/search.html',
                       {'persons': persons,
                        'affiliations': affiliations,
