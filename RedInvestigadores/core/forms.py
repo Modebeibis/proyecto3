@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, User
 from .models import *
 from django.utils.translation import ugettext_lazy as _
 from allauth.account.forms import LoginForm, SignupForm
+import re
 
 class CustomLoginForm(LoginForm):
     def __init__(self, *args, **kwargs):
@@ -24,6 +25,19 @@ class CustomSignupForm(SignupForm):
         user.email      = self.cleaned_data['email']
         user.save()
         return user
+    
+    def clean(self):
+        cd = self.cleaned_data
+        first_name = cd.get("first_name")
+        last_name = cd.get("last_name")
+        nums = re.compile(r"[+-]?\d+(?:\.\d+)?")
+        bad_firstName = len(nums.findall(first_name)) > 0
+        bad_lastName = len(nums.findall(last_name)) > 0
+        if bad_firstName or bad_lastName:
+            raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " + 
+                                                "intenta no usar números ó cáracteres especiales")
+        return cd
+            
 
 class LoginForm(AuthenticationForm):
     def __init__(self, request,*args, **kwargs):
