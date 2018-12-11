@@ -222,7 +222,7 @@ def profile_changes(request):
             person.orcid = orcid
             person.save()
 
-            return redirect('profile/'+ str(request.user.id))
+            return redirect('/profile/'+ str(request.user.id))
 
     person = Person.objects.get(user = request.user.id)
     form = ProfileForm(initial={'first_name':  person.first_name,
