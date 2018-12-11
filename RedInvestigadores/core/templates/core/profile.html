@@ -40,52 +40,13 @@
      </nav>
    </header>
    <div class="container">
-
-       <div class="row">
-           <div class="col-md-12">
-               <h1 class="page-header">Perfil de usuario
-               </h1>
-           </div>
-       </div>
-     </div>
+    <h1 align="center">Perfil de usuario</h1>
      {% if person %}
      <div class="row">
-       <div class="col-md-3">
-         <div class="col-md-12" align="center">
-           <img class="img-responsive img-portfolio img-hover" src="{% static "img/20344-200.png" %}">
-         </div>
-         <div class="col-md-12">
-           {% if person.first_name == "No ha introducido esta información" %}
-             <p class="text-center"><strong>Nombre - Apellidos:</strong></p>
-             <p class="text-center"><strong>{{ person.first_name }}</strong></p>
-           {% else %}
-             <p class="text-center"><strong>{{ person.first_name }} {{ person.last_name }}</strong></p>
-           {% endif %}
-           <p class="text-center">Grado de estudios: <em> {{ person.get_degree_display }} </em></p>
-           <p class="text-center">SNI: <em>{{ person.get_sni_display }}</em></p>
-           <p class="text-center">Sede: <em>{{ person.affiliation }}</em></p>
-         </div>
-
-         <div class="col-md-12 text-center">
-              <ul class="list-unstyled list-inline list-social-icons">
-                     <li>
-                         <a href="#"><i class="editIcons icon-facebook-square editSizeIcons"></i></a>
-                     </li>
-                     <li>
-                         <a href="#"><i class="editIcons icon-linkedin-square editSizeIcons"></i></a>
-                     </li>
-                     <li>
-                         <a href="#"><i class="editIcons icon-twitter-square editSizeIcons"></i></a>
-                     </li>
-                     <li>
-                         <a href="#"><i class="editIcons icon-google-plus-square editSizeIcons"></i></a>
-                     </li>
-                 </ul>
-         </div>
-
+       <div class="col-md-1">
+         
        </div>
          <div class="col-md-9">
-
 
              <div class="col-md-12" style="border-width: 1px 1px 0px 1px; border-style: solid; border-color: lightgrey; background: #f1f3f6;">
                <div class="col-md-8 col-md-offset-2">
@@ -172,33 +133,7 @@
                        {% endif %}
                  </div>
              </div>
-             <div class="col-md-12" style="border: 1px solid lightgrey; background: #e5eaf2;">
-                 <div class="col-md-8 col-md-offset-2">
-                 <div class="control-group form-group">
-                         <div class="controls">
-                           <br >
-                             <label>Enlaces:</label>
-                             <p>http://www.es.com</p>
-                             <br>
-                             <div class="input-group">
-                               <span class="input-group-addon">https://plus.google.com</span><p>Google +</p>
-                             </div>
-                             <br>
-                             <div class="input-group">
-                               <span class="input-group-addon">http://twitter.com</span><p>Twitter</p>
-                             </div>
-                             <br>
-                             <div class="input-group">
-                               <span class="input-group-addon">https://www.facebook.com</span><p>Facebook</p>
-                             </div>
-                             <br>
-                             <div class="input-group">
-                               <span class="input-group-addon">https://www.linkedin.com</span><p>Linkedin</p>
-                             </div>
-                             <br >
-                         </div>
-                     </div>
-                 </div>
+             
                  <style>
                  .enlaceboton {
                    font-family: verdana, arial, sans-serif;
@@ -226,7 +161,10 @@
                   }
                  </style>
                    {% if request.user.is_authenticated %}
+                   <br>
                    <a class="enlaceboton" href="{% url 'research' %}">Editar perfil</a>
+                   <a class="enlaceboton" href="{% url 'group_petition' %}">Crear grupo</a>
+                   <a class="enlaceboton" href="{% url 'publication_petition'%}">Añadir articulo</a>
                    {% else %}
 
                    {% endif %}
