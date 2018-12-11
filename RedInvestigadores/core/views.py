@@ -286,12 +286,10 @@ def publication_changes(request,publication_id):
         return render(request, 'core/home.html')
 
     if request.method == 'POST':
-        print('hi1')
         pub_instance=Publication.objects.get(pk = publication_id)
         form = PublicationChangeForm(request.POST, instance= pub_instance)
 
         if form.is_valid():
-            print('hi')
             authors = form.cleaned_data.get('authors')
             title   = form.cleaned_data.get('title')
             doi     = form.cleaned_data.get('doi')
