@@ -6,13 +6,33 @@ from django.utils.translation import ugettext_lazy as _
 
 class Affiliation(models.Model):
     name        = models.TextField()
+    acronym     = models.TextField(null=True, blank=True)
     super_level = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
     address     = models.TextField()
+
     def __str__(self):
         if self.super_level is None:
             return self.name
         else:
             return '%s - %s' % (self.super_level.__str__(), self.name)
+
+    def trailing_short_name(self):
+        if self.super_level is None:
+            return self.acronym
+        else:
+            return '%s - %s' % (self.super_level.short_name(), self.acronym)
+
+    def short_name(self):
+        if self.super_level is None:
+            return self.name
+        else:
+            return '%s - %s' % (self.super_level.trailing_short_name(), self.name)
+
+    def top_level(self):
+        if self.super_level is None:
+            return self
+        else:
+            return self.super_level.top_level()
 
 class Role(models.Model):
     description = models.TextField()
@@ -37,13 +57,35 @@ class StateManager(models.Manager):
 class State(models.Model):
     name = models.TextField()
     objects = StateManager()
+
     def __str__(self):
         return self.name
+
     def population(self):
         return Person.objects.filter(state=self).count()
+
     def relative_density(self):
         pop = self.population()
-        return pop / State.objects.max_population()
+        if State.objects.max_population() == 0:
+            return 0
+        else:
+            return pop / State.objects.max_population()
+
+    def pop_list(self):
+        user_persons = []
+        every_person = Person.objects.filter(state=self)
+        every_person.order_by('last_name')
+        for person in every_person:
+            if (not person.personrole_set.filter(role=4).exists()) or (not len(person.personrole_set.filter(role=4)) == 1):
+                user_persons.append(person)
+        return user_persons
+
+    def affiliation_set(self):
+        affiliations = set()
+        for person in self.pop_list():
+            affiliations.add(person.affiliation.top_level())
+        return affiliations
+
 
 class CustomUser(AbstractUser):
     email    = models.EmailField(_('email address'), unique=True)
@@ -205,43 +247,3 @@ class StudentOf(models.Model):
 
     class Meta:
         unique_together = (('student', 'tutor'),)
-
-class UserPetition(models.Model):
-    name = models.TextField()
-    last_name = models.TextField()
-    email = models.TextField()
-
-class AffiliationPetition(models.Model):
-    name = models.TextField()
-    email = models.TextField()
-    address = models.TextField()
-    id_super_level = models.ForeignKey(Affiliation, null = True, on_delete = models.SET_NULL)
-
-class PublicationPetition(models.Model):
-    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
-    title   = models.TextField()
-    journal = models.ForeignKey(Journal, on_delete=models.PROTECT)
-    volume  = models.IntegerField()
-    issue   = models.IntegerField()
-    date    = models.DateField()
-    doi     = models.TextField()
-
-class JournalPetition(models.Model):
-    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
-    name = models.TextField()
-    issn = models.TextField(max_length=9, unique=True)
-
-class ExternalAuthorPetition(models.Model):
-    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
-    first_name = models.TextField()
-    last_name  = models.TextField()
-
-class GroupPetition(models.Model):
-    id_researcher = models.ForeignKey(Researcher, on_delete = models.CASCADE)
-    name = models.TextField()
-
-class GroupAddPetition(models.Model):
-    id_researcher_owner = models.ForeignKey(Researcher, on_delete = models.CASCADE)
-    id_person_to_add = models.ForeignKey(Person, on_delete = models.CASCADE)
-    id_group = models.ForeignKey(Group, null = True, on_delete = models.SET_NULL)
-    id_petition_group = models.ForeignKey(GroupPetition, null = True, on_delete = models.SET_NULL)

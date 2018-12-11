@@ -37,6 +37,7 @@ urlpatterns = [
     views.activate, name='activate'),
     path('sedes/', views.get_affiliations, name='sedes'),
     path('sedes/<int:affiliation_id>', views.get_affiliation, name='sede'),
+    path('estados/<int:state_id>', views.get_state_info, name='estado'),
     path('publicacion/<int:publication_id>', views.get_publication, name='publication'),
     path('grupo/<int:group_id>', views.get_group, name='group'),
     path('actualizar/grupo/<int:group_id>',views.group_changes, name='group_change'),

@@ -17,8 +17,8 @@ class CustomUserAdmin(UserAdmin):
     list_display = ['email', 'username']
 
 class PersonAdmin(admin.ModelAdmin):
-    fields = ['first_name', 'last_name', 'user']
-    list_display = ('first_name', 'last_name', 'user')
+    fields = ['first_name', 'last_name', 'user', 'state']
+    list_display = ('first_name', 'last_name', 'user', 'state')
 
 class AdministratorAdmin(admin.ModelAdmin):
     fields = ['person',]
@@ -32,6 +32,7 @@ admin.site.register(Group)
 admin.site.register(ExternalAuthor)
 admin.site.register(Journal)
 admin.site.register(Person, PersonAdmin)
+admin.site.register(PersonRole)
 admin.site.register(Postdoc)
 admin.site.register(Publication)
 admin.site.register(Researcher)

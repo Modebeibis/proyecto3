@@ -53,7 +53,7 @@ class CustomUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(UserCreationForm, self).__init__(*args, **kwargs)
         self.fields['username'].label  = 'Usuario'
-        self.fields['email'].label     = 'Correo Electrónico'
+#        self.fields['email'].label     = 'Correo Electrónico'
         self.fields['password1'].label = 'Contraseña'
         self.fields['password2'].label = 'Confirma tu contraseña'
 
