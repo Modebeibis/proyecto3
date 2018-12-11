@@ -210,33 +210,21 @@ def search(request):
 
 def profile_changes(request):
     print(request.method)
-    person = Person.objects.get(user = request.user)
     if not request.user.is_authenticated:
-        return render(request, 'core/profile.html')
+        return render(request, 'core/home.html')
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST)
+        profile_instance=Person.objects.get(user = request.user.id)
+        form = ProfileForm(request.POST,instance= profile_instance)
         if form.is_valid():
-            first_name   = form.cleaned_data.get('first_name')
-            last_name    = form.cleaned_data.get('last_name')
-            affiliations = Affiliation.objects.get(pk = form.cleaned_data.get('affiliations'))
-            orcid        = form.cleaned_data.get('orcid')
-            state        = State.objects.get(pk = form.cleaned_data.get('states'))
-            degree       = form.cleaned_data.get('degree')
-            sni          = form.cleaned_data.get('sni')
-
-            person.first_name  = first_name
-            person.last_name   = last_name
-            person.affiliation = affiliation
-            person.orcid       = orcid
-            person.state       = state
-            person.user        = request.user
-            person.degree      = degree
-            person.sni         = sni
+            orcid  = form.cleaned_data.get('orcid')
+            person = form.save(commit = False)
+            person.orcid = orcid
             person.save()
 
-            return redirect('core/profile/'+ str(profile.user.id))
+            return redirect('profile/'+ str(request.user.id))
 
+    person = Person.objects.get(user = request.user.id)
     form = ProfileForm(initial={'first_name':  person.first_name,
                                 'last_name':   person.last_name,
                                 'affiliation': person.affiliation,
@@ -245,7 +233,6 @@ def profile_changes(request):
                                 'degree':      person.degree,
                                 'sni':         person.sni
                                 })
-    print('hello')
     return render(request, 'core/researcher.html', {'form':form}, RequestContext(request))
 
 def get_publication_petition(request):
@@ -370,6 +357,7 @@ def group_changes(request,group_id):
                 if not GroupMember.objects.filter(group = group, person = member).exists():
                     GroupMember.objects.create(group = group,person = member)
             return redirect('/grupo/' + str(group_id))
+
     group=Group.objects.get(pk= group_id)
     form = GroupPetitionForm(initial={'name': group.name})
     return render(request, 'core/group_change.html',
