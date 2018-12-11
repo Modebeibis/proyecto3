@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, User
 from .models import *
 from django.utils.translation import ugettext_lazy as _
 from allauth.account.forms import LoginForm, SignupForm
+import re
 
 class CustomLoginForm(LoginForm):
     def __init__(self, *args, **kwargs):
@@ -24,6 +25,19 @@ class CustomSignupForm(SignupForm):
         user.email      = self.cleaned_data['email']
         user.save()
         return user
+    
+    def clean(self):
+        cd = self.cleaned_data
+        first_name = cd.get("first_name")
+        last_name = cd.get("last_name")
+        nums = re.compile(r"[+-]?\d+(?:\.\d+)?")
+        bad_firstName = len(nums.findall(first_name)) > 0
+        bad_lastName = len(nums.findall(last_name)) > 0
+        if bad_firstName or bad_lastName:
+            raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " + 
+                                                "intenta no usar números ó cáracteres especiales")
+        return cd
+            
 
 class LoginForm(AuthenticationForm):
     def __init__(self, request,*args, **kwargs):
@@ -91,21 +105,26 @@ class PublicationPetitionForm(forms.Form):
     for i in range (0, 90):
         years.append(1940+i)
     title     = forms.CharField(label = 'Título', max_length = 200)
-    J_CHOICES = ((journal.id, journal.__str__()) for journal in Journal.objects.all())
-    journal   = forms.ChoiceField(label = 'Revista', choices = J_CHOICES)
+    journal   = forms.ChoiceField(label = 'Revista')
     volume    = forms.IntegerField(label = 'Volumen')
     issue     = forms.IntegerField(label = 'Número')
-    date      = forms.DateField(widget=forms.SelectDateWidget(years=years), label = 'Fecha publicación')
+    date      = forms.DateField(widget = forms.SelectDateWidget(years=years),
+                                label = 'Fecha publicación')
     doi       = forms.CharField(label = 'DOI')
-    OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
-    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                          choices=OPTIONS)
+    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+
+    def __init__(self, *args, **kwargs):
+        super(PublicationPetitionForm, self).__init__(*args, **kwargs)
+        J_CHOICES = ((journal.id, journal.__str__()) for journal in Journal.objects.all())
+        self.fields['journal'].choices = J_CHOICES
+        OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['authors'].choices = OPTIONS
+
 class PublicationChangeForm(forms.ModelForm):
     doi       = forms.CharField(label = 'DOI')
     title     = forms.CharField(label = 'Título', max_length = 200)
-    OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
-    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                          choices=OPTIONS)
+    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+
     class Meta:
         model=Publication
         fields=('journal', 'volume','issue','date')
@@ -116,12 +135,17 @@ class PublicationChangeForm(forms.ModelForm):
             'date' : _('Fecha'),
         }
     def __init__(self,*args, **kwargs):
-        super(PublicationChangeForm,self).__init__(*args, **kwargs)
+        super(PublicationChangeForm, self).__init__(*args, **kwargs)
         self.fields['journal'].queryset = Journal.objects.all()
+        OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['authors'].choices = OPTIONS
 
 
 class GroupPetitionForm(forms.Form):
     name = forms.CharField(label = 'Nombre', max_length = 200)
-    OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
-    members = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                          choices=OPTIONS)
+    members = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+
+    def __init__(self, *args, **kwargs):
+        super(GroupPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['members'].choices = OPTIONS

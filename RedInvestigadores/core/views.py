@@ -18,6 +18,8 @@ from .models import *
 from allauth.account.views import *
 from allauth.account.forms import LoginForm, SignupForm
 
+import json
+
 def signup(request):
     if request.method == 'POST':
         form = CustomSignupForm(request.POST)
@@ -66,7 +68,15 @@ class PersonInformation(object):
         self.roles = roles
 
 def home(request):
-    return render(request, 'core/home.html')
+    states = State.objects.all()
+    census = []
+    for state in states:
+        census.append([state.name, state.relative_density()])
+
+    census = json.dumps(census)
+
+    return render(request, 'core/home.html',
+                 {'census': census})
 
 def research(request):
     return render(request, 'core/researcher.html')
