@@ -44,7 +44,7 @@
       <h1> {{affiliation}} </h1>
 
       {% if affiliation.super_level %}
-      <h2> Dependencia <h2>
+      <h2> Nivel Superior <h2>
         <h3> {{affiliation.super_level}} <a href="{% url 'sede' affiliation.super_level.id %}"> Perfil </a> </h3>
         <br/>
         {% endif %}

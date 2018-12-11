@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth import login
 from django.template import RequestContext
+from django.db.models import Q
 
 from .forms import *
 from .models import *
@@ -69,9 +70,9 @@ class PersonInformation(object):
 
 def home(request):
     states = State.objects.all()
-    census = []
+    census = {}
     for state in states:
-        census.append([state.name, state.relative_density()])
+        census[state.name] = state.relative_density()
 
     census = json.dumps(census)
 
@@ -144,6 +145,24 @@ def get_affiliation(request, affiliation_id):
     return render(request, 'core/sede.html',
                   {'affiliation': affiliation, 'sub_levels':sub_levels, 'register':register})
 
+def get_state_info(request, state_id):
+    state = State.objects.get(pk = state_id)
+    affiliations = state.affiliation_set()
+    persons = state.pop_list()
+    register = []
+    for person in persons:
+        person_roles = PersonRole.objects.filter(person = person.id)
+        roles = []
+        for person_role in person_roles:
+            roles.append(person_role.role)
+
+        register.append(PersonInformation(person, roles))
+
+    return render(request, 'core/estado.html',
+                  {'affiliations': affiliations,
+                   'state':        state,
+                   'register':     register})
+
 def get_user_profile(request, user_id):
     user = CustomUser.objects.get(pk = user_id)
     person = Person.objects.get(user = user_id)
@@ -195,9 +214,9 @@ def get_user_profile(request, user_id):
 def search(request):
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
-        persons = Person.objects.filter(first_name__icontains=q)
-        affiliations = Affiliation.objects.filter(name__icontains=q)
-        publications = Publication.objects.filter(title__icontains=q)
+        persons = Person.objects.filter(Q(first_name__icontains=q) | Q(last_name__icontains=q)).order_by('last_name')
+        affiliations = Affiliation.objects.filter(name__icontains=q).order_by('name')
+        publications = Publication.objects.filter(title__icontains=q).order_by('date')
         return render(request, 'core/search.html',
                       {'persons': persons,
                        'affiliations': affiliations,
