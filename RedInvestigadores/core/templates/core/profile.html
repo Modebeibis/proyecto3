@@ -44,7 +44,7 @@
      {% if person %}
      <div class="row">
        <div class="col-md-1">
-         
+
        </div>
          <div class="col-md-9">
 
@@ -66,6 +66,12 @@
                          <span id="alertQualification" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
                            <p>Título: {{ person.get_degree_display }} </p>
                          </span>
+                         {% if roles %}
+                         <br >
+                         <span id="alertQualification" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                           <p>Rol(es): {% for role in roles %} {{ role }} / {% endfor %} </p>
+                         </span>
+                         {% endif %}
                          <br >
                          <span id="alertEmail" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
                            <p>Email: {{ user.email }} </p>
@@ -133,7 +139,7 @@
                        {% endif %}
                  </div>
              </div>
-             
+
                  <style>
                  .enlaceboton {
                    font-family: verdana, arial, sans-serif;

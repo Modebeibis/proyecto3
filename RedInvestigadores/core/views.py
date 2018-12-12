@@ -201,6 +201,11 @@ def get_user_profile(request, user_id):
         participant_grant = Grant.objects.get(pk = participant_of_grant.grant.id)
         participant_grants.append(participant_grant)
 
+    person_roles = PersonRole.objects.filter(person = person)
+    roles = []
+    for person_role in person_roles:
+        roles.append(person_role.role)
+
     return render(request, 'core/profile.html',
                   {'person': person,
                    'user': user,
@@ -208,7 +213,8 @@ def get_user_profile(request, user_id):
                    'owner_groups':owner_groups,
                    'member_groups':member_groups,
                    'responsible_grants': responsible_grants,
-                   'participant_grants': participant_grants})
+                   'participant_grants': participant_grants,
+                   'roles': roles})
 
 
 def search(request):
