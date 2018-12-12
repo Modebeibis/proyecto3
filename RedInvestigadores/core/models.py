@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import MinValueValidator
 
 class Affiliation(models.Model):
     name        = models.TextField()
@@ -168,8 +169,8 @@ class Journal(models.Model):
 class Publication(models.Model):
     title   = models.TextField()
     journal = models.ForeignKey(Journal, on_delete=models.PROTECT)
-    volume  = models.IntegerField()
-    issue   = models.IntegerField()
+    volume  = models.IntegerField(validators=[MinValueValidator(1)])
+    issue   = models.IntegerField(validators=[MinValueValidator(0)])
     date    = models.DateField()
     doi     = models.TextField(unique=True)
     def __str__(self):
