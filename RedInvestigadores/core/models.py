@@ -178,7 +178,7 @@ class Publication(models.Model):
 
 class AuthorOf(models.Model):
     person      = models.ForeignKey(Person, on_delete=models.CASCADE)
-    publication = models.ForeignKey(Publication, on_delete=models.PROTECT)
+    publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (('person', 'publication'),)
