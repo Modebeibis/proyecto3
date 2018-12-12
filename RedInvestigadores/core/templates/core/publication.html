@@ -60,7 +60,13 @@
                    <li> DOI: <a href="https://doi.org/{{ publication.doi }}"> {{ publication.doi }} </a> </li>
               </ul>
               {% if user.is_authenticated %}
-              <a class="enlaceboton" href="{% url 'publication_change' publication.id %}">Actualizar publicación</a>
+                  {%for author in authors %}
+                      {%if author.user == request.user %}
+                          <a class="enlaceboton" href="{% url 'publication_change' publication.id %}">Actualizar publicación</a>
+
+                      {{ "<!--" }}
+                      {%endif%}
+                  {%endfor%}
               {% endif %}
          {% endif %}
     </div>
