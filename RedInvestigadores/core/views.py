@@ -374,9 +374,14 @@ def get_group_petition(request):
     return render(request, 'core/group_petition.html',
                   {'form':petition_form}, RequestContext(request))
 
-def group_changes(request,group_id):
+def group_changes(request, group_id):
     if not request.user.is_authenticated:
         return render(request, 'core/home.html')
+
+    group = Group.objects.get(pk= group_id)
+
+    if (request.user.id != group.owner.user.id):
+        return redirect('/grupo/' + str(group_id))
 
     if request.method == 'POST':
         form = GroupPetitionForm(request.POST)
@@ -393,7 +398,6 @@ def group_changes(request,group_id):
                     GroupMember.objects.create(group = group,person = member)
             return redirect('/grupo/' + str(group_id))
 
-    group=Group.objects.get(pk= group_id)
     form = GroupPetitionForm(initial={'name': group.name})
     return render(request, 'core/group_change.html',
                   {'form':form,
