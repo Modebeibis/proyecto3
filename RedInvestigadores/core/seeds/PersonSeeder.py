@@ -6,6 +6,20 @@ from random import randint
 
 class PersonSeeder(object):
 
+    def get_unique_email(self):
+        faker   = Faker()
+        while True:
+            email = faker.email()
+            if not CustomUser.objects.filter(email = email).exists():
+                return email
+
+    def get_unique_orcid(self):
+        faker   = Faker()
+        while True:
+            orcid = faker.isbn10()
+            if not Person.objects.filter(orcid = orcid).exists():
+                return orcid
+
     def seed(self):
         faker   = Faker()
         degrees = ["BSC", "MSC", "PHD"]
@@ -15,8 +29,8 @@ class PersonSeeder(object):
             first_name  = faker.first_name()
             last_name   = faker.last_name()
             affiliation = Affiliation.objects.get(pk = randint(1, 70))
-            email       = faker.email()
-            orcid       = faker.isbn10()
+            email       = self.get_unique_email()
+            orcid       = self.get_unique_orcid()
             role        = Role.objects.get(pk = randint(1, 4))
             state       = State.objects.get(pk = randint(1, 32))
 
