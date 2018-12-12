@@ -307,6 +307,17 @@ def publication_changes(request,publication_id):
     if not request.user.is_authenticated:
         return render(request, 'core/home.html')
 
+    publication = Publication.objects.get(pk= publication_id)
+    authors_of  = AuthorOf.objects.filter(publication = publication)
+
+    found = False
+    for author_of in authors_of:
+        if (author_of.person.user == request.user):
+            found = True
+
+    if not found:
+        return redirect('/publicacion/' + str(publication_id))
+
     if request.method == 'POST':
         pub_instance=Publication.objects.get(pk = publication_id)
         form = PublicationChangeForm(request.POST, instance= pub_instance)
@@ -327,7 +338,6 @@ def publication_changes(request,publication_id):
                     AuthorOf.objects.create(publication = publication,person = author)
             return redirect('/publicacion/' + str(publication_id))
 
-    publication = Publication.objects.get(pk= publication_id)
     form = PublicationChangeForm(initial={'title': publication.title,
                                          'journal': publication.journal,
                                          'volume': publication.volume,
