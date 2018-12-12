@@ -146,8 +146,8 @@ class PublicationPetitionForm(forms.Form):
         years.append(1940+i)
     title     = forms.CharField(label = 'Título', max_length = 200)
     journal   = forms.ChoiceField(label = 'Revista')
-    volume    = forms.IntegerField(label = 'Volumen')
-    issue     = forms.IntegerField(label = 'Número')
+    volume    = forms.IntegerField(label = 'Volumen',min_value=1)
+    issue     = forms.IntegerField(label = 'Número',min_value=0)
     date      = forms.DateField(widget = forms.SelectDateWidget(years=years),
                                 label = 'Fecha publicación')
     doi       = forms.CharField(label = 'DOI')
