@@ -1,9 +1,9 @@
 from django.shortcuts import render,  redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from django.views import generic
 from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode,  urlsafe_base64_decode
 from django.template import RequestContext
@@ -12,6 +12,7 @@ from .tokens import account_activation_token
 from django.contrib.auth import login
 from django.template import RequestContext
 from django.db.models import Q
+from django.views.generic import DeleteView
 
 from .forms import *
 from .models import *
@@ -402,3 +403,36 @@ def group_changes(request, group_id):
     return render(request, 'core/group_change.html',
                   {'form':form,
                   'group': group }, RequestContext(request))
+
+class DeleteGroup(DeleteView):
+    template_name= 'core/delete_group.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("group_id")
+        return get_object_or_404(Group, id=id)
+
+class DeletePublication(DeleteView):
+    template_name= 'core/delete_publication.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("publication_id")
+        return get_object_or_404(Publication, id=id)
+
+
+class DeleteAuthor(DeleteView):
+    template_name='core/delete_authors.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("author_id")
+        return get_object_or_404(Person, id=id)
+
+class DeleteMember(DeleteView):
+    template_name='core/delete_members.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("member_id")
+        return get_object_or_404(Person, id=id)
