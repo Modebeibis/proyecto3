@@ -173,6 +173,16 @@ class GrantPetitionForm(forms.Form):
         OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
         self.fields['participants'].choices = OPTIONS
 
+class GrantChangeForm(forms.Form):
+    start_date   = forms.DateField(label = 'Fecha Inicio')
+    end_date     = forms.DateField(label = 'Fecha Final')
+    participants = forms.MultipleChoiceField(label= 'Miembros',widget=forms.CheckboxSelectMultiple)
+
+    def __init__(self, *args, **kwargs):
+        super(GrantChangeForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['participants'].choices = OPTIONS
+
 class AffiliationPetitionForm(forms.Form):
     name        = forms.CharField(label = 'Nombre', max_length = 200)
     acronym     = forms.CharField(label = 'Acrónimo', max_length = 200)

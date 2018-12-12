@@ -419,6 +419,38 @@ def get_grant_petition(request):
     return render(request, 'core/grant_petition.html',
                   {'form':petition_form}, RequestContext(request))
 
+def grant_changes(request, grant_id):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    grant = Grant.objects.get(pk = grant_id)
+
+    if request.method == 'POST':
+        form = GrantChangeForm(request.POST)
+
+        if form.is_valid():
+            start_date      = form.cleaned_data.get('start_date')
+            end_date        = form.cleaned_data.get('end_date')
+            participants_id = form.cleaned_data.get('participants')
+
+            grant.start_date = start_date
+            grant.end_date   = end_date
+            grant.save()
+
+            for participant_id in participants_id:
+                participant = Person.objects.get(pk = participant_id)
+                if not GrantParticipant.objects.filter(grant = grant, person = participant).exists():
+                    GrantParticipant.objects.create(grant = grant, person = participant)
+
+            return redirect('/proyecto/' + str(grant.id))
+
+    form = GrantChangeForm(initial={'start_date': grant.start_date,
+                                    'end_date': grant.end_date})
+
+    return render(request, 'core/grant_change.html',
+                  {'form':form,
+                  'grant': grant }, RequestContext(request))
+
 def get_affiliation_petition(request):
     if not request.user.is_authenticated:
         return render(request, 'core/home.html')

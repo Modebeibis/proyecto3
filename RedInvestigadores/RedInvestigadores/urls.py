@@ -47,6 +47,7 @@ urlpatterns = [
     path('crear/proyecto', views.get_grant_petition, name='grant_petition'),
     path('crear/sede', views.get_affiliation_petition, name='affiliation_petition'),
     path('actualizar/publicacion/<int:publication_id>', views.publication_changes, name='publication_change'),
+    path('actualizar/proyecto/<int:grant_id>', views.grant_changes, name='grant_change'),
     path('', include('django.contrib.auth.urls')),
     path('', views.home, name='home'),
 ]
