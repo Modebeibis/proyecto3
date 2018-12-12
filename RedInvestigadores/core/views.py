@@ -147,7 +147,7 @@ def get_affiliation(request, affiliation_id):
 
 def get_state_info(request, state_id):
     state = State.objects.get(pk = state_id)
-    affiliations = state.affiliation_set()
+    affiliations = state.affiliation_set_top()
     persons = state.pop_list()
     register = []
     for person in persons:
@@ -162,6 +162,26 @@ def get_state_info(request, state_id):
                   {'affiliations': affiliations,
                    'state':        state,
                    'register':     register})
+
+def get_state_affiliation_info(request, state_id, affiliation_id):
+    state            = State.objects.get(pk = state_id)
+    affiliation      = Affiliation.objects.get(pk = affiliation_id)
+    sub_affiliations = state.sub_affiliation_set(affiliation)
+    persons          = affiliation.pop_list_state(state)
+    register = []
+    for person in persons:
+        person_roles = PersonRole.objects.filter(person = person.id)
+        roles = []
+        for person_role in person_roles:
+            roles.append(person_role.role)
+
+        register.append(PersonInformation(person, roles))
+
+    return render(request, 'core/estado-institucion.html',
+                  {'affiliation':      affiliation,
+                   'sub_affiliations': sub_affiliations,
+                   'state':            state,
+                   'register':         register})
 
 def get_user_profile(request, user_id):
     user = CustomUser.objects.get(pk = user_id)

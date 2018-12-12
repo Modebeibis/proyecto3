@@ -39,15 +39,14 @@
       </nav>
     </header>
     <div class="container">
+      {% if affiliation %}
+      <h1> {{affiliation}} </h1>
 
-      {% if state %}
-      <h1> {{state}} </h1>
-
-        {% if affiliations %}
-        <h2> Instituciones </h2>
+        {% if sub_affiliations %}
+        <h2> Dependencias </h2>
         <ul class="list">
-          {% for affiliation in affiliations %}
-          <li> {{affiliation}} <a href="{% url 'estado/sede' state.id affiliation.id %}">Perfil</a> </li>
+          {% for affiliation in sub_affiliations %}
+          <li> {{affiliation}} <a href="{% url 'sede' affiliation.id %}">Perfil</a> </li>
           {% endfor %}
         </ul>
 
@@ -63,7 +62,7 @@
         </ul>
         {% endif %}
 
-        {% endif %}
+      {% endif %}
     </div>
 
     <style>
