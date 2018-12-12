@@ -46,11 +46,17 @@
               <h2> Miembros </h2>
               <ul>
                    {% for member in members %}
-                   <li> {{member}} - <a href="{% url 'profile' member.user.id %}"> Perfil </a></li>
+                       {% if member == group.owner %}
+                       <li> <h4> Dueño: {{member}} - <a href="{% url 'profile' member.user.id %}"> Perfil </a> </h4> </li>
+                       {% else %}
+                       <li> {{member}} - <a href="{% url 'profile' member.user.id %}"> Perfil </a></li>
+                       {% endif %}
                    {% endfor %}
               </ul>
               {% endif %}
+              {% if request.user == group.owner.user %}
               <p><a href="{% url 'group_change' group.id %}">Cambiar</a>
+              {% endif %}
          {% endif %}
     </div>
 
