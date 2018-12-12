@@ -25,7 +25,7 @@ class CustomSignupForm(SignupForm):
         user.email      = self.cleaned_data['email']
         user.save()
         return user
-    
+
     def clean(self):
         cd = self.cleaned_data
         first_name = cd.get("first_name")
@@ -34,10 +34,10 @@ class CustomSignupForm(SignupForm):
         bad_firstName = len(nums.findall(first_name)) > 0
         bad_lastName = len(nums.findall(last_name)) > 0
         if bad_firstName or bad_lastName:
-            raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " + 
+            raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
                                                 "intenta no usar números ó cáracteres especiales")
         return cd
-            
+
 
 class LoginForm(AuthenticationForm):
     def __init__(self, request,*args, **kwargs):
@@ -91,14 +91,25 @@ class CustomUserChangeForm(UserChangeForm):
         }
 
 
-class ProfileForm(forms.Form):
-    first_name   = forms.CharField(label = 'Nombres', max_length = 500)
-    last_name    = forms.CharField(label = 'Apellidos', max_length = 500)
-    affiliations = forms.ModelChoiceField(label = 'Sedes', queryset=Affiliation.objects.all())
-    orcid        = forms.CharField(label = 'ORCID', max_length = 500, required=False)
-    states       = forms.ModelChoiceField(queryset=State.objects.all(), label='Estado')
-    degree       = forms.ChoiceField(label = 'Título', choices = Person.DEGREE_CHOICES)
-    sni          = forms.ChoiceField(label = 'SNI', choices = Person.SNI_CHOICES)
+class ProfileForm(forms.ModelForm):
+    orcid = forms.CharField(label='ORCID')
+    class Meta:
+        model=Person
+        fields=('first_name','last_name','affiliation','state','degree','sni')
+        labels = {
+            'first_name' : _('Nombres'),
+            'last_name'  : _('Apellidos'),
+            'affiliation': _('Sede'),
+            'state'      : _('Estado'),
+            'degree'     : _('Título'),
+            'sni'        : _('SNI')
+        }
+    def __init__(self,*args, **kwargs):
+        super(ProfileForm, self).__init__(*args,**kwargs)
+        self.fields['affiliation'].queryset = Affiliation.objects.all()
+        self.fields['state'].queryset = State.objects.all()
+        self.fields['degree'].queryset = Person.DEGREE_CHOICES
+        self.fields['sni'].queryset = Person.SNI_CHOICES
 
 class PublicationPetitionForm(forms.Form):
     years = []
@@ -111,7 +122,8 @@ class PublicationPetitionForm(forms.Form):
     date      = forms.DateField(widget = forms.SelectDateWidget(years=years),
                                 label = 'Fecha publicación')
     doi       = forms.CharField(label = 'DOI')
-    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                          label ='Autores')
 
     def __init__(self, *args, **kwargs):
         super(PublicationPetitionForm, self).__init__(*args, **kwargs)
@@ -123,7 +135,7 @@ class PublicationPetitionForm(forms.Form):
 class PublicationChangeForm(forms.ModelForm):
     doi       = forms.CharField(label = 'DOI')
     title     = forms.CharField(label = 'Título', max_length = 200)
-    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+    authors   = forms.MultipleChoiceField(label= 'autores', widget=forms.CheckboxSelectMultiple)
 
     class Meta:
         model=Publication
@@ -143,7 +155,7 @@ class PublicationChangeForm(forms.ModelForm):
 
 class GroupPetitionForm(forms.Form):
     name = forms.CharField(label = 'Nombre', max_length = 200)
-    members = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+    members = forms.MultipleChoiceField(label= 'Miembros',widget=forms.CheckboxSelectMultiple)
 
     def __init__(self, *args, **kwargs):
         super(GroupPetitionForm, self).__init__(*args, **kwargs)

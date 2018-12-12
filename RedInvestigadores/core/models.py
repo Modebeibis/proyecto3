@@ -96,8 +96,8 @@ class CustomUser(AbstractUser):
         return self.email
 
 class Person(models.Model):
-    first_name      = models.TextField()
-    last_name       = models.TextField()
+    first_name      = models.CharField(max_length=200)
+    last_name       = models.CharField(max_length=200)
     affiliation     = models.ForeignKey(Affiliation, default=1, on_delete=models.PROTECT)
     orcid           = models.TextField(unique=True)
     state           = models.ForeignKey(State, default=1, on_delete=models.PROTECT)
