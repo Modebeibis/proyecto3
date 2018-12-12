@@ -44,7 +44,7 @@
      {% if person %}
      <div class="row">
        <div class="col-md-1">
-         
+
        </div>
          <div class="col-md-9">
 
@@ -133,7 +133,7 @@
                        {% endif %}
                  </div>
              </div>
-             
+
                  <style>
                  .enlaceboton {
                    font-family: verdana, arial, sans-serif;
@@ -165,6 +165,7 @@
                    <a class="enlaceboton" href="{% url 'research' %}">Editar perfil</a>
                    <a class="enlaceboton" href="{% url 'group_petition' %}">Crear grupo</a>
                    <a class="enlaceboton" href="{% url 'publication_petition'%}">Añadir articulo</a>
+                   <a class="enlaceboton" href="{% url 'grant_petition'%}">Añadir proyecto</a>
                    {% else %}
 
                    {% endif %}
