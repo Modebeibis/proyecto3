@@ -161,3 +161,14 @@ class GroupPetitionForm(forms.Form):
         super(GroupPetitionForm, self).__init__(*args, **kwargs)
         OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
         self.fields['members'].choices = OPTIONS
+
+class GrantPetitionForm(forms.Form):
+    title        = forms.CharField(label = 'Título', max_length = 200)
+    start_date   = forms.DateField(label = 'Fecha Inicio')
+    end_date     = forms.DateField(label = 'Fecha Final')
+    participants = forms.MultipleChoiceField(label= 'Miembros',widget=forms.CheckboxSelectMultiple)
+
+    def __init__(self, *args, **kwargs):
+        super(GrantPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['participants'].choices = OPTIONS

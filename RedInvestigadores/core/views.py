@@ -382,3 +382,39 @@ def group_changes(request,group_id):
     return render(request, 'core/group_change.html',
                   {'form':form,
                   'group': group }, RequestContext(request))
+
+def get_grant_petition(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        petition_form = GrantPetitionForm(request.POST)
+
+        person = Person.objects.get(user = request.user)
+
+        if not (Researcher.objects.filter(person = person).exists()):
+            redirect('')
+
+        responsible = Researcher.objects.get(person = person)
+
+        if petition_form.is_valid():
+            title           = petition_form.cleaned_data.get('title')
+            start_date      = petition_form.cleaned_data.get('start_date')
+            end_date        = petition_form.cleaned_data.get('end_date')
+            participants_id = petition_form.cleaned_data.get('participants')
+
+            grant = Grant.objects.create(title       = title,
+                                         start_date  = start_date,
+                                         end_date    = end_date,
+                                         responsible = responsible)
+
+            for participant_id in participants_id:
+                participant = Person.objects.get(pk = participant_id)
+                GrantParticipant.objects.create(grant  = grant,
+                                                person = participant)
+
+            return redirect('/proyecto/' + str(grant.id))
+
+    petition_form = GrantPetitionForm()
+    return render(request, 'core/grant_petition.html',
+                  {'form':petition_form}, RequestContext(request))

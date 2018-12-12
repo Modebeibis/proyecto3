@@ -39,27 +39,11 @@
       </nav>
     </header>
     <div class="container">
-         {% if grant %}
-              <h1> Proyecto: {{grant}} </h1>
-              <h2> Responsable: {{responsible}} - <a href="{% url 'profile' responsible.user.id %}"> Perfil </a> </h2>
-              {% if participants %}
-              <br/>
-              <h2> Participantes </h2>
-              <ul>
-                   {% for participant in participants %}
-                   <li> {{participant}} - <a href="{% url 'profile' participant.user.id %}"> Perfil </a></li>
-                   {% endfor %}
-              </ul>
-              {% endif %}
-              <br/>
-              <h2> Datos </h2>
-              <ul>
-                   <li> Proyecto: {{grant}} </li>
-                   <li> Responsable: {{responsible}} </li>
-                   <li> Fecha inicio: {{grant.start_date}} </li>
-                   <li> Fecha final: {{grant.end_date}} </li>
-              </ul>
-         {% endif %}
+         <form action = "{% url 'grant_petition' %}" method="post">
+              {% csrf_token %}
+              {{ form.as_ul }}
+              <input type = "submit" value = "Crear">
+         </form>
     </div>
 
 
