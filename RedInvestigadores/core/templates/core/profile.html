@@ -166,7 +166,7 @@
                    border-left: 2px solid #666666;
                   }
                  </style>
-                   {% if request.user.is_authenticated %}
+                   {% if request.user.is_authenticated and request.user == user %}
                    <br>
                    <a class="enlaceboton" href="{% url 'research' %}">Editar perfil</a>
                    <a class="enlaceboton" href="{% url 'group_petition' %}">Crear grupo</a>
