@@ -418,3 +418,28 @@ def get_grant_petition(request):
     petition_form = GrantPetitionForm()
     return render(request, 'core/grant_petition.html',
                   {'form':petition_form}, RequestContext(request))
+
+def get_affiliation_petition(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        petition_form = AffiliationPetitionForm(request.POST)
+
+        if petition_form.is_valid():
+            name           = petition_form.cleaned_data.get('name')
+            acronym        = petition_form.cleaned_data.get('acronym')
+            address        = petition_form.cleaned_data.get('address')
+            super_level_id = petition_form.cleaned_data.get('super_level')
+            super_level    = Affiliation.objects.get(pk = super_level_id)
+
+            affiliation    = Affiliation.objects.create(name        = name,
+                                                        acronym     = acronym,
+                                                        address     = address,
+                                                        super_level = super_level)
+
+            return redirect('/sedes/' + str(affiliation.id))
+
+    petition_form = AffiliationPetitionForm()
+    return render(request, 'core/affiliation_petition.html',
+                  {'form':petition_form}, RequestContext(request))

@@ -172,3 +172,14 @@ class GrantPetitionForm(forms.Form):
         super(GrantPetitionForm, self).__init__(*args, **kwargs)
         OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
         self.fields['participants'].choices = OPTIONS
+
+class AffiliationPetitionForm(forms.Form):
+    name        = forms.CharField(label = 'Nombre', max_length = 200)
+    acronym     = forms.CharField(label = 'Acrónimo', max_length = 200)
+    address     = forms.CharField(label = 'Dirección', max_length = 200)
+    super_level = forms.ChoiceField(label = 'Nivel Superior')
+
+    def __init__(self, *args, **kwargs):
+        super(AffiliationPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((affiliation.id, affiliation.__str__()) for affiliation in Affiliation.objects.all())
+        self.fields['super_level'].choices = OPTIONS
