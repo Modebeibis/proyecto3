@@ -50,7 +50,9 @@
                    {% endfor %}
               </ul>
               {% endif %}
+              {% if request.user == group.owner.user %}
               <p><a href="{% url 'group_change' group.id %}">Cambiar</a>
+              {% endif %}
          {% endif %}
     </div>
 
