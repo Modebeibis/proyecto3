@@ -425,6 +425,9 @@ def grant_changes(request, grant_id):
 
     grant = Grant.objects.get(pk = grant_id)
 
+    if (reqest.user != grant.responsible.user):
+        redirect('/proyecto/' + str(grant.id))
+
     if request.method == 'POST':
         form = GrantChangeForm(request.POST)
 
