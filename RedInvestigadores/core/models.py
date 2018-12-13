@@ -35,6 +35,14 @@ class Affiliation(models.Model):
         else:
             return self.super_level.top_level()
 
+    def pop_list_state(self, state):
+        population_list = []
+        persons = Person.objects.all()
+        for person in persons:
+            if (person.affiliation.top_level() == self) and (person.state == state):
+                population_list.append(person)
+        return population_list
+
 class Role(models.Model):
     description = models.TextField()
     def __str__(self):
@@ -75,7 +83,6 @@ class State(models.Model):
     def pop_list(self):
         user_persons = []
         every_person = Person.objects.filter(state=self)
-        every_person.order_by('last_name')
         for person in every_person:
             if (not person.personrole_set.filter(role=4).exists()) or (not len(person.personrole_set.filter(role=4)) == 1):
                 user_persons.append(person)
@@ -84,7 +91,20 @@ class State(models.Model):
     def affiliation_set(self):
         affiliations = set()
         for person in self.pop_list():
-            affiliations.add(person.affiliation.top_level())
+            affiliations.add(person.affiliation)
+        return affiliations
+
+    def affiliation_set_top(self):
+        affiliations = set()
+        for affiliation in self.affiliation_set():
+            affiliations.add(affiliation.top_level())
+        return affiliations
+
+    def sub_affiliation_set(self, affiliation):
+        affiliations = set()
+        for person in self.pop_list():
+            if person.affiliation.top_level() == affiliation:
+                affiliations.add(person.affiliation)
         return affiliations
 
 
