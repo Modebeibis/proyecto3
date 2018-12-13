@@ -148,7 +148,7 @@ def get_affiliation(request, affiliation_id):
 
 def get_state_info(request, state_id):
     state = State.objects.get(pk = state_id)
-    affiliations = state.affiliation_set()
+    affiliations = state.affiliation_set_top()
     persons = state.pop_list()
     register = []
     for person in persons:
@@ -163,6 +163,26 @@ def get_state_info(request, state_id):
                   {'affiliations': affiliations,
                    'state':        state,
                    'register':     register})
+
+def get_state_affiliation_info(request, state_id, affiliation_id):
+    state            = State.objects.get(pk = state_id)
+    affiliation      = Affiliation.objects.get(pk = affiliation_id)
+    sub_affiliations = state.sub_affiliation_set(affiliation)
+    persons          = affiliation.pop_list_state(state)
+    register = []
+    for person in persons:
+        person_roles = PersonRole.objects.filter(person = person.id)
+        roles = []
+        for person_role in person_roles:
+            roles.append(person_role.role)
+
+        register.append(PersonInformation(person, roles))
+
+    return render(request, 'core/estado-institucion.html',
+                  {'affiliation':      affiliation,
+                   'sub_affiliations': sub_affiliations,
+                   'state':            state,
+                   'register':         register})
 
 def get_user_profile(request, user_id):
     user = CustomUser.objects.get(pk = user_id)
@@ -235,7 +255,7 @@ def search(request):
 
 def profile_changes(request):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     if request.method == 'POST':
         profile_instance=Person.objects.get(user = request.user.id)
@@ -261,7 +281,7 @@ def profile_changes(request):
 
 def get_publication_petition(request):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     if request.method == 'POST':
         petition_form = PublicationPetitionForm(request.POST)
@@ -304,7 +324,7 @@ def get_publication_petition(request):
 
 def publication_changes(request,publication_id):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     publication = Publication.objects.get(pk= publication_id)
     authors_of  = AuthorOf.objects.filter(publication = publication)
@@ -351,7 +371,7 @@ def publication_changes(request,publication_id):
 
 def get_group_petition(request):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     if request.method == 'POST':
         petition_form = GroupPetitionForm(request.POST)
@@ -375,7 +395,7 @@ def get_group_petition(request):
 
 def group_changes(request, group_id):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     group = Group.objects.get(pk= group_id)
 
@@ -405,7 +425,7 @@ def group_changes(request, group_id):
 
 def get_grant_petition(request):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     if request.method == 'POST':
         petition_form = GrantPetitionForm(request.POST)
@@ -441,7 +461,7 @@ def get_grant_petition(request):
 
 def grant_changes(request, grant_id):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     grant = Grant.objects.get(pk = grant_id)
 
@@ -476,7 +496,7 @@ def grant_changes(request, grant_id):
 
 def get_affiliation_petition(request):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     if request.method == 'POST':
         petition_form = AffiliationPetitionForm(request.POST)
