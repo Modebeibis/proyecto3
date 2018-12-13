@@ -162,14 +162,6 @@ class Person(models.Model):
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
 
-@receiver(post_save, sender = CustomUser)
-def create_person_profile(sender, instance, created, **kwargs):
-    if created:
-        Person.objects.create(first_name = instance.first_name,
-                              last_name  = instance.last_name,
-                              orcid      = instance.__str__(),
-                              user       = instance)
-
 class PersonRole(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     role = models.ForeignKey(Role, on_delete=models.PROTECT)
@@ -268,3 +260,20 @@ class StudentOf(models.Model):
 
     class Meta:
         unique_together = (('student', 'tutor'),)
+
+@receiver(post_save, sender = CustomUser)
+def create_person_profile(sender, instance, created, **kwargs):
+    """
+    Trigger for when an user is created.
+    It creates a person associated to the user
+    and assigns it the researcher's role
+
+    """
+    if created:
+        person  = Person.objects.create(first_name = instance.first_name,
+                                        last_name  = instance.last_name,
+                                        orcid      = str(instance),
+                                        user       = instance)
+        role = Role.objects.get(pk = 3)
+        PersonRole.objects.create(person = person, role = role)
+        Researcher.objects.create(person = person)
