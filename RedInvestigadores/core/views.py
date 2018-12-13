@@ -404,6 +404,103 @@ def group_changes(request, group_id):
                   {'form':form,
                   'group': group }, RequestContext(request))
 
+
+def get_grant_petition(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        petition_form = GrantPetitionForm(request.POST)
+
+        person = Person.objects.get(user = request.user)
+
+        if not (Researcher.objects.filter(person = person).exists()):
+            redirect('')
+
+        responsible = Researcher.objects.get(person = person)
+
+        if petition_form.is_valid():
+            title           = petition_form.cleaned_data.get('title')
+            start_date      = petition_form.cleaned_data.get('start_date')
+            end_date        = petition_form.cleaned_data.get('end_date')
+            participants_id = petition_form.cleaned_data.get('participants')
+
+            grant = Grant.objects.create(title       = title,
+                                         start_date  = start_date,
+                                         end_date    = end_date,
+                                         responsible = responsible)
+
+            for participant_id in participants_id:
+                participant = Person.objects.get(pk = participant_id)
+                GrantParticipant.objects.create(grant  = grant,
+                                                person = participant)
+
+            return redirect('/proyecto/' + str(grant.id))
+
+    petition_form = GrantPetitionForm()
+    return render(request, 'core/grant_petition.html',
+                  {'form':petition_form}, RequestContext(request))
+
+def grant_changes(request, grant_id):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    grant = Grant.objects.get(pk = grant_id)
+
+    if (reqest.user != grant.responsible.user):
+        redirect('/proyecto/' + str(grant.id))
+
+    if request.method == 'POST':
+        form = GrantChangeForm(request.POST)
+
+        if form.is_valid():
+            start_date      = form.cleaned_data.get('start_date')
+            end_date        = form.cleaned_data.get('end_date')
+            participants_id = form.cleaned_data.get('participants')
+
+            grant.start_date = start_date
+            grant.end_date   = end_date
+            grant.save()
+
+            for participant_id in participants_id:
+                participant = Person.objects.get(pk = participant_id)
+                if not GrantParticipant.objects.filter(grant = grant, person = participant).exists():
+                    GrantParticipant.objects.create(grant = grant, person = participant)
+
+            return redirect('/proyecto/' + str(grant.id))
+
+    form = GrantChangeForm(initial={'start_date': grant.start_date,
+                                    'end_date': grant.end_date})
+
+    return render(request, 'core/grant_change.html',
+                  {'form':form,
+                  'grant': grant }, RequestContext(request))
+
+def get_affiliation_petition(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        petition_form = AffiliationPetitionForm(request.POST)
+
+        if petition_form.is_valid():
+            name           = petition_form.cleaned_data.get('name')
+            acronym        = petition_form.cleaned_data.get('acronym')
+            address        = petition_form.cleaned_data.get('address')
+            super_level_id = petition_form.cleaned_data.get('super_level')
+            super_level    = Affiliation.objects.get(pk = super_level_id)
+
+            affiliation    = Affiliation.objects.create(name        = name,
+                                                        acronym     = acronym,
+                                                        address     = address,
+                                                        super_level = super_level)
+
+            return redirect('/sedes/' + str(affiliation.id))
+
+    petition_form = AffiliationPetitionForm()
+    return render(request, 'core/affiliation_petition.html',
+                  {'form':petition_form}, RequestContext(request))
+
 class DeleteGroup(DeleteView):
     template_name= 'core/delete_group.html'
     success_url= '/home'
@@ -437,6 +534,10 @@ class DeleteMember(DeleteView):
 
     def get_object(self):
         id=self.kwargs.get("member_id")
+<<<<<<< HEAD
         group_id=self.kwargs.get("group_id")
         member_id=GroupMember.objects.get(person=id, group=group_id)
         return get_object_or_404(GroupMember, id=member_id.id)
+=======
+        return get_object_or_404(Person, id=id)
+>>>>>>> 8b83912330e3f3ef93858c1981a6dcd2a877d66f

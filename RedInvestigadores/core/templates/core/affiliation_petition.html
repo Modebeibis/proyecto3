@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <title>Crear Grupo</title>
+    <title>Busqueda</title>
     <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_53775_53775.ico" %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
@@ -39,7 +39,7 @@
       </nav>
     </header>
     <div class="container">
-         <form action = "{% url 'group_petition' %}" method="post">
+         <form action = "{% url 'affiliation_petition' %}" method="post">
               {% csrf_token %}
               {{ form.as_ul }}
               <input type = "submit" value = "Crear">
