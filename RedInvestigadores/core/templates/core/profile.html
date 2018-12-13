@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <title>Investigador</title>
+    <title>Perfil</title>
     <link rel="shortcut icon" href="{% static "img/books.ico" %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
@@ -102,19 +102,21 @@
                        <ul>
                             {% for paper in papers %}
                             <li> {{paper}} - <a href="{% url 'publication' paper.id %}">Articulo</a> </li>
+                            <p><a href="{% url 'delete_publication' paper.id %}">Eliminar</a></p>
                             {% endfor %}
                        </ul>
                        {% endif %}
                        {% if owner_groups %}
-                       <p> Dueñ@ de los grupos </p>
+                       <p> Líder de los grupos </p>
                        <ul>
                             {% for group in owner_groups %}
-                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
+                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a></li>
+                            <p><a href="{% url 'delete_group' group.id %}">Eliminar</a></p>
                             {% endfor %}
                        </ul>
                        {% endif %}
                        {% if member_groups %}
-                       <p> Miembr@ de los grupos </p>
+                       <p> Integrante de los grupos </p>
                        <ul>
                             {% for group in member_groups %}
                             <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
@@ -130,7 +132,7 @@
                        </ul>
                        {% endif %}
                        {% if participant_grants %}
-                       <p> Participe de los proyectos </p>
+                       <p> Partícipe de los proyectos </p>
                        <ul>
                             {% for grant in participant_grants %}
                             <li> {{grant}} - <a href="{% url 'grant' grant.id %}">Proyecto</a> </li>
@@ -149,7 +151,6 @@
                    background-color: #FA8072;
                    color: white;
                    text-decoration: none;
-
                    margin-right: 40px;
                   }
                   .enlaceboton:link,
@@ -171,7 +172,10 @@
                    <a class="enlaceboton" href="{% url 'research' %}">Editar perfil</a>
                    <a class="enlaceboton" href="{% url 'group_petition' %}">Crear grupo</a>
                    <a class="enlaceboton" href="{% url 'publication_petition'%}">Añadir articulo</a>
-                   {% else %}
+                   <a class="enlaceboton" href="{% url 'grant_petition'%}">Añadir proyecto</a>
+                    {% if user.is_staff %}
+                      <a class="enlaceboton" href="{% url 'admin:index' %}">Administración</a>
+                    {% endif %}
 
                    {% endif %}
              </div>

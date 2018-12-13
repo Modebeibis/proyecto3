@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <title>Busqueda</title>
+    <title>Grupo</title>
     <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_53775_53775.ico" %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
@@ -45,13 +45,24 @@
               <br/>
               <h2> Miembros </h2>
               <ul>
-                   {% for member in members %}
-                       {% if member == group.owner %}
-                       <li> <h4> Dueño: {{member}} - <a href="{% url 'profile' member.user.id %}"> Perfil </a> </h4> </li>
-                       {% else %}
-                       <li> {{member}} - <a href="{% url 'profile' member.user.id %}"> Perfil </a></li>
-                       {% endif %}
-                   {% endfor %}
+                   {% if request.user.id == group.owner.user.id %}
+                       {% for member in members %}
+                          {% if member == group.owner %}
+                          <li> <h4> Dueño: {{member}} - <a href="{% url 'profile' member.user.id %}"> Perfil </a> </h4> </li>
+                          {% else %}
+                          <li> {{member}} - <a href="{% url 'profile' member.user.id %}"> Perfil </a></li>
+                          <p><a href="{% url 'delete_members' member.id group.id %}">Eliminar</a></p>
+                          {% endif %}
+                       {% endfor %}
+                   {% else %}
+                      {% for member in members %}
+                         {% if member == group.owner %}
+                         <li> <h4> Dueño: {{member}} - <a href="{% url 'profile' member.user.id %}"> Perfil </a> </h4> </li>
+                         {% else %}
+                         <li> {{member}} - <a href="{% url 'profile' member.user.id %}"> Perfil </a></li>
+                         {% endif %}
+                      {% endfor %}
+                   {% endif %}
               </ul>
               {% endif %}
               {% if request.user == group.owner.user %}
@@ -65,7 +76,21 @@
       <p>&copy; 2018 <a href=""></a></p>
     </footer>
 
+    <style>
+      .container {
+        background: #cacfd2;
+      }
+      h1 {
+        text-align: justify;
+        font-size: 3em;
+      }
+      .list {
+        list-style: disc;
+        margin-left: 30px;
+        font-size: 1.5em;
+      }
 
+    </style>
 
 
 

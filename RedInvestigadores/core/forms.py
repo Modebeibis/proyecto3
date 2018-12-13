@@ -35,7 +35,7 @@ class CustomSignupForm(SignupForm):
             raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
                                                 "intenta no usar números ó cáracteres especiales")
         return cd
-    
+
     def clean_password(self,cd):
         password = cd.get("password1")
         if len(str(password)) <= 4:
@@ -53,7 +53,7 @@ class CustomSignupForm(SignupForm):
 class LoginForm(AuthenticationForm):
     def __init__(self, request,*args, **kwargs):
         super().__init__(request,*args,**kwargs)
-        self.fields['username'].label = 'Escribe tu usuario'
+        self.fields['username'].label = 'Escribe tu correo'
         self.fields['password'].label = 'Ingresa tu contraseña'
 
     class Meta(AuthenticationForm):
@@ -115,7 +115,7 @@ class ProfileForm(forms.ModelForm):
             'degree'     : _('Título'),
             'sni'        : _('SNI')
         }
-    
+
     def clean_name(self,cd):
         first_name = cd.get("first_name")
         last_name = cd.get("last_name")
@@ -125,7 +125,7 @@ class ProfileForm(forms.ModelForm):
             raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
                                                 "intenta no usar números ó cáracteres especiales")
         return cd
-    
+
     def clean(self):
         super().clean()
         cd = self.cleaned_data
@@ -150,8 +150,7 @@ class PublicationPetitionForm(forms.Form):
     date      = forms.DateField(widget = forms.SelectDateWidget(years=years),
                                 label = 'Fecha publicación')
     doi       = forms.CharField(label = 'DOI')
-    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                          label ='Autores')
+    authors   = forms.MultipleChoiceField(label ='Autores')
 
     def __init__(self, *args, **kwargs):
         super(PublicationPetitionForm, self).__init__(*args, **kwargs)
@@ -163,7 +162,7 @@ class PublicationPetitionForm(forms.Form):
 class PublicationChangeForm(forms.ModelForm):
     doi       = forms.CharField(label = 'DOI')
     title     = forms.CharField(label = 'Título', max_length = 200)
-    authors   = forms.MultipleChoiceField(label= 'autores', widget=forms.CheckboxSelectMultiple)
+    authors   = forms.MultipleChoiceField(label= 'autores')
 
     class Meta:
         model=Publication
@@ -183,9 +182,46 @@ class PublicationChangeForm(forms.ModelForm):
 
 class GroupPetitionForm(forms.Form):
     name = forms.CharField(label = 'Nombre', max_length = 200)
-    members = forms.MultipleChoiceField(label= 'Miembros',widget=forms.CheckboxSelectMultiple)
+    members = forms.MultipleChoiceField(label= 'Miembros')
 
     def __init__(self, *args, **kwargs):
         super(GroupPetitionForm, self).__init__(*args, **kwargs)
         OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
         self.fields['members'].choices = OPTIONS
+
+class GrantPetitionForm(forms.Form):
+    years = []
+    for i in range (0, 20):
+        years.append(2000+i)
+    title        = forms.CharField(label = 'Título', max_length = 200)
+    start_date   = forms.DateField(widget = forms.SelectDateWidget(years=years),
+                                   label = 'Fecha Inicio')
+    end_date     = forms.DateField(widget = forms.SelectDateWidget(years=years),
+                                   label = 'Fecha Final')
+    participants = forms.MultipleChoiceField(label= 'Miembros')
+
+    def __init__(self, *args, **kwargs):
+        super(GrantPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['participants'].choices = OPTIONS
+
+class GrantChangeForm(forms.Form):
+    years = []
+    for i in range (0, 20):
+        years.append(2000+i)
+    start_date   = forms.DateField(widget = forms.SelectDateWidget(years=years),
+                                   label = 'Fecha Inicio')
+    end_date     = forms.DateField(widget = forms.SelectDateWidget(years=years),
+                                   label = 'Fecha Final')
+    participants = forms.MultipleChoiceField(label= 'Miembros')
+
+    def __init__(self, *args, **kwargs):
+        super(GrantChangeForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['participants'].choices = OPTIONS
+
+class AffiliationPetitionForm(forms.Form):
+    name        = forms.CharField(label = 'Nombre', max_length = 200)
+    acronym     = forms.CharField(label = 'Acrónimo', max_length = 200)
+    address     = forms.CharField(label = 'Dirección', max_length = 200)
+    super_level = forms.ModelChoiceField(label = 'Nivel Superior', queryset = Affiliation.objects.all(), required = False)
