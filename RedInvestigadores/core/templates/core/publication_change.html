@@ -50,12 +50,30 @@
     <footer id="main-footer">
       <p>&copy; 2018 <a href=""></a></p>
     </footer>
-
-
-
-
-
     {% endblock %}
   </body>
+  {% block css %}
+  <style>
+    .container{
+      position: relative;
+      margin-top: 30px;
+      text-indent: 10px;
+      font-size: 1em;
+    }
 
+    input {
+      border-color: #A9A9A9;
+      border-radius: 5px;
+      display: flex;
+      margin-left: 35px;
+    }
+    .boton {
+      margin-left: 600px;
+      background-color: #FA8072;
+      width: 100px;
+      text-decoration-color: black;
+      text-align: center;
+    }
+    </style>
+    {% endblock %}
 </html>
