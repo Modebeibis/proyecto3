@@ -26,16 +26,28 @@ class CustomSignupForm(SignupForm):
         user.save()
         return user
 
-    def clean(self):
-        cd = self.cleaned_data
+    def clean_name(self,cd):
         first_name = cd.get("first_name")
         last_name = cd.get("last_name")
-        nums = re.compile(r"[+-]?\d+(?:\.\d+)?")
-        bad_firstName = len(nums.findall(first_name)) > 0
-        bad_lastName = len(nums.findall(last_name)) > 0
-        if bad_firstName or bad_lastName:
+        bad_firstName = bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', first_name))
+        bad_lastName = bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', last_name))
+        if not(bad_firstName) or not(bad_lastName):
             raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
                                                 "intenta no usar números ó cáracteres especiales")
+        return cd
+    
+    def clean_password(self,cd):
+        password = cd.get("password1")
+        print(password)
+        if len(str(password)) <= 4:
+            raise forms.ValidationError("Contraseña invalida, intenta usar una contraseña "+
+                                                "mayor a 4 caráteres.")
+        return cd
+
+    def clean(self):
+        cd = self.cleaned_data
+        cd = self.clean_name(cd)
+        cd = self.clean_password(cd)
         return cd
 
 
@@ -104,6 +116,23 @@ class ProfileForm(forms.ModelForm):
             'degree'     : _('Título'),
             'sni'        : _('SNI')
         }
+    
+    def clean_name(self,cd):
+        first_name = cd.get("first_name")
+        last_name = cd.get("last_name")
+        bad_firstName = bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', first_name))
+        bad_lastName = bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', last_name))
+        if not(bad_firstName) or not(bad_lastName):
+            raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
+                                                "intenta no usar números ó cáracteres especiales")
+        return cd
+    
+    def clean(self):
+        super().clean()
+        cd = self.cleaned_data
+        cd = self.clean_name(cd)
+        return cd
+
     def __init__(self,*args, **kwargs):
         super(ProfileForm, self).__init__(*args,**kwargs)
         self.fields['affiliation'].queryset = Affiliation.objects.all()
@@ -117,8 +146,8 @@ class PublicationPetitionForm(forms.Form):
         years.append(1940+i)
     title     = forms.CharField(label = 'Título', max_length = 200)
     journal   = forms.ChoiceField(label = 'Revista')
-    volume    = forms.IntegerField(label = 'Volumen')
-    issue     = forms.IntegerField(label = 'Número')
+    volume    = forms.IntegerField(label = 'Volumen',min_value=1)
+    issue     = forms.IntegerField(label = 'Número',min_value=0)
     date      = forms.DateField(widget = forms.SelectDateWidget(years=years),
                                 label = 'Fecha publicación')
     doi       = forms.CharField(label = 'DOI')

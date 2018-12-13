@@ -66,6 +66,12 @@
                          <span id="alertQualification" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
                            <p>Título: {{ person.get_degree_display }} </p>
                          </span>
+                         {% if roles %}
+                         <br >
+                         <span id="alertQualification" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
+                           <p>Rol(es): {% for role in roles %} {{ role }} / {% endfor %} </p>
+                         </span>
+                         {% endif %}
                          <br >
                          <span id="alertEmail" data-toggle="popover" data-trigger="hover" data-placement="right" title="" data-content="">
                            <p>Email: {{ user.email }} </p>
@@ -160,7 +166,7 @@
                    border-left: 2px solid #666666;
                   }
                  </style>
-                   {% if request.user.is_authenticated %}
+                   {% if request.user.is_authenticated and request.user == user %}
                    <br>
                    <a class="enlaceboton" href="{% url 'research' %}">Editar perfil</a>
                    <a class="enlaceboton" href="{% url 'group_petition' %}">Crear grupo</a>

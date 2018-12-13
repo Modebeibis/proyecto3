@@ -1,9 +1,9 @@
 from django.shortcuts import render,  redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from django.views import generic
 from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode,  urlsafe_base64_decode
 from django.template import RequestContext
@@ -12,6 +12,7 @@ from .tokens import account_activation_token
 from django.contrib.auth import login
 from django.template import RequestContext
 from django.db.models import Q
+from django.views.generic import DeleteView
 
 from .forms import *
 from .models import *
@@ -201,6 +202,11 @@ def get_user_profile(request, user_id):
         participant_grant = Grant.objects.get(pk = participant_of_grant.grant.id)
         participant_grants.append(participant_grant)
 
+    person_roles = PersonRole.objects.filter(person = person)
+    roles = []
+    for person_role in person_roles:
+        roles.append(person_role.role)
+
     return render(request, 'core/profile.html',
                   {'person': person,
                    'user': user,
@@ -208,7 +214,8 @@ def get_user_profile(request, user_id):
                    'owner_groups':owner_groups,
                    'member_groups':member_groups,
                    'responsible_grants': responsible_grants,
-                   'participant_grants': participant_grants})
+                   'participant_grants': participant_grants,
+                   'roles': roles})
 
 
 def search(request):
@@ -301,6 +308,17 @@ def publication_changes(request,publication_id):
     if not request.user.is_authenticated:
         return render(request, 'core/home.html')
 
+    publication = Publication.objects.get(pk= publication_id)
+    authors_of  = AuthorOf.objects.filter(publication = publication)
+
+    found = False
+    for author_of in authors_of:
+        if (author_of.person.user == request.user):
+            found = True
+
+    if not found:
+        return redirect('/publicacion/' + str(publication_id))
+
     if request.method == 'POST':
         pub_instance=Publication.objects.get(pk = publication_id)
         form = PublicationChangeForm(request.POST, instance= pub_instance)
@@ -321,7 +339,6 @@ def publication_changes(request,publication_id):
                     AuthorOf.objects.create(publication = publication,person = author)
             return redirect('/publicacion/' + str(publication_id))
 
-    publication = Publication.objects.get(pk= publication_id)
     form = PublicationChangeForm(initial={'title': publication.title,
                                          'journal': publication.journal,
                                          'volume': publication.volume,
@@ -358,9 +375,14 @@ def get_group_petition(request):
     return render(request, 'core/group_petition.html',
                   {'form':petition_form}, RequestContext(request))
 
-def group_changes(request,group_id):
+def group_changes(request, group_id):
     if not request.user.is_authenticated:
         return render(request, 'core/home.html')
+
+    group = Group.objects.get(pk= group_id)
+
+    if (request.user.id != group.owner.user.id):
+        return redirect('/grupo/' + str(group_id))
 
     if request.method == 'POST':
         form = GroupPetitionForm(request.POST)
@@ -377,11 +399,11 @@ def group_changes(request,group_id):
                     GroupMember.objects.create(group = group,person = member)
             return redirect('/grupo/' + str(group_id))
 
-    group=Group.objects.get(pk= group_id)
     form = GroupPetitionForm(initial={'name': group.name})
     return render(request, 'core/group_change.html',
                   {'form':form,
                   'group': group }, RequestContext(request))
+
 
 def get_grant_petition(request):
     if not request.user.is_authenticated:
@@ -478,3 +500,36 @@ def get_affiliation_petition(request):
     petition_form = AffiliationPetitionForm()
     return render(request, 'core/affiliation_petition.html',
                   {'form':petition_form}, RequestContext(request))
+
+class DeleteGroup(DeleteView):
+    template_name= 'core/delete_group.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("group_id")
+        return get_object_or_404(Group, id=id)
+
+class DeletePublication(DeleteView):
+    template_name= 'core/delete_publication.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("publication_id")
+        return get_object_or_404(Publication, id=id)
+
+
+class DeleteAuthor(DeleteView):
+    template_name='core/delete_authors.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("author_id")
+        return get_object_or_404(Person, id=id)
+
+class DeleteMember(DeleteView):
+    template_name='core/delete_members.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("member_id")
+        return get_object_or_404(Person, id=id)
