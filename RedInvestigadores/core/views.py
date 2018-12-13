@@ -202,7 +202,6 @@ def get_user_profile(request, user_id):
         owner_groups.append(owner_group)
 
     member_of_groups = GroupMember.objects.filter(person = person.id)
-    print(member_of_groups)
     member_groups = []
     for member_of_group in member_of_groups:
         member_group = Group.objects.get(pk = member_of_group.group.id)
@@ -255,7 +254,6 @@ def search(request):
 
 
 def profile_changes(request):
-    print(request.method)
     if not request.user.is_authenticated:
         return redirect('/home')
 
@@ -432,12 +430,13 @@ def get_grant_petition(request):
     if request.method == 'POST':
         petition_form = GrantPetitionForm(request.POST)
 
-        person = Person.objects.get(user = request.user)
+        person = Person.objects.get(user = request.user.id)
 
         if not (Researcher.objects.filter(person = person).exists()):
-            redirect('/home')
-
-        responsible = Researcher.objects.get(person = person)
+            responsible=Researcher(person= person)
+            responsible.save()
+        else:
+            responsible = Researcher.objects.get(person = person)
 
         if petition_form.is_valid():
             title           = petition_form.cleaned_data.get('title')
@@ -467,7 +466,7 @@ def grant_changes(request, grant_id):
 
     grant = Grant.objects.get(pk = grant_id)
 
-    if (reqest.user != grant.responsible.user):
+    if (request.user != grant.responsible.person.user):
         redirect('/proyecto/' + str(grant.id))
 
     if request.method == 'POST':
@@ -542,7 +541,6 @@ class DeletePublication(DeleteView):
     def get_object(self):
         id=self.kwargs.get("publication_id")
         return get_object_or_404(Publication, id=id)
-
 
 class DeleteAuthor(DeleteView):
     template_name='core/delete_authors.html'

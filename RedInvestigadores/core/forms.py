@@ -38,7 +38,6 @@ class CustomSignupForm(SignupForm):
 
     def clean_password(self,cd):
         password = cd.get("password1")
-        print(password)
         if len(str(password)) <= 4:
             raise forms.ValidationError("Contraseña invalida, intenta usar una contraseña "+
                                                 "mayor a 4 caráteres.")
