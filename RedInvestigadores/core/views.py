@@ -433,9 +433,10 @@ def get_grant_petition(request):
         person = Person.objects.get(user = request.user.id)
 
         if not (Researcher.objects.filter(person = person).exists()):
-            redirect('/home')
-
-        responsible = Researcher.objects.get(person = person)
+            responsible=Researcher(person= person)
+            responsible.save()
+        else:
+            responsible = Researcher.objects.get(person = person)
 
         if petition_form.is_valid():
             title           = petition_form.cleaned_data.get('title')
@@ -465,7 +466,7 @@ def grant_changes(request, grant_id):
 
     grant = Grant.objects.get(pk = grant_id)
 
-    if (reqest.user != grant.responsible.user):
+    if (request.user != grant.responsible.person.user):
         redirect('/proyecto/' + str(grant.id))
 
     if request.method == 'POST':
