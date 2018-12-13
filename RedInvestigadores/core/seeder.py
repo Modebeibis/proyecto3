@@ -12,7 +12,7 @@ print('- - - - Seeding Persons...')
 PersonSeeder().seed()
 print('- - - - Seeding Administrators...')
 PersonSeeder().seed_admins()
-# As all persons are now researches by default then the following code lines are commented
+# As all persons are now researchers by default then the following code lines are commented
 # print('- - - - Seeding Researchers...')
 # PersonSeeder().seed_researchers()
 print('- - - - Seeding Postdocs...')
