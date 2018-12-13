@@ -171,8 +171,10 @@
                    <a class="enlaceboton" href="{% url 'research' %}">Editar perfil</a>
                    <a class="enlaceboton" href="{% url 'group_petition' %}">Crear grupo</a>
                    <a class="enlaceboton" href="{% url 'publication_petition'%}">Añadir articulo</a>
-                   {% else %}
-
+                    {% if user.is_staff %}
+                      <a class="enlaceboton" href="{% url 'admin:index' %}">Administración</a>
+                    {% endif %}
+                    
                    {% endif %}
              </div>
          </form>

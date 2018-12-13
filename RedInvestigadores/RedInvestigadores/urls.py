@@ -25,7 +25,6 @@ urlpatterns = [
         authentication_form=LoginForm), name='login'),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('home/', views.home, name='home'),
     path('profile/<int:user_id>', views.get_user_profile, name='profile'),
     path('research/',views.profile_changes, name='research'),
     path('about_of/', views.about_of, name='about_of'),

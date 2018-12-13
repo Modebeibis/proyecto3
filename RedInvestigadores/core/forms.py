@@ -54,7 +54,7 @@ class CustomSignupForm(SignupForm):
 class LoginForm(AuthenticationForm):
     def __init__(self, request,*args, **kwargs):
         super().__init__(request,*args,**kwargs)
-        self.fields['username'].label = 'Escribe tu usuario'
+        self.fields['username'].label = 'Escribe tu correo'
         self.fields['password'].label = 'Ingresa tu contraseña'
 
     class Meta(AuthenticationForm):
