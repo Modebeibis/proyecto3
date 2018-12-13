@@ -7,14 +7,14 @@ class JournalSeeder(object):
         faker   = Faker()
         while True:
             name = faker.company()
-            if not CustomUser.objects.filter(name = name).exists():
+            if not Journal.objects.filter(name = name).exists():
                 return name
 
     def get_unique_issn(self):
         faker   = Faker()
         while True:
             issn = faker.isbn10()
-            if not Person.objects.filter(issn = issn).exists():
+            if not Journal.objects.filter(issn = issn).exists():
                 return issn
 
     def seed(self):

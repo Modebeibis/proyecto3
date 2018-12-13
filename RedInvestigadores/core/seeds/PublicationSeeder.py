@@ -8,7 +8,7 @@ class PublicationSeeder(object):
         faker   = Faker()
         while True:
             doi = faker.isbn10()
-            if not Person.objects.filter(doi = doi).exists():
+            if not Publication.objects.filter(doi = doi).exists():
                 return doi
 
     def seed(self):
