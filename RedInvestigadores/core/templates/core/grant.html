@@ -57,8 +57,11 @@
                    <li> Proyecto: {{grant}} </li>
                    <li> Responsable: {{responsible}} </li>
                    <li> Fecha inicio: {{grant.start_date}} </li>
-                   <li> Fecha final: {{publication.end_date}} </li>
+                   <li> Fecha final: {{grant.end_date}} </li>
               </ul>
+              {% if responsible.user == request.user %}
+                  <p><a href="{% url 'grant_change' grant.id %}">Cambiar</a>
+              {% endif %}
          {% endif %}
     </div>
 

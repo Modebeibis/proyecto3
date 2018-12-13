@@ -47,6 +47,7 @@
               <ul>
                    {% for author in authors %}
                    <li> {{author}} - <a href="{% url 'profile' author.user.id %}"> Perfil </a></li>
+                   <p><a href="{% url 'delete_authors' author.id %}">Eliminar</a></p>
                    {% endfor %}
               </ul>
               {% endif %}
