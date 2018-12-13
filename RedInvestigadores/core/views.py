@@ -257,7 +257,7 @@ def search(request):
 def profile_changes(request):
     print(request.method)
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     if request.method == 'POST':
         profile_instance=Person.objects.get(user = request.user.id)
@@ -283,7 +283,7 @@ def profile_changes(request):
 
 def get_publication_petition(request):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     if request.method == 'POST':
         petition_form = PublicationPetitionForm(request.POST)
@@ -326,7 +326,7 @@ def get_publication_petition(request):
 
 def publication_changes(request,publication_id):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     publication = Publication.objects.get(pk= publication_id)
     authors_of  = AuthorOf.objects.filter(publication = publication)
@@ -373,7 +373,7 @@ def publication_changes(request,publication_id):
 
 def get_group_petition(request):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     if request.method == 'POST':
         petition_form = GroupPetitionForm(request.POST)
@@ -397,7 +397,7 @@ def get_group_petition(request):
 
 def group_changes(request, group_id):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     group = Group.objects.get(pk= group_id)
 
@@ -427,7 +427,7 @@ def group_changes(request, group_id):
 
 def get_grant_petition(request):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     if request.method == 'POST':
         petition_form = GrantPetitionForm(request.POST)
@@ -463,7 +463,7 @@ def get_grant_petition(request):
 
 def grant_changes(request, grant_id):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     grant = Grant.objects.get(pk = grant_id)
 
@@ -498,7 +498,7 @@ def grant_changes(request, grant_id):
 
 def get_affiliation_petition(request):
     if not request.user.is_authenticated:
-        return render(request, 'core/home.html')
+        return redirect('/home')
 
     if request.method == 'POST':
         petition_form = AffiliationPetitionForm(request.POST)
