@@ -107,7 +107,7 @@
                        </ul>
                        {% endif %}
                        {% if owner_groups %}
-                       <p> Dueñ@ de los grupos </p>
+                       <p> Líder de los grupos </p>
                        <ul>
                             {% for group in owner_groups %}
                             <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a></li>
@@ -116,7 +116,7 @@
                        </ul>
                        {% endif %}
                        {% if member_groups %}
-                       <p> Miembr@ de los grupos </p>
+                       <p> Integrante de los grupos </p>
                        <ul>
                             {% for group in member_groups %}
                             <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
@@ -132,7 +132,7 @@
                        </ul>
                        {% endif %}
                        {% if participant_grants %}
-                       <p> Participe de los proyectos </p>
+                       <p> Partícipe de los proyectos </p>
                        <ul>
                             {% for grant in participant_grants %}
                             <li> {{grant}} - <a href="{% url 'grant' grant.id %}">Proyecto</a> </li>

@@ -150,8 +150,7 @@ class PublicationPetitionForm(forms.Form):
     date      = forms.DateField(widget = forms.SelectDateWidget(years=years),
                                 label = 'Fecha publicación')
     doi       = forms.CharField(label = 'DOI')
-    authors   = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                          label ='Autores')
+    authors   = forms.MultipleChoiceField(label ='Autores')
 
     def __init__(self, *args, **kwargs):
         super(PublicationPetitionForm, self).__init__(*args, **kwargs)
@@ -163,7 +162,7 @@ class PublicationPetitionForm(forms.Form):
 class PublicationChangeForm(forms.ModelForm):
     doi       = forms.CharField(label = 'DOI')
     title     = forms.CharField(label = 'Título', max_length = 200)
-    authors   = forms.MultipleChoiceField(label= 'autores', widget=forms.CheckboxSelectMultiple)
+    authors   = forms.MultipleChoiceField(label= 'autores')
 
     class Meta:
         model=Publication
@@ -183,7 +182,7 @@ class PublicationChangeForm(forms.ModelForm):
 
 class GroupPetitionForm(forms.Form):
     name = forms.CharField(label = 'Nombre', max_length = 200)
-    members = forms.MultipleChoiceField(label= 'Miembros',widget=forms.CheckboxSelectMultiple)
+    members = forms.MultipleChoiceField(label= 'Miembros')
 
     def __init__(self, *args, **kwargs):
         super(GroupPetitionForm, self).__init__(*args, **kwargs)
@@ -191,10 +190,15 @@ class GroupPetitionForm(forms.Form):
         self.fields['members'].choices = OPTIONS
 
 class GrantPetitionForm(forms.Form):
+    years = []
+    for i in range (0, 20):
+        years.append(2000+i)
     title        = forms.CharField(label = 'Título', max_length = 200)
-    start_date   = forms.DateField(label = 'Fecha Inicio')
-    end_date     = forms.DateField(label = 'Fecha Final')
-    participants = forms.MultipleChoiceField(label= 'Miembros',widget=forms.CheckboxSelectMultiple)
+    start_date   = forms.DateField(widget = forms.SelectDateWidget(years=years),
+                                   label = 'Fecha Inicio')
+    end_date     = forms.DateField(widget = forms.SelectDateWidget(years=years),
+                                   label = 'Fecha Final')
+    participants = forms.MultipleChoiceField(label= 'Miembros')
 
     def __init__(self, *args, **kwargs):
         super(GrantPetitionForm, self).__init__(*args, **kwargs)
@@ -202,9 +206,14 @@ class GrantPetitionForm(forms.Form):
         self.fields['participants'].choices = OPTIONS
 
 class GrantChangeForm(forms.Form):
-    start_date   = forms.DateField(label = 'Fecha Inicio')
-    end_date     = forms.DateField(label = 'Fecha Final')
-    participants = forms.MultipleChoiceField(label= 'Miembros',widget=forms.CheckboxSelectMultiple)
+    years = []
+    for i in range (0, 20):
+        years.append(2000+i)
+    start_date   = forms.DateField(widget = forms.SelectDateWidget(years=years),
+                                   label = 'Fecha Inicio')
+    end_date     = forms.DateField(widget = forms.SelectDateWidget(years=years),
+                                   label = 'Fecha Final')
+    participants = forms.MultipleChoiceField(label= 'Miembros')
 
     def __init__(self, *args, **kwargs):
         super(GrantChangeForm, self).__init__(*args, **kwargs)
@@ -215,9 +224,4 @@ class AffiliationPetitionForm(forms.Form):
     name        = forms.CharField(label = 'Nombre', max_length = 200)
     acronym     = forms.CharField(label = 'Acrónimo', max_length = 200)
     address     = forms.CharField(label = 'Dirección', max_length = 200)
-    super_level = forms.ChoiceField(label = 'Nivel Superior')
-
-    def __init__(self, *args, **kwargs):
-        super(AffiliationPetitionForm, self).__init__(*args, **kwargs)
-        OPTIONS = ((affiliation.id, affiliation.__str__()) for affiliation in Affiliation.objects.all())
-        self.fields['super_level'].choices = OPTIONS
+    super_level = forms.ModelChoiceField(label = 'Nivel Superior', queryset = Affiliation.objects.all(), required = False)

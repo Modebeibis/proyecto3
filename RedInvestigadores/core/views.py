@@ -433,7 +433,7 @@ def get_grant_petition(request):
         person = Person.objects.get(user = request.user.id)
 
         if not (Researcher.objects.filter(person = person).exists()):
-            return redirect('/home')
+            redirect('/home')
 
         responsible = Researcher.objects.get(person = person)
 
@@ -506,12 +506,18 @@ def get_affiliation_petition(request):
             acronym        = petition_form.cleaned_data.get('acronym')
             address        = petition_form.cleaned_data.get('address')
             super_level_id = petition_form.cleaned_data.get('super_level')
-            super_level    = Affiliation.objects.get(pk = super_level_id)
+            if super_level_id != None:
+                affiliation = Affiliation.objects.create(name        = name,
+                                                         acronym     = acronym,
+                                                         address     = address,
+                                                         super_level = super_level_id)
+            else:
+                affiliation    = Affiliation.objects.create(name        = name,
+                                                            acronym     = acronym,
+                                                            address     = address)
 
-            affiliation    = Affiliation.objects.create(name        = name,
-                                                        acronym     = acronym,
-                                                        address     = address,
-                                                        super_level = super_level)
+
+
 
             return redirect('/sedes/' + str(affiliation.id))
 
