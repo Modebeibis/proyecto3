@@ -430,10 +430,10 @@ def get_grant_petition(request):
     if request.method == 'POST':
         petition_form = GrantPetitionForm(request.POST)
 
-        person = Person.objects.get(user = request.user)
+        person = Person.objects.get(user = request.user.id)
 
         if not (Researcher.objects.filter(person = person).exists()):
-            redirect('')
+            return redirect('/home')
 
         responsible = Researcher.objects.get(person = person)
 
