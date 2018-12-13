@@ -182,7 +182,6 @@ def get_user_profile(request, user_id):
         owner_groups.append(owner_group)
 
     member_of_groups = GroupMember.objects.filter(person = person.id)
-    print(member_of_groups)
     member_groups = []
     for member_of_group in member_of_groups:
         member_group = Group.objects.get(pk = member_of_group.group.id)
@@ -235,7 +234,6 @@ def search(request):
 
 
 def profile_changes(request):
-    print(request.method)
     if not request.user.is_authenticated:
         return render(request, 'core/home.html')
 
@@ -517,7 +515,6 @@ class DeletePublication(DeleteView):
         id=self.kwargs.get("publication_id")
         return get_object_or_404(Publication, id=id)
 
-
 class DeleteAuthor(DeleteView):
     template_name='core/delete_authors.html'
     success_url= '/home'
@@ -534,10 +531,6 @@ class DeleteMember(DeleteView):
 
     def get_object(self):
         id=self.kwargs.get("member_id")
-<<<<<<< HEAD
         group_id=self.kwargs.get("group_id")
         member_id=GroupMember.objects.get(person=id, group=group_id)
         return get_object_or_404(GroupMember, id=member_id.id)
-=======
-        return get_object_or_404(Person, id=id)
->>>>>>> 8b83912330e3f3ef93858c1981a6dcd2a877d66f

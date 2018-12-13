@@ -35,10 +35,9 @@ class CustomSignupForm(SignupForm):
             raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
                                                 "intenta no usar números ó cáracteres especiales")
         return cd
-    
+
     def clean_password(self,cd):
         password = cd.get("password1")
-        print(password)
         if len(str(password)) <= 4:
             raise forms.ValidationError("Contraseña invalida, intenta usar una contraseña "+
                                                 "mayor a 4 caráteres.")
@@ -116,7 +115,7 @@ class ProfileForm(forms.ModelForm):
             'degree'     : _('Título'),
             'sni'        : _('SNI')
         }
-    
+
     def clean_name(self,cd):
         first_name = cd.get("first_name")
         last_name = cd.get("last_name")
@@ -126,7 +125,7 @@ class ProfileForm(forms.ModelForm):
             raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
                                                 "intenta no usar números ó cáracteres especiales")
         return cd
-    
+
     def clean(self):
         super().clean()
         cd = self.cleaned_data
