@@ -102,6 +102,7 @@
                        <ul>
                             {% for paper in papers %}
                             <li> {{paper}} - <a href="{% url 'publication' paper.id %}">Articulo</a> </li>
+                            <p><a href="{% url 'delete_publication' paper.id %}">Eliminar</a></p>
                             {% endfor %}
                        </ul>
                        {% endif %}
@@ -109,7 +110,8 @@
                        <p> Dueñ@ de los grupos </p>
                        <ul>
                             {% for group in owner_groups %}
-                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
+                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a></li>
+                            <p><a href="{% url 'delete_group' group.id %}">Eliminar</a></p>
                             {% endfor %}
                        </ul>
                        {% endif %}
