@@ -39,12 +39,50 @@
       </nav>
     </header>
     <div class="container">
-         <form action = '.' method="post">
-              {% csrf_token %}
-              <h1>¿Quieres eliminar al miembro "{{ object.person }}"?</h1>
-              <p><button type = "submit">Aceptar</button> <a href="{% url 'group' object.group.id %}">Cancelar</a></p>
-         </form>
+      {% if affiliation %}
+      <h1> {{affiliation}} </h1>
+
+        {% if sub_affiliations %}
+        <h2> Dependencias </h2>
+        <ul class="list">
+          {% for affiliation in sub_affiliations %}
+          <li> {{affiliation}} <a href="{% url 'sede' affiliation.id %}">Perfil</a> </li>
+          {% endfor %}
+        </ul>
+
+        <br/>
+        {% endif %}
+
+        {% if register %}
+        <h2> Personas </h2>
+        <ul class="list">
+          {% for entry in register %}
+          <li> {{entry.person}} - {% for role in entry.roles %} {{role}}/ {% endfor %} <a href="{% url 'profile' entry.person.user.id %}"> Perfil </a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+      {% endif %}
     </div>
+
+    <style>
+    .container {
+      background: #cacfd2;
+    }
+    h1 {
+      text-align: justify;
+      font-size: 3em;
+    }
+    h2,h3 {
+      text-align: justify;
+      font-size: 2em;
+    }
+    .list {
+      list-style: disc;
+      margin-left: 30px;
+      font-size: 1.5em;
+    }
+    </style>
 
 
     <footer id="main-footer">

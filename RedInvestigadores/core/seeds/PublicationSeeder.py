@@ -3,16 +3,24 @@ from core.models import Person, Journal, Publication, AuthorOf, AuthorOfExternal
 from random import randint
 
 class PublicationSeeder(object):
+
+    def get_unique_doi(self):
+        faker   = Faker()
+        while True:
+            doi = faker.isbn10()
+            if not Publication.objects.filter(doi = doi).exists():
+                return doi
+
     def seed(self):
         faker = Faker()
 
         for i in range(1000):
-            title = faker.sentence()
+            title   = faker.sentence()
             journal = Journal.objects.get(pk = randint(1, 50))
-            volume = randint(1, 800)
-            issue = randint(1, 10)
-            date = faker.date()
-            doi = faker.isbn10()
+            volume  = randint(1, 800)
+            issue   = randint(1, 10)
+            date    = faker.date()
+            doi     = self.get_unique_doi()
 
             Publication.objects.get_or_create(title = title,
                                               journal = journal,
@@ -45,7 +53,7 @@ class PublicationSeeder(object):
 
             ExternalAuthor.objects.get_or_create(first_name = first_name,
                                                  last_name = last_name)
-                                                 
+
             external_author = ExternalAuthor.objects.get(pk = i + 1)
             AuthorOfExternal.objects.get_or_create(author = external_author,
                                                    publication = publication)
