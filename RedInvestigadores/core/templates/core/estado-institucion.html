@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <title>Sede</title>
+    <title>Busqueda</title>
     <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_53775_53775.ico" %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
@@ -39,15 +39,14 @@
       </nav>
     </header>
     <div class="container">
+      {% if affiliation %}
+      <h1> {{affiliation}} </h1>
 
-      {% if state %}
-      <h1> {{state}} </h1>
-
-        {% if affiliations %}
-        <h2> Instituciones </h2>
+        {% if sub_affiliations %}
+        <h2> Dependencias </h2>
         <ul class="list">
-          {% for affiliation in affiliations %}
-          <li> {{affiliation}} <a href="{% url 'estado/sede' state.id affiliation.id %}">Perfil</a> </li>
+          {% for affiliation in sub_affiliations %}
+          <li> {{affiliation}} <a href="{% url 'sede' affiliation.id %}">Perfil</a> </li>
           {% endfor %}
         </ul>
 
@@ -63,7 +62,7 @@
         </ul>
         {% endif %}
 
-        {% endif %}
+      {% endif %}
     </div>
 
     <style>

@@ -1,9 +1,9 @@
 from django.shortcuts import render,  redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from django.views import generic
 from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode,  urlsafe_base64_decode
 from django.template import RequestContext
@@ -12,6 +12,7 @@ from .tokens import account_activation_token
 from django.contrib.auth import login
 from django.template import RequestContext
 from django.db.models import Q
+from django.views.generic import DeleteView
 
 from .forms import *
 from .models import *
@@ -147,7 +148,7 @@ def get_affiliation(request, affiliation_id):
 
 def get_state_info(request, state_id):
     state = State.objects.get(pk = state_id)
-    affiliations = state.affiliation_set()
+    affiliations = state.affiliation_set_top()
     persons = state.pop_list()
     register = []
     for person in persons:
@@ -162,6 +163,26 @@ def get_state_info(request, state_id):
                   {'affiliations': affiliations,
                    'state':        state,
                    'register':     register})
+
+def get_state_affiliation_info(request, state_id, affiliation_id):
+    state            = State.objects.get(pk = state_id)
+    affiliation      = Affiliation.objects.get(pk = affiliation_id)
+    sub_affiliations = state.sub_affiliation_set(affiliation)
+    persons          = affiliation.pop_list_state(state)
+    register = []
+    for person in persons:
+        person_roles = PersonRole.objects.filter(person = person.id)
+        roles = []
+        for person_role in person_roles:
+            roles.append(person_role.role)
+
+        register.append(PersonInformation(person, roles))
+
+    return render(request, 'core/estado-institucion.html',
+                  {'affiliation':      affiliation,
+                   'sub_affiliations': sub_affiliations,
+                   'state':            state,
+                   'register':         register})
 
 def get_user_profile(request, user_id):
     user = CustomUser.objects.get(pk = user_id)
@@ -402,3 +423,137 @@ def group_changes(request, group_id):
     return render(request, 'core/group_change.html',
                   {'form':form,
                   'group': group }, RequestContext(request))
+
+
+def get_grant_petition(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        petition_form = GrantPetitionForm(request.POST)
+
+        person = Person.objects.get(user = request.user)
+
+        if not (Researcher.objects.filter(person = person).exists()):
+            redirect('')
+
+        responsible = Researcher.objects.get(person = person)
+
+        if petition_form.is_valid():
+            title           = petition_form.cleaned_data.get('title')
+            start_date      = petition_form.cleaned_data.get('start_date')
+            end_date        = petition_form.cleaned_data.get('end_date')
+            participants_id = petition_form.cleaned_data.get('participants')
+
+            grant = Grant.objects.create(title       = title,
+                                         start_date  = start_date,
+                                         end_date    = end_date,
+                                         responsible = responsible)
+
+            for participant_id in participants_id:
+                participant = Person.objects.get(pk = participant_id)
+                GrantParticipant.objects.create(grant  = grant,
+                                                person = participant)
+
+            return redirect('/proyecto/' + str(grant.id))
+
+    petition_form = GrantPetitionForm()
+    return render(request, 'core/grant_petition.html',
+                  {'form':petition_form}, RequestContext(request))
+
+def grant_changes(request, grant_id):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    grant = Grant.objects.get(pk = grant_id)
+
+    if (reqest.user != grant.responsible.user):
+        redirect('/proyecto/' + str(grant.id))
+
+    if request.method == 'POST':
+        form = GrantChangeForm(request.POST)
+
+        if form.is_valid():
+            start_date      = form.cleaned_data.get('start_date')
+            end_date        = form.cleaned_data.get('end_date')
+            participants_id = form.cleaned_data.get('participants')
+
+            grant.start_date = start_date
+            grant.end_date   = end_date
+            grant.save()
+
+            for participant_id in participants_id:
+                participant = Person.objects.get(pk = participant_id)
+                if not GrantParticipant.objects.filter(grant = grant, person = participant).exists():
+                    GrantParticipant.objects.create(grant = grant, person = participant)
+
+            return redirect('/proyecto/' + str(grant.id))
+
+    form = GrantChangeForm(initial={'start_date': grant.start_date,
+                                    'end_date': grant.end_date})
+
+    return render(request, 'core/grant_change.html',
+                  {'form':form,
+                  'grant': grant }, RequestContext(request))
+
+def get_affiliation_petition(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/home.html')
+
+    if request.method == 'POST':
+        petition_form = AffiliationPetitionForm(request.POST)
+
+        if petition_form.is_valid():
+            name           = petition_form.cleaned_data.get('name')
+            acronym        = petition_form.cleaned_data.get('acronym')
+            address        = petition_form.cleaned_data.get('address')
+            super_level_id = petition_form.cleaned_data.get('super_level')
+            super_level    = Affiliation.objects.get(pk = super_level_id)
+
+            affiliation    = Affiliation.objects.create(name        = name,
+                                                        acronym     = acronym,
+                                                        address     = address,
+                                                        super_level = super_level)
+
+            return redirect('/sedes/' + str(affiliation.id))
+
+    petition_form = AffiliationPetitionForm()
+    return render(request, 'core/affiliation_petition.html',
+                  {'form':petition_form}, RequestContext(request))
+
+class DeleteGroup(DeleteView):
+    template_name= 'core/delete_group.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("group_id")
+        return get_object_or_404(Group, id=id)
+
+class DeletePublication(DeleteView):
+    template_name= 'core/delete_publication.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("publication_id")
+        return get_object_or_404(Publication, id=id)
+
+
+class DeleteAuthor(DeleteView):
+    template_name='core/delete_authors.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("author_id")
+        pub_id=self.kwargs.get("publication_id")
+        author_id=AuthorOf.objects.get(person=id,publication=pub_id)
+        return get_object_or_404(AuthorOf, id=author_id.id)
+
+class DeleteMember(DeleteView):
+    template_name='core/delete_members.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("member_id")
+        group_id=self.kwargs.get("group_id")
+        member_id=GroupMember.objects.get(person=id, group=group_id)
+        return get_object_or_404(GroupMember, id=member_id.id)

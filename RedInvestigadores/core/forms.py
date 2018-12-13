@@ -54,7 +54,7 @@ class CustomSignupForm(SignupForm):
 class LoginForm(AuthenticationForm):
     def __init__(self, request,*args, **kwargs):
         super().__init__(request,*args,**kwargs)
-        self.fields['username'].label = 'Escribe tu usuario'
+        self.fields['username'].label = 'Escribe tu correo'
         self.fields['password'].label = 'Ingresa tu contraseña'
 
     class Meta(AuthenticationForm):
@@ -190,3 +190,35 @@ class GroupPetitionForm(forms.Form):
         super(GroupPetitionForm, self).__init__(*args, **kwargs)
         OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
         self.fields['members'].choices = OPTIONS
+
+class GrantPetitionForm(forms.Form):
+    title        = forms.CharField(label = 'Título', max_length = 200)
+    start_date   = forms.DateField(label = 'Fecha Inicio')
+    end_date     = forms.DateField(label = 'Fecha Final')
+    participants = forms.MultipleChoiceField(label= 'Miembros',widget=forms.CheckboxSelectMultiple)
+
+    def __init__(self, *args, **kwargs):
+        super(GrantPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['participants'].choices = OPTIONS
+
+class GrantChangeForm(forms.Form):
+    start_date   = forms.DateField(label = 'Fecha Inicio')
+    end_date     = forms.DateField(label = 'Fecha Final')
+    participants = forms.MultipleChoiceField(label= 'Miembros',widget=forms.CheckboxSelectMultiple)
+
+    def __init__(self, *args, **kwargs):
+        super(GrantChangeForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((person.id, person.__str__()) for person in Person.objects.all())
+        self.fields['participants'].choices = OPTIONS
+
+class AffiliationPetitionForm(forms.Form):
+    name        = forms.CharField(label = 'Nombre', max_length = 200)
+    acronym     = forms.CharField(label = 'Acrónimo', max_length = 200)
+    address     = forms.CharField(label = 'Dirección', max_length = 200)
+    super_level = forms.ChoiceField(label = 'Nivel Superior')
+
+    def __init__(self, *args, **kwargs):
+        super(AffiliationPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((affiliation.id, affiliation.__str__()) for affiliation in Affiliation.objects.all())
+        self.fields['super_level'].choices = OPTIONS

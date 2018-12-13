@@ -102,6 +102,7 @@
                        <ul>
                             {% for paper in papers %}
                             <li> {{paper}} - <a href="{% url 'publication' paper.id %}">Articulo</a> </li>
+                            <p><a href="{% url 'delete_publication' paper.id %}">Eliminar</a></p>
                             {% endfor %}
                        </ul>
                        {% endif %}
@@ -109,7 +110,8 @@
                        <p> Dueñ@ de los grupos </p>
                        <ul>
                             {% for group in owner_groups %}
-                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a> </li>
+                            <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a></li>
+                            <p><a href="{% url 'delete_group' group.id %}">Eliminar</a></p>
                             {% endfor %}
                        </ul>
                        {% endif %}
@@ -170,7 +172,10 @@
                    <a class="enlaceboton" href="{% url 'research' %}">Editar perfil</a>
                    <a class="enlaceboton" href="{% url 'group_petition' %}">Crear grupo</a>
                    <a class="enlaceboton" href="{% url 'publication_petition'%}">Añadir articulo</a>
-                   {% else %}
+                   <a class="enlaceboton" href="{% url 'grant_petition'%}">Añadir proyecto</a>
+                    {% if user.is_staff %}
+                      <a class="enlaceboton" href="{% url 'admin:index' %}">Administración</a>
+                    {% endif %}
 
                    {% endif %}
              </div>
