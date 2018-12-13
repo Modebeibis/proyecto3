@@ -24,7 +24,6 @@ urlpatterns = [
     path('login/',auth_views.LoginView.as_view(template_name='registration/login.html',
         authentication_form=LoginForm), name='login'),
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
     path('home/', views.home, name='home'),
     path('<int:group_id>/eliminar/grupo/', views.DeleteGroup.as_view(),name='delete_group'),
     path('<int:publication_id>/eliminar/articulo/', views.DeletePublication.as_view(),name='delete_publication'),
