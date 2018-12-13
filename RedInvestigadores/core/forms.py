@@ -4,7 +4,6 @@ from .models import *
 from django.utils.translation import ugettext_lazy as _
 from allauth.account.forms import LoginForm, SignupForm
 import re
-import itertools
 
 class CustomLoginForm(LoginForm):
     def __init__(self, *args, **kwargs):
