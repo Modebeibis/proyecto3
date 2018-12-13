@@ -542,6 +542,14 @@ class DeletePublication(DeleteView):
         id=self.kwargs.get("publication_id")
         return get_object_or_404(Publication, id=id)
 
+class DeleteGrant(DeleteView):
+    template_name= 'core/delete_grant.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("grant_id")
+        return get_object_or_404(Grant, id=id)
+
 class DeleteAuthor(DeleteView):
     template_name='core/delete_authors.html'
     success_url= '/home'
@@ -561,3 +569,13 @@ class DeleteMember(DeleteView):
         group_id=self.kwargs.get("group_id")
         member_id=GroupMember.objects.get(person=id, group=group_id)
         return get_object_or_404(GroupMember, id=member_id.id)
+
+class DeleteParticipant(DeleteView):
+    template_name= 'core/delete_participant.html'
+    success_url= '/home'
+
+    def get_object(self):
+        id=self.kwargs.get("participant_id")
+        grant_id=self.kwargs.get("grant_id")
+        part_id=GrantParticipant.objects.get(person=id,grant=grant_id)
+        return get_object_or_404(GrantParticipant, id=part_id.id)

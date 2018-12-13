@@ -39,50 +39,11 @@
       </nav>
     </header>
     <div class="container">
-         {% if grant %}
-              <h1> Proyecto: {{grant}} </h1>
-              {% if responsible.user == request.user %}
-                 <h2> Responsable: {{responsible}} - <a href="{% url 'profile' responsible.user.id %}"> Perfil </a> </h2>
-                 {% if participants %}
-                 <br/>
-                 <h2> Participantes </h2>
-                 <ul>
-                      {% for participant in participants %}
-                      <li> {{participant}} - <a href="{% url 'profile' participant.user.id %}"> Perfil </a></li>
-                      <p><a href="{% url 'delete_participant' participant.id grant.id %}">Eliminar</a></p>
-                      {% endfor %}
-                 </ul>
-                 {% endif %}
-                 <br/>
-                 <h2> Datos </h2>
-                 <ul>
-                      <li> Proyecto: {{grant}} </li>
-                      <li> Responsable: {{responsible}} </li>
-                      <li> Fecha inicio: {{grant.start_date}} </li>
-                      <li> Fecha final: {{grant.end_date}} </li>
-                 </ul>
-                 <p><a href="{% url 'grant_change' grant.id %}">Cambiar</a>
-              {% else %}
-              <h2> Responsable: {{responsible}} - <a href="{% url 'profile' responsible.user.id %}"> Perfil </a> </h2>
-              {% if participants %}
-              <br/>
-              <h2> Participantes </h2>
-              <ul>
-                   {% for participant in participants %}
-                   <li> {{participant}} - <a href="{% url 'profile' participant.user.id %}"> Perfil </a></li>
-                   {% endfor %}
-              </ul>
-              {% endif %}
-              <br/>
-              <h2> Datos </h2>
-              <ul>
-                   <li> Proyecto: {{grant}} </li>
-                   <li> Responsable: {{responsible}} </li>
-                   <li> Fecha inicio: {{grant.start_date}} </li>
-                   <li> Fecha final: {{grant.end_date}} </li>
-              </ul>
-              {% endif %}
-         {% endif %}
+         <form action = '.' method="post">
+              {% csrf_token %}
+              <h1>¿Quieres eliminar al participante "{{ object.person }}"?</h1>
+              <p><button type = "submit">Aceptar</button> <a href="{% url 'grant' object.grant.id %}">Cancelar</a></p>
+         </form>
     </div>
 
 
