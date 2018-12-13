@@ -544,7 +544,9 @@ class DeleteAuthor(DeleteView):
 
     def get_object(self):
         id=self.kwargs.get("author_id")
-        return get_object_or_404(Person, id=id)
+        pub_id=self.kwargs.get("publication_id")
+        author_id=AuthorOf.objects.get(person=id,publication=pub_id)
+        return get_object_or_404(AuthorOf, id=author_id.id)
 
 class DeleteMember(DeleteView):
     template_name='core/delete_members.html'
@@ -552,4 +554,10 @@ class DeleteMember(DeleteView):
 
     def get_object(self):
         id=self.kwargs.get("member_id")
+<<<<<<< HEAD
+        group_id=self.kwargs.get("group_id")
+        member_id=GroupMember.objects.get(person=id, group=group_id)
+        return get_object_or_404(GroupMember, id=member_id.id)
+=======
         return get_object_or_404(Person, id=id)
+>>>>>>> 8b83912330e3f3ef93858c1981a6dcd2a877d66f
