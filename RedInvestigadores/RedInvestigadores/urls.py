@@ -31,6 +31,7 @@ urlpatterns = [
     path('<int:member_id>/<int:group_id>/eliminar/miembro/', views.DeleteMember.as_view(),name='delete_members'),
     path('<int:participant_id>/<int:grant_id>/eliminar/participante/', views.DeleteParticipant.as_view(),name='delete_participant'),
     path('profile/<int:user_id>', views.get_user_profile, name='profile'),
+    path('profile', views.get_user_profile_without_id, name='profile'),
     path('research/',views.profile_changes, name='research'),
     path('about_of/', views.about_of, name='about_of'),
     path('search_view/', views.search_view, name='search_view'),
