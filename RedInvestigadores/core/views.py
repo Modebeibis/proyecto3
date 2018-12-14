@@ -188,13 +188,16 @@ def get_user_profile_without_id(request):
     return get_user_profile(request, request.user.id)
 
 def get_user_profile(request, user_id):
-    user = CustomUser.objects.get(pk = user_id)
-    person = Person.objects.get(user = user_id)
-    papers_author_of = AuthorOf.objects.filter(person = person)
-    papers = []
-    students = []
-    tutors = []
+    user               = CustomUser.objects.get(pk = user_id)
+    person             = Person.objects.get(user = user_id)
+    papers_author_of   = AuthorOf.objects.filter(person = person)
+    papers             = []
+    students           = []
+    tutors             = []
     responsible_grants = []
+
+    is_researcher      = Researcher.objects.filter(person=person).exists()
+    is_student         = Student.objects.filter(person=person).exists()
 
     for paper_author in papers_author_of:
         paper = Publication.objects.get(pk = paper_author.publication.id)
@@ -252,7 +255,9 @@ def get_user_profile(request, user_id):
                    'member_groups':      member_groups,
                    'responsible_grants': responsible_grants,
                    'participant_grants': participant_grants,
-                   'roles':              roles})
+                   'roles':              roles,
+                   'is_researcher':      is_researcher,
+                   'is_student':         is_student})
 
 
 def search(request):

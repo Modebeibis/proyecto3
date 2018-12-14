@@ -161,7 +161,7 @@ class PublicationPetitionForm(forms.Form):
         self.fields['authors'].choices = OPTIONS
 
 class TutorPetitionForm(forms.Form):
-    tutors = forms.MultipleChoiceField(label ='Tutor')
+    tutors = forms.MultipleChoiceField(label ='Tutores')
 
     def __init__(self, *args, **kwargs):
         super(TutorPetitionForm, self).__init__(*args, **kwargs)
@@ -169,7 +169,7 @@ class TutorPetitionForm(forms.Form):
         self.fields['tutors'].choices = OPTIONS
 
 class StudentPetitionForm(forms.Form):
-    students = forms.MultipleChoiceField(label ='Student')
+    students = forms.MultipleChoiceField(label ='Estudiantes')
 
     def __init__(self, *args, **kwargs):
         super(StudentPetitionForm, self).__init__(*args, **kwargs)
