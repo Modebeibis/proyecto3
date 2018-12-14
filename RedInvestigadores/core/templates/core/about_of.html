@@ -62,11 +62,13 @@
    <style>
      #Invitado {background-color: #245c87; height: 100%;}
      #Investigador {background-color: #7c3733; height: 100%;}
+     #Postdoc {background-color: #ff8000; height: 100%;}
      #Alumno {background-color: #788724; height: 100%;}
    </style>
 
-   <button class="tablink" onclick="openPage('Invitado', this, '#245c87 ')"  id="defaultOpen">Postdoc</button>
+   <button class="tablink" onclick="openPage('Invitado', this, '#245c87 ')"  id="defaultOpen">Invitado</button>
    <button class="tablink" onclick="openPage('Investigador', this, '#7c3733')">Investigador</button>
+   <button class="tablink" onclick="openPage('Postdoc', this, '#ff8000')">Postdoc</button>
    <button class="tablink" onclick="openPage('Alumno', this, '#788724')">Alumno</button>
    <div id="Invitado" class="tabcontent">
      <h3>Postdoc</h3>
@@ -94,6 +96,20 @@
          para esto a los se le quieran agregar, deberan estar registrados.
          Deberan pertenecer a una institución y a su vez, esta debe ser existente
          o en caso contrario, solicitarla para poder registrarla.
+      </font>
+      </p>
+     </div>
+   </div>
+
+   <div id="Postdoc" class="tabcontent">
+     <h3>Postdoc</h3>
+     <img style="float: right;" src="{% static "img/PerfilUsuario/iconoPostdoc.svg" %}" width="150px" height="150px" >
+     <div id="redondeado">
+       <p>
+       <font size=5>
+         Para las personas que se encuentre registradas como Postdoc,
+         podran realizar las mismas acciones que un investigador, salvo el crear
+         grupos.
       </font>
       </p>
      </div>
