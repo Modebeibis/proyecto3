@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinValueValidator
 
@@ -16,18 +16,6 @@ class Affiliation(models.Model):
             return self.name
         else:
             return '%s - %s' % (self.super_level.__str__(), self.name)
-
-    def trailing_short_name(self):
-        if self.super_level is None:
-            return self.acronym
-        else:
-            return '%s - %s' % (self.super_level.short_name(), self.acronym)
-
-    def short_name(self):
-        if self.super_level is None:
-            return self.name
-        else:
-            return '%s - %s' % (self.super_level.trailing_short_name(), self.name)
 
     def top_level(self):
         if self.super_level is None:
@@ -165,12 +153,18 @@ class Person(models.Model):
 class PersonRole(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     role = models.ForeignKey(Role, on_delete=models.PROTECT)
+    def __str__(self):
+        return ("(" + self.person.__str__()
+                + "-" + self.person.user.__str__()
+                + ", " + self.role.description + ")")
 
     class Meta:
         unique_together = (('person'), ('role'),)
 
 class Administrator(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    def __str__(self):
+        return "%s - %s" % (self.person.__str__(), self.person.user.__str__())
 
 class Journal(models.Model):
     name = models.TextField(unique=True)
@@ -192,33 +186,25 @@ class AuthorOf(models.Model):
     person      = models.ForeignKey(Person, on_delete=models.CASCADE)
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return ("(" + self.person.__str__()
+                + "-" + self.person.user.__str__()
+                + ", " + self.publication.title + ")")
+
     class Meta:
         unique_together = (('person', 'publication'),)
 
-class ExternalAuthor(models.Model):
-    first_name = models.TextField()
-    last_name  = models.TextField()
-    def __str__(self):
-        return '%s %s' % (self.first_name, self.last_name)
-
-    class Meta:
-        unique_together = (('first_name', 'last_name'),)
-
-class AuthorOfExternal(models.Model):
-    author      = models.ForeignKey(ExternalAuthor, on_delete=models.PROTECT)
-    publication = models.ForeignKey(Publication, on_delete=models.PROTECT)
-
-    class Meta:
-        unique_together = (('author', 'publication'),)
-
 class Researcher(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '%s - %s' % (person.__str__(), person.user.__str__())
 
 class Grant(models.Model):
     responsible = models.ForeignKey(Researcher, on_delete=models.CASCADE)
     title       = models.TextField()
     start_date  = models.DateField()
-    end_date    = models.DateField()
+    end_date    = models.DateField(null=True, blank=True)
     def __str__(self):
         return self.title
 
@@ -277,3 +263,33 @@ def create_person_profile(sender, instance, created, **kwargs):
         role = Role.objects.get(pk = 3)
         PersonRole.objects.create(person = person, role = role)
         Researcher.objects.create(person = person)
+
+@receiver(post_save, sender = Administrator)
+def setup_credentials_and_role(sender, instance, created, **kwargs):
+    """
+    Trigger for adding the Administrator role, and
+    assigning the corresponding credentials to a newly
+    created Administrator
+    """
+    if created:
+        instance.person.user.is_staff     = True
+        instance.person.user.is_superuser = True
+        instance.person.user.save(update_fields=['is_staff', 'is_superuser'])
+        role = Role.objects.get(pk = 4)
+        PersonRole.objects.get_or_create(person = instance.person,
+                                         role   = role)
+
+@receiver(post_delete, sender = Administrator)
+def delete_credentials_and_role(sender, instance, **kwargs):
+    """
+    Trigger for adding the Administrator role, and
+    assigning the corresponding credentials to a newly
+    created Administrator
+    """
+    instance.person.user.is_staff     = False
+    instance.person.user.is_superuser = False
+    instance.person.user.save(update_fields=['is_staff', 'is_superuser'])
+    role = Role.objects.get(pk = 4)
+    relation = PersonRole.objects.get(person = instance.person,
+                                      role   = role)
+    relation.delete()

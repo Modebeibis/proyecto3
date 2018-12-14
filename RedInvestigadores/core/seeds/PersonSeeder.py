@@ -65,11 +65,7 @@ class PersonSeeder(object):
             person = Person.objects.get(pk = person_id)
             user = CustomUser.objects.get(pk = person.user_id)
 
-            user.is_staff = user.is_superuser = True
             user.save()
-
-            PersonRole.objects.get_or_create(person = person,
-                                             role   = role)
 
             Administrator.objects.get_or_create(person = person)
 

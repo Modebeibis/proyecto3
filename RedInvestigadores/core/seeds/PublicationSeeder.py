@@ -1,5 +1,5 @@
 from faker import Faker
-from core.models import Person, Journal, Publication, AuthorOf, AuthorOfExternal, ExternalAuthor
+from core.models import Person, Journal, Publication, AuthorOf
 from random import randint
 
 class PublicationSeeder(object):
@@ -42,18 +42,3 @@ class PublicationSeeder(object):
                 person = Person.objects.get(pk = person_id)
                 AuthorOf.objects.get_or_create(person = person,
                                                publication = publication)
-
-    def seed_external_authors(self):
-        faker = Faker()
-
-        for i in range(50):
-            publication = Publication.objects.get(pk = randint(1, 1000))
-            first_name = faker.first_name()
-            last_name = faker.last_name()
-
-            ExternalAuthor.objects.get_or_create(first_name = first_name,
-                                                 last_name = last_name)
-
-            external_author = ExternalAuthor.objects.get(pk = i + 1)
-            AuthorOfExternal.objects.get_or_create(author = external_author,
-                                                   publication = publication)

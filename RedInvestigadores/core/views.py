@@ -184,6 +184,9 @@ def get_state_affiliation_info(request, state_id, affiliation_id):
                    'state':            state,
                    'register':         register})
 
+def get_user_profile_without_id(request):
+    return get_user_profile(request, request.user.id)
+
 def get_user_profile(request, user_id):
     user = CustomUser.objects.get(pk = user_id)
     person = Person.objects.get(user = user_id)
@@ -241,7 +244,7 @@ def search(request):
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
         persons = Person.objects.filter(Q(first_name__icontains=q) | Q(last_name__icontains=q)).order_by('last_name')
-        affiliations = Affiliation.objects.filter(name__icontains=q).order_by('name')
+        affiliations = Affiliation.objects.filter(Q(name__icontains=q) | Q(acronym__icontains=q)).order_by('name')
         publications = Publication.objects.filter(title__icontains=q).order_by('date')
         return render(request, 'core/search.html',
                       {'persons': persons,
