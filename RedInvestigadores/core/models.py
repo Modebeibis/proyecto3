@@ -402,7 +402,7 @@ class Researcher(models.Model):
         :return: a string representation of the researcher.
         """
 
-        return '%s - %s' % (person.__str__(), person.user.__str__())
+        return '%s - %s' % (self.person.__str__(), self.person.user.__str__())
 
 class Grant(models.Model):
     """
@@ -509,6 +509,15 @@ class Student(models.Model):
     """
 
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        """
+        Returns a string representation of the student.
+
+        :return: a string representation of the student.
+        """
+        
+        return self.person.__str__()
 
 class StudentOf(models.Model):
     """

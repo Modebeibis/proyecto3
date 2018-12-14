@@ -90,19 +90,36 @@
                          <p class="help-block"></p>
                      </div>
                  </div>
-                       <div class="control-group form-group">
-                           <div class="controls">
-                               <label>Biografía:</label>
-                               <p>Info</p>
-                                 <br >
-                           </div>
-                       </div>
+                 {% if tutors %}
+                 <p> Tutor(es) </p>
+                 <ul>
+                      {% for tutor in tutors %}
+                      <li> {{tutor.person}} - <a href="{% url 'profile' tutor.person.id %}">Perfil</a> </li>
+                      {% if request.user.is_authenticated and request.user == user %}
+                        <p><a href="{% url 'delete_tutor' tutor.id user.id %}">Eliminar</a></p>
+                      {% endif %}
+                      {% endfor %}
+                 </ul>
+                 {% endif %}
                        {% if papers %}
                        <p> Artículos </p>
                        <ul>
                             {% for paper in papers %}
                             <li> {{paper}} - <a href="{% url 'publication' paper.id %}">Articulo</a> </li>
-                            <p><a href="{% url 'delete_publication' paper.id %}">Eliminar</a></p>
+                            {% if request.user.is_authenticated and request.user == user %}
+                              <p><a href="{% url 'delete_publication' paper.id %}">Eliminar</a></p>
+                            {% endif %}
+                            {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {% if students %}
+                       <p> Estudiantes </p>
+                       <ul>
+                            {% for student in students %}
+                            <li> {{student}} - <a href="{% url 'profile' student.person.id %}">Perfil</a> </li>
+                            {% if request.user.is_authenticated and request.user == user %}
+                              <p><a href="{% url 'delete_student' student.id user.id %}">Eliminar</a></p>
+                            {% endif %}
                             {% endfor %}
                        </ul>
                        {% endif %}
@@ -111,7 +128,9 @@
                        <ul>
                             {% for group in owner_groups %}
                             <li> {{group}} - <a href="{% url 'group' group.id %}">Grupo</a></li>
-                            <p><a href="{% url 'delete_group' group.id %}">Eliminar</a></p>
+                            {% if request.user.is_authenticated and request.user == user %}
+                              <p><a href="{% url 'delete_group' group.id %}">Eliminar</a></p>
+                            {% endif %}
                             {% endfor %}
                        </ul>
                        {% endif %}
@@ -128,7 +147,9 @@
                        <ul>
                             {% for grant in responsible_grants %}
                             <li> {{grant}} - <a href="{% url 'grant' grant.id %}">Proyecto</a> </li>
-                            <p><a href="{% url 'delete_grant' grant.id %}">Eliminar</a></p>
+                            {% if request.user.is_authenticated and request.user == user %}
+                              <p><a href="{% url 'delete_grant' grant.id %}">Eliminar</a></p>
+                            {% endif %}
                             {% endfor %}
                        </ul>
                        {% endif %}
