@@ -240,9 +240,13 @@ def get_user_profile(request, user_id):
 def search(request):
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
-        persons = Person.objects.filter(Q(first_name__icontains=q) | Q(last_name__icontains=q)).order_by('last_name')
+        split_q = q.split()
+        if len(split_q) < 3:
+            persons = Person.objects.filter(Q(first_name__icontains=q) | Q(last_name__icontains=q) | Q(first_name__icontains=split_q[0], last_name__icontains=q[-1])).order_by('last_name')
+        else:
+            persons = Person.objects.filter(Q(first_name__icontains=q) | Q(last_name__icontains=q) | Q(first_name__icontains=split_q[0], last_name__icontains=q[-1]) & Q(last_name__icontains=q[1]) | Q(first_name__icontains=split_q[0]) & Q(first_name__icontains=q[1]), last_name__icontains=q[-1]).order_by('last_name')
         affiliations = Affiliation.objects.filter(name__icontains=q).order_by('name')
-        publications = Publication.objects.filter(title__icontains=q).order_by('date')
+        publications = Publication.objects.filter(Q(title__icontains=q) | Q(date__icontains=q)).order_by('date')
         return render(request, 'core/search.html',
                       {'persons': persons,
                        'affiliations': affiliations,
@@ -250,7 +254,7 @@ def search(request):
                        'query': q})
 
     else:
-        return HttpResponse('Please submit a search term.')
+        return HttpResponse('Por favor, ingresa alguna palabra para buscar.')
 
 
 def profile_changes(request):
