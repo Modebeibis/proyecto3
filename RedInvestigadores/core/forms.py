@@ -29,9 +29,11 @@ class CustomSignupForm(SignupForm):
     def clean_name(self,cd):
         first_name = cd.get("first_name")
         last_name = cd.get("last_name")
-        bad_firstName = bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', first_name))
-        bad_lastName = bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', last_name))
-        if not(bad_firstName) or not(bad_lastName):
+        correct_name = [name for name in [x.isalpha() for x 
+                                        in str(first_name).split(" ")] if not(name)]
+        correct_last_name = [name for name in 
+                                [x.isalpha() for x in str(last_name).split(" ")] if not(name)]
+        if len(correct_name) > 0 or len(correct_last_name) > 0:
             raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
                                                 "intenta no usar números ó cáracteres especiales")
         return cd
@@ -119,9 +121,9 @@ class ProfileForm(forms.ModelForm):
     def clean_name(self,cd):
         first_name = cd.get("first_name")
         last_name = cd.get("last_name")
-        bad_firstName = bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', first_name))
-        bad_lastName = bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', last_name))
-        if not(bad_firstName) or not(bad_lastName):
+        correct_name = [name for name in [x.isalpha() for x in str(first_name).split(" ")] if not(name)]
+        correct_last_name = [name for name in [x.isalpha() for x in str(last_name).split(" ")] if not(name)]
+        if len(correct_name) > 0 or len(correct_last_name) > 0:
             raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
                                                 "intenta no usar números ó cáracteres especiales")
         return cd
