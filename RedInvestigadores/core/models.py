@@ -198,7 +198,7 @@ class Researcher(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
 
     def __str__(self):
-        return '%s - %s' % (person.__str__(), person.user.__str__())
+        return '%s - %s' % (self.person.__str__(), self.person.user.__str__())
 
 class Grant(models.Model):
     responsible = models.ForeignKey(Researcher, on_delete=models.CASCADE)
@@ -239,6 +239,8 @@ class Postdoc(models.Model):
 
 class Student(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.person.__str__()
 
 class StudentOf(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

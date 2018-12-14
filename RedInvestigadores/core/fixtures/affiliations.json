@@ -1,0 +1,57 @@
+[
+  {
+    "model": "core.affiliation",
+    "pk": 1,
+    "fields": {
+      "name": "POR DEFINIR",
+      "acronym": "POR DEFINIR",
+      "address": "N/A"
+    }
+  },
+  {
+    "model": "core.affiliation",
+    "pk": 2,
+    "fields": {
+      "name": "Universidad Nacional Autónoma de México",
+      "acronym": "UNAM",
+      "address": "Av. Universidad 3000, Coyoacán, 04510, Ciudad de México"
+    }
+  },
+  {
+    "model": "core.affiliation",
+    "pk": 3,
+    "fields": {
+      "name": "Departamento de Matemáticas",
+      "super_level": 2,
+      "address": "Circuito Exterior s/n, Ciudad Universitaria, Ciudad de México"
+    }
+  },
+  {
+    "model": "core.affiliation",
+    "pk": 4,
+    "fields": {
+      "name": "Instituto de Matemáticas",
+      "acronym": "IMUNAM",
+      "super_level": 2,
+      "address": "Circuito Exterior s/n, Ciudad Universitaria, Ciudad de México"
+    }
+  },
+  {
+    "model": "core.affiliation",
+    "pk": 5,
+    "fields": {
+      "name": "Centro de Investigación y de Estudios Avanzados del Instituto Politécnico Nacional",
+      "acronym": "CINVESTAV",
+      "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
+    }
+  },
+  {
+    "model": "core.affiliation",
+    "pk": 6,
+    "fields": {
+      "name": "Departamento de Computación",
+      "super_level": 5,
+      "address": "Av. Instituto Politécnico Nacional 2508, La Laguna Ticoman"
+    }
+  }
+]

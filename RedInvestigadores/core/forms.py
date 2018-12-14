@@ -17,7 +17,6 @@ class CustomSignupForm(SignupForm):
     first_name = forms.CharField(max_length=30, label='Nombres')
     last_name  = forms.CharField(max_length=30, label='Apellidos')
     email      = forms.EmailField(label='Correo Electrónico')
-#    state      = forms.ModelChoiceField(queryset=State.objects.all(), label='Estado')
 
     def signup(self, request, user):
         user.first_name = self.cleaned_data['first_name']
@@ -112,7 +111,7 @@ class ProfileForm(forms.ModelForm):
         labels = {
             'first_name' : _('Nombres'),
             'last_name'  : _('Apellidos'),
-            'affiliation': _('Sede'),
+            'affiliation': _('Adscripción'),
             'state'      : _('Estado'),
             'degree'     : _('Título'),
             'sni'        : _('SNI')
@@ -160,6 +159,22 @@ class PublicationPetitionForm(forms.Form):
         self.fields['journal'].choices = J_CHOICES
         OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
         self.fields['authors'].choices = OPTIONS
+
+class TutorPetitionForm(forms.Form):
+    tutors = forms.MultipleChoiceField(label ='Tutor')
+
+    def __init__(self, *args, **kwargs):
+        super(TutorPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS   = ((tutor.id, tutor.person.__str__()) for tutor in Researcher.objects.all())
+        self.fields['tutors'].choices = OPTIONS
+
+class StudentPetitionForm(forms.Form):
+    students = forms.MultipleChoiceField(label ='Student')
+
+    def __init__(self, *args, **kwargs):
+        super(StudentPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((student.id, student.person.__str__()) for student in Student.objects.all())
+        self.fields['students'].choices = OPTIONS
 
 class PublicationChangeForm(forms.ModelForm):
     doi       = forms.CharField(label = 'DOI')
@@ -225,5 +240,5 @@ class GrantChangeForm(forms.Form):
 class AffiliationPetitionForm(forms.Form):
     name        = forms.CharField(label = 'Nombre', max_length = 200)
     acronym     = forms.CharField(label = 'Acrónimo', max_length = 200, required = False)
-    address     = forms.CharField(label = 'Dirección', max_length = 200, required = False)
+    address     = forms.CharField(label = 'Dirección', max_length = 200)
     super_level = forms.ModelChoiceField(label = 'Nivel Superior', queryset = Affiliation.objects.all(), required = False)

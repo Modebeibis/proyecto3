@@ -1,0 +1,26 @@
+[
+  {
+    "model": "core.journal",
+    "pk": 1,
+    "fields": {
+      "name": "Discrete Mathematics",
+      "issn": "0012-365X"
+    }
+  },
+  {
+    "model": "core.journal",
+    "pk": 2,
+    "fields": {
+      "name": "Discrete Applied Mathematics",
+      "issn": "0166-218X"
+    }
+  },
+  {
+    "model": "core.journal",
+    "pk": 3,
+    "fields": {
+      "name": "Discrete Optimization",
+      "issn": "1572-5286"
+    }
+  }
+]
