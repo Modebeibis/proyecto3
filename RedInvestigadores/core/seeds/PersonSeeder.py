@@ -4,9 +4,25 @@ from core.models import CustomUser, Person, PersonRole, Administrator, Postdoc, 
 from django.contrib.auth.hashers import make_password
 from random import randint
 
+"""
+Class to seed persons into the database.
+
+"""
+
 class PersonSeeder(object):
+    """
+    PersonSeeder is the one who has the capacity of creating
+    N persons and inserting each one of them into the database.
+
+    """
 
     def get_unique_email(self):
+        """
+        Returns an user's email that hasn't already been used in the database.
+
+        :return: An unique email for the person.
+        """
+
         faker   = Faker()
         while True:
             email = faker.email()
@@ -14,6 +30,12 @@ class PersonSeeder(object):
                 return email
 
     def get_unique_orcid(self):
+        """
+        Returns an user's orcid that hasn't already been used in the database.
+
+        :return: An unique orcid for the person.
+        """
+
         faker   = Faker()
         while True:
             orcid = faker.isbn10()
@@ -21,6 +43,32 @@ class PersonSeeder(object):
                 return orcid
 
     def seed(self):
+        """
+        Creates 500 persons, each with an unique email,
+        and inserts them into the database.
+        First the user is created, the trigger activates creating a person,
+        the person is selected and it is filled with the given information.
+
+        Each user follows the model a custom user has:
+        * username - The password always follows the following: "userX"
+                     Where X is the user's id
+        * password - The password always follows the following: "pwX"
+                     Where X is the user's id
+        * email    - A random and unique email is given
+
+        Each persons follows the model a person has:
+        * first_name      - Random first name is given
+        * last_name       - Random last name is given
+        * affiliation     - Random affiliation is selected
+        * degree          - Random degree is selected
+        * orcid           - A random and unique orcid is given
+        * sni             - A random SNI level is selected
+        * state           - A random state is selected
+        * user            - User is selected
+        * email_confirmed - It is supposed that the email was already confirmed
+
+        """
+
         faker   = Faker()
         degrees = ["BSC", "MSC", "PHD"]
         sni     = ["N", "C", "1", "2", "3", "E"]
@@ -31,7 +79,6 @@ class PersonSeeder(object):
             affiliation = Affiliation.objects.get(pk = randint(1, 70))
             email       = self.get_unique_email()
             orcid       = self.get_unique_orcid()
-            role        = Role.objects.get(pk = randint(1, 4))
             state       = State.objects.get(pk = randint(1, 32))
 
             username = "user%d" % (i+1)
@@ -45,7 +92,6 @@ class PersonSeeder(object):
             person.affiliation     = affiliation
             person.degree          = degrees[randint(0,2)]
             person.orcid           = orcid
-            person.role            = role
             person.sni             = sni[randint(0, 5)]
             person.state           = state
             person.user            = CustomUser.objects.get(username=username)
@@ -53,6 +99,14 @@ class PersonSeeder(object):
             person.save()
 
     def seed_admins(self):
+        """
+        Creates 25 administrators and inserts them into the database.
+        Each administrator follows the model an administrator has:
+        * person - Random person is selected
+
+        If the person is already an administrator then another one is selected.
+        """
+
         faker = Faker()
         role = Role.objects.get(pk = 4)
 
@@ -70,6 +124,15 @@ class PersonSeeder(object):
             Administrator.objects.get_or_create(person = person)
 
     def seed_researchers(self):
+        """
+        Creates 350 researchers and inserts them into the database.
+        Each researcher follows the model a researcher has:
+        * person - Random person is selected
+
+        It also creates a PersonRole object to indicate that person is indeed
+        a researcher.
+        """
+
         faker = Faker()
         role = Role.objects.get(pk = 3)
 
@@ -82,6 +145,16 @@ class PersonSeeder(object):
             Researcher.objects.get_or_create(person = person)
 
     def seed_postdocs(self):
+        """
+        Creates 150 postdocs and inserts them into the database.
+        Each postdoc follows the model a postdoc has:
+        * person - Random person is selected
+
+        If the person is already a postdoc then another one is selected.
+        It also creates a PersonRole object to indicate that person is indeed
+        a postdoc.
+        """
+
         faker = Faker()
         role = Role.objects.get(pk = 2)
 
@@ -99,6 +172,16 @@ class PersonSeeder(object):
             Postdoc.objects.get_or_create(person = person)
 
     def seed_students(self):
+        """
+        Creates 100 students and inserts them into the database.
+        Each student follows the model a student has:
+        * person - Random person is selected
+
+        If the person is already a student then another one is selected.
+        It also creates a PersonRole object to indicate that person is indeed
+        a student.
+        """
+
         faker = Faker()
         role = Role.objects.get(pk = 1)
 
@@ -111,6 +194,11 @@ class PersonSeeder(object):
             Student.objects.get_or_create(person = person)
 
     def seed_student_of_relationships(self):
+        """
+        Creates 100 relationships between researchers and students.
+        If a researcher is already in charge of a student, then another one is selected.
+        """
+
         faker = Faker()
 
         for i in range(100):
@@ -127,6 +215,11 @@ class PersonSeeder(object):
                                             tutor   = researcher)
 
     def fill_person_and_roles(self):
+        """
+        Checks that each person in the database has at least one role.
+        If it doesn't then it creates one. 
+        """
+
         for i in range(500):
             if not PersonRole.objects.filter(person = (i+1)).exists():
                 random_role = randint(1, 4)
