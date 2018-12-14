@@ -509,7 +509,14 @@ class Student(models.Model):
     """
 
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    
     def __str__(self):
+        """
+        Returns a string representation of the student.
+
+        :return: a string representation of the student.
+        """
+        
         return self.person.__str__()
 
 class StudentOf(models.Model):
