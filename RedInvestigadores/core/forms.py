@@ -29,9 +29,9 @@ class CustomSignupForm(SignupForm):
     def clean_name(self,cd):
         first_name = cd.get("first_name")
         last_name = cd.get("last_name")
-        correct_name = [name for name in [x.isalpha() for x 
+        correct_name = [name for name in [x.isalpha() for x
                                         in str(first_name).split(" ")] if not(name)]
-        correct_last_name = [name for name in 
+        correct_last_name = [name for name in
                                 [x.isalpha() for x in str(last_name).split(" ")] if not(name)]
         if len(correct_name) > 0 or len(correct_last_name) > 0:
             raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
@@ -199,8 +199,8 @@ class GrantPetitionForm(forms.Form):
     start_date   = forms.DateField(widget = forms.SelectDateWidget(years=years),
                                    label = 'Fecha Inicio')
     end_date     = forms.DateField(widget = forms.SelectDateWidget(years=years),
-                                   label = 'Fecha Final')
-    participants = forms.MultipleChoiceField(label= 'Miembros')
+                                   label = 'Fecha Final', required = False)
+    participants = forms.MultipleChoiceField(label= 'Miembros', required=False)
 
     def __init__(self, *args, **kwargs):
         super(GrantPetitionForm, self).__init__(*args, **kwargs)
@@ -214,8 +214,8 @@ class GrantChangeForm(forms.Form):
     start_date   = forms.DateField(widget = forms.SelectDateWidget(years=years),
                                    label = 'Fecha Inicio')
     end_date     = forms.DateField(widget = forms.SelectDateWidget(years=years),
-                                   label = 'Fecha Final')
-    participants = forms.MultipleChoiceField(label= 'Miembros')
+                                   label = 'Fecha Final', required=False)
+    participants = forms.MultipleChoiceField(label= 'Miembros', required=False)
 
     def __init__(self, *args, **kwargs):
         super(GrantChangeForm, self).__init__(*args, **kwargs)
@@ -224,6 +224,6 @@ class GrantChangeForm(forms.Form):
 
 class AffiliationPetitionForm(forms.Form):
     name        = forms.CharField(label = 'Nombre', max_length = 200)
-    acronym     = forms.CharField(label = 'Acrónimo', max_length = 200)
-    address     = forms.CharField(label = 'Dirección', max_length = 200)
+    acronym     = forms.CharField(label = 'Acrónimo', max_length = 200, required = False)
+    address     = forms.CharField(label = 'Dirección', max_length = 200, required = False)
     super_level = forms.ModelChoiceField(label = 'Nivel Superior', queryset = Affiliation.objects.all(), required = False)
