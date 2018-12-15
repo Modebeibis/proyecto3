@@ -35,43 +35,43 @@
             </ul>
        </nav>
      </header>
-     <div style="
-      background-color: darkcyan;
-      font-size: 4;
-      width: 100%;
-      align-items: center;
-      text-align: justify;
-      color: black;
-      border: 3px solid white;
-      border-radius: 15px;
-      font-size: medium;
-     " align="center">
-       <h2 align="center">¿Quiénes somos?</h2>
-       <p style="
-       padding: 3rem;">
-       Esta página tiene como finalidad crear una red de investigadores
-       existentes en México, donde cualquier persona podrá consultar las
-       publicaciones, grupos de trabajo, proyectos e información
-       academicamente relevante sobre los usuarios registrados. Se intenta
-       generar un sitio donde los académicos puedan llevar el control de sus
-       labores y a su vez, ganar visibilidad. Se propone una forma sencilla
-       de agrupar a los académicos por estado, institución y subdependencias
-       para tener fácil acceso a una búsqueda regionalizada en México. <br>
-       </p>
-     </div>
-   <style>
-     #Invitado {background-color: #245c87; height: 100%;}
-     #Investigador {background-color: #7c3733; height: 100%;}
-     #Postdoc {background-color: #994c00; height: 100%;}
-     #Alumno {background-color: #788724; height: 100%;}
-   </style>
+     <div style="height:60%">
+      <div style="
+        background-color: darkcyan;
+        font-size: 4;
+        width: 100%;
+        align-items: center;
+        text-align: justify;
+        color: black;
+        border: 3px solid white;
+        border-radius: 15px;
+        font-size: medium;
+      " align="center">
+        <h2 align="center">¿Quiénes somos?</h2>
+        <p style="padding: 3rem;">
+          Esta página tiene como finalidad crear una red de investigadores
+          existentes en México, donde cualquier persona podrá consultar las
+          publicaciones, grupos de trabajo, proyectos e información
+          academicamente relevante sobre los usuarios registrados. Se intenta
+          generar un sitio donde los académicos puedan llevar el control de sus
+          labores y a su vez, ganar visibilidad. Se propone una forma sencilla
+          de agrupar a los académicos por estado, institución y subdependencias
+          para tener fácil acceso a una búsqueda regionalizada en México. <br>
+        </p>
+      </div>
+    <style>
+      #Invitado {background-color: #245c87; height: 100%;}
+      #Investigador {background-color: #7c3733; height: 100%;}
+      #Postdoc {background-color: #994c00; height: 100%;}
+      #Alumno {background-color: #788724; height: 100%;}
+    </style>
 
-   <button class="tablink" onclick="openPage('Invitado', this, '#245c87 ')"  id="defaultOpen">Invitado</button>
-   <button class="tablink" onclick="openPage('Investigador', this, '#7c3733')">Investigador</button>
-   <button class="tablink" onclick="openPage('Postdoc', this, '#994c00')">Postdoc</button>
-   <button class="tablink" onclick="openPage('Alumno', this, '#788724')">Alumno</button>
-   <div id="Invitado" class="tabcontent">
-     <h3>Postdoc</h3>
+    <button class="tablink" onclick="openPage('Invitado', this, '#245c87 ')"  id="defaultOpen">Invitado</button>
+    <button class="tablink" onclick="openPage('Investigador', this, '#7c3733')">Investigador</button>
+    <button class="tablink" onclick="openPage('Postdoc', this, '#994c00')">Postdoc</button>
+    <button class="tablink" onclick="openPage('Alumno', this, '#788724')">Alumno</button>
+    <div id="Invitado" class="tabcontent">
+     <h3>Invitado</h3>
       <img style="float: right;" src="{% static "img/PerfilUsuario/iconoInvitado.svg" %}" width="200px" height="200px" >
      <div id="redondeado">
        <p>
@@ -129,7 +129,7 @@
       </p>
      </div>
    </div>
-
+  </div>
    <script>
      function openPage(pageName,elmnt,color) {
        var i, tabcontent, tablinks;
