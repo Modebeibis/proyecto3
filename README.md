@@ -21,6 +21,7 @@ _Repositorio para el tercer proyecto en el curso de modelado y programación de 
 * Django
 * Faker
 * django-allauth
+* psycopg2
 
 ## PostgreSQL
 En la mayoría de los sistemas operativos hoy disponibles, el manejador de base de datos PostgreSQL ya se encuentra instalado por omisión. Sin embargo si este no es el caso, por favor checar el siguiente enlace en donde se encuentra toda la documentación necesaría: [postgresql](https://www.postgresql.org/docs/9.3/tutorial-install.html).
