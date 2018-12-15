@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <title>Sede</title>
+    <title>Publicación</title>
     <link rel="shortcut icon" href="{% static "img/keyword-research_icon-icons.com_53775_53775.ico" %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
@@ -39,62 +39,46 @@
       </nav>
     </header>
     <div class="container">
-
-      {% if state %}
-      <h1> {{state}} </h1>
-
-        {% if affiliations %}
-        <h2> Instituciones </h2>
-        <ul class="list">
-          {% for affiliation in affiliations %}
-          <li> {{affiliation}} <a href="{% url 'estado/sede' state.id affiliation.id %}">Dependencias</a> </li>
-          {% endfor %}
-        </ul>
-
-        <br/>
-        {% endif %}
-
-        {% if register %}
-        <h2> Personas </h2>
-        <ul class="list">
-          {% for entry in register %}
-          <li> {{entry.person}} - {% for role in entry.roles %} {{role}}/ {% endfor %} <a href="{% url 'profile' entry.person.user.id %}"> Perfil </a></li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-
-        {% endif %}
+         <form action = "{% url 'tutor_petition' %}" method="post">
+              {% csrf_token %}
+              {{ form.as_ul }}
+              <input type = "submit" value = "Agregar">
+         </form>
     </div>
-
-    <style>
-    .container {
-      background: #cacfd2;
-    }
-    h1 {
-      text-align: justify;
-      font-size: 3em;
-    }
-    h2,h3 {
-      text-align: justify;
-      font-size: 2em;
-    }
-    .list {
-      list-style: disc;
-      margin-left: 30px;
-      font-size: 1.5em;
-    }
-    </style>
 
 
     <footer id="main-footer">
       <p>&copy; 2018 <a href=""></a></p>
     </footer>
 
-
-
-
-
     {% endblock %}
   </body>
+
+  {% block css %}
+  <style>
+    .container{
+      position: relative;
+      margin-top: 30px;
+      text-indent: 10px;
+      font-size: 1em;
+    }
+
+    input {
+      border-color: #A9A9A9;
+      border-radius: 5px;
+      display: flex;
+      margin-left: 35px;
+    }
+    .boton {
+      margin-left: 600px;
+      background-color: #FA8072;
+      width: 100px;
+      text-decoration-color: black;
+      text-align: center;
+    }
+    </style>
+    {% endblock %}
+
+
 
 </html>
