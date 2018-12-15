@@ -20,16 +20,11 @@ class PersonAdmin(admin.ModelAdmin):
     fields = ['first_name', 'last_name', 'user', 'state']
     list_display = ('first_name', 'last_name', 'user', 'state')
 
-class AdministratorAdmin(admin.ModelAdmin):
-    fields = ['person',]
-    list_display = ('person',)
-
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Administrator, AdministratorAdmin)
+admin.site.register(Administrator)
 admin.site.register(Affiliation)
 admin.site.register(Grant)
 admin.site.register(Group)
-admin.site.register(ExternalAuthor)
 admin.site.register(Journal)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(PersonRole)

@@ -33,7 +33,6 @@ class CustomSignupForm(SignupForm):
     first_name = forms.CharField(max_length=30, label='Nombres')
     last_name  = forms.CharField(max_length=30, label='Apellidos')
     email      = forms.EmailField(label='Correo Electrónico')
-#    state      = forms.ModelChoiceField(queryset=State.objects.all(), label='Estado')
 
     def signup(self, request, user):
         """
@@ -52,9 +51,11 @@ class CustomSignupForm(SignupForm):
         """
         first_name = cd.get("first_name")
         last_name = cd.get("last_name")
-        bad_firstName = bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', first_name))
-        bad_lastName = bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', last_name))
-        if not(bad_firstName) or not(bad_lastName):
+        correct_name = [name for name in [x.isalpha() for x
+                                        in str(first_name).split(" ")] if not(name)]
+        correct_last_name = [name for name in
+                                [x.isalpha() for x in str(last_name).split(" ")] if not(name)]
+        if len(correct_name) > 0 or len(correct_last_name) > 0:
             raise forms.ValidationError("Nombre(s) o Apellidos invalidos, " +
                                                 "intenta no usar números ó cáracteres especiales")
         return cd
@@ -169,7 +170,7 @@ class ProfileForm(forms.ModelForm):
         labels = {
             'first_name' : _('Nombres'),
             'last_name'  : _('Apellidos'),
-            'affiliation': _('Sede'),
+            'affiliation': _('Adscripción'),
             'state'      : _('Estado'),
             'degree'     : _('Título'),
             'sni'        : _('SNI')
@@ -233,6 +234,22 @@ class PublicationPetitionForm(forms.Form):
         OPTIONS   = ((person.id, person.__str__()) for person in Person.objects.all())
         self.fields['authors'].choices = OPTIONS
 
+class TutorPetitionForm(forms.Form):
+    tutors = forms.MultipleChoiceField(label ='Tutores')
+
+    def __init__(self, *args, **kwargs):
+        super(TutorPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS   = ((tutor.id, tutor.person.__str__()) for tutor in Researcher.objects.all())
+        self.fields['tutors'].choices = OPTIONS
+
+class StudentPetitionForm(forms.Form):
+    students = forms.MultipleChoiceField(label ='Estudiantes')
+
+    def __init__(self, *args, **kwargs):
+        super(StudentPetitionForm, self).__init__(*args, **kwargs)
+        OPTIONS = ((student.id, student.person.__str__()) for student in Student.objects.all())
+        self.fields['students'].choices = OPTIONS
+
 class PublicationChangeForm(forms.ModelForm):
     """
     Class for the form used to make changes in a publication.
@@ -291,8 +308,8 @@ class GrantPetitionForm(forms.Form):
     start_date   = forms.DateField(widget = forms.SelectDateWidget(years=years),
                                    label = 'Fecha Inicio')
     end_date     = forms.DateField(widget = forms.SelectDateWidget(years=years),
-                                   label = 'Fecha Final')
-    participants = forms.MultipleChoiceField(label= 'Miembros')
+                                   label = 'Fecha Final', required = False)
+    participants = forms.MultipleChoiceField(label= 'Miembros', required=False)
 
     def __init__(self, *args, **kwargs):
         """
@@ -313,8 +330,8 @@ class GrantChangeForm(forms.Form):
     start_date   = forms.DateField(widget = forms.SelectDateWidget(years=years),
                                    label = 'Fecha Inicio')
     end_date     = forms.DateField(widget = forms.SelectDateWidget(years=years),
-                                   label = 'Fecha Final')
-    participants = forms.MultipleChoiceField(label= 'Miembros')
+                                   label = 'Fecha Final', required=False)
+    participants = forms.MultipleChoiceField(label= 'Miembros', required=False)
 
     def __init__(self, *args, **kwargs):
         """
@@ -329,6 +346,6 @@ class AffiliationPetitionForm(forms.Form):
     """Class for the form used to create a new affiliation.
     """
     name        = forms.CharField(label = 'Nombre', max_length = 200)
-    acronym     = forms.CharField(label = 'Acrónimo', max_length = 200)
+    acronym     = forms.CharField(label = 'Acrónimo', max_length = 200, required = False)
     address     = forms.CharField(label = 'Dirección', max_length = 200)
     super_level = forms.ModelChoiceField(label = 'Nivel Superior', queryset = Affiliation.objects.all(), required = False)

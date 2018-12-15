@@ -165,5 +165,5 @@ ACCOUNT_UNIQUE_EMAIL                = True
 ACCOUNT_FORMS                       = {'login': 'core.forms.CustomLoginForm',
                                        'signup': 'core.forms.CustomSignupForm'}
 
-LOGIN_REDIRECT_URL  = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL  = 'profile'
+LOGOUT_REDIRECT_URL = 'login'

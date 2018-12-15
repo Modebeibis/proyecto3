@@ -243,17 +243,25 @@ def get_state_affiliation_info(request, state_id, affiliation_id):
                    'state':            state,
                    'register':         register})
 
+def get_user_profile_without_id(request):
+    return get_user_profile(request, request.user.id)
+
 def get_user_profile(request, user_id):
     """
     Gets the person information from the database of the given user.
     This includes publications, groups in which the person is member,
     and grants.
     """
-    user = CustomUser.objects.get(pk = user_id)
-    person = Person.objects.get(user = user_id)
-    papers_author_of = AuthorOf.objects.filter(person = person)
-    papers = []
+    user               = CustomUser.objects.get(pk = user_id)
+    person             = Person.objects.get(user = user_id)
+    papers_author_of   = AuthorOf.objects.filter(person = person)
+    papers             = []
+    students           = []
+    tutors             = []
     responsible_grants = []
+
+    is_researcher      = Researcher.objects.filter(person=person).exists()
+    is_student         = Student.objects.filter(person=person).exists()
 
     for paper_author in papers_author_of:
         paper = Publication.objects.get(pk = paper_author.publication.id)
@@ -271,13 +279,24 @@ def get_user_profile(request, user_id):
         member_group = Group.objects.get(pk = member_of_group.group.id)
         member_groups.append(member_group)
 
+    if (Student.objects.filter(person = person.id).exists()):
+        student           = Student.objects.get(person = person.id)
+        tutors_of_student = StudentOf.objects.filter(student = student)
+        for tutor_student in tutors_of_student:
+            tutor = Researcher.objects.get(person = tutor_student.tutor.person)
+            tutors.append(tutor)
+
     if (Researcher.objects.filter(person = person.id).exists()):
-        researcher =  Researcher.objects.get(person = person.id)
+        researcher            = Researcher.objects.get(person = person.id)
         responsible_of_grants = Grant.objects.filter(responsible = researcher)
-        responsible_grants = []
+        students_tutor_of     = StudentOf.objects.filter(tutor = researcher)
+        responsible_grants    = []
         for responsible_of_grant in responsible_of_grants:
             responsible_grant = Grant.objects.get(pk = responsible_of_grant.id)
             responsible_grants.append(responsible_grant)
+        for tutor_student in students_tutor_of:
+            student = Student.objects.get(person = tutor_student.student.person)
+            students.append(student)
 
     participant_of_grants = GrantParticipant.objects.filter(person = person)
     participant_grants = []
@@ -291,14 +310,18 @@ def get_user_profile(request, user_id):
         roles.append(person_role.role)
 
     return render(request, 'core/profile.html',
-                  {'person': person,
-                   'user': user,
-                   'papers':papers,
-                   'owner_groups':owner_groups,
-                   'member_groups':member_groups,
+                  {'person':             person,
+                   'user':               user,
+                   'papers':             papers,
+                   'students':           students,
+                   'tutors':             tutors,
+                   'owner_groups':       owner_groups,
+                   'member_groups':      member_groups,
                    'responsible_grants': responsible_grants,
                    'participant_grants': participant_grants,
-                   'roles': roles})
+                   'roles':              roles,
+                   'is_researcher':      is_researcher,
+                   'is_student':         is_student})
 
 
 def search(request):
@@ -313,7 +336,7 @@ def search(request):
             persons = Person.objects.filter(Q(first_name__icontains=q) | Q(last_name__icontains=q) | Q(first_name__icontains=split_q[0], last_name__icontains=q[-1])).order_by('last_name')
         else:
             persons = Person.objects.filter(Q(first_name__icontains=q) | Q(last_name__icontains=q) | Q(first_name__icontains=split_q[0], last_name__icontains=q[-1]) & Q(last_name__icontains=q[1]) | Q(first_name__icontains=split_q[0]) & Q(first_name__icontains=q[1]), last_name__icontains=q[-1]).order_by('last_name')
-        affiliations = Affiliation.objects.filter(name__icontains=q).order_by('name')
+        affiliations = Affiliation.objects.filter(Q(name__icontains=q) | Q (acronym__icontains=q)).order_by('name')
         publications = Publication.objects.filter(Q(title__icontains=q) | Q(date__icontains=q)).order_by('date')
         return render(request, 'core/search.html',
                       {'persons': persons,
@@ -642,6 +665,54 @@ def get_affiliation_petition(request):
     return render(request, 'core/affiliation_petition.html',
                   {'form':petition_form}, RequestContext(request))
 
+def get_student_petition(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
+    if request.method == 'POST':
+        petition_form = StudentPetitionForm(request.POST)
+
+        if petition_form.is_valid():
+            students_id = petition_form.cleaned_data.get('students')
+
+            petitioner = Person.objects.get(user = request.user.id)
+            pet_tutor  = Researcher.objects.get(person = petitioner)
+
+            for student_id in students_id:
+                student = Student.objects.get(pk = student_id)
+                student_of = StudentOf.objects.get_or_create(tutor   = pet_tutor,
+                                                             student = student)
+
+            return redirect('/profile')
+
+    petition_form = StudentPetitionForm()
+    return render(request, 'core/student_petition.html',
+                  {'form':petition_form}, RequestContext(request))
+
+def get_tutor_petition(request):
+    if not request.user.is_authenticated:
+        return redirect('/home')
+
+    if request.method == 'POST':
+        petition_form = TutorPetitionForm(request.POST)
+
+        if petition_form.is_valid():
+            tutors_id = petition_form.cleaned_data.get('tutors')
+
+            petitioner = Person.objects.get(user = request.user.id)
+            pet_student = Student.objects.get(person = petitioner)
+
+            for tutor_id in tutors_id:
+                tutor = Researcher.objects.get(pk = tutor_id)
+                student_of = StudentOf.objects.get_or_create(student = pet_student,
+                                                             tutor   = tutor)
+
+            return redirect('/profile')
+
+    petition_form = TutorPetitionForm()
+    return render(request, 'core/tutor_petition.html',
+                  {'form':petition_form}, RequestContext(request))
+
 class DeleteGroup(DeleteView):
     """
     Class that inherits from DeleteView.
@@ -650,7 +721,7 @@ class DeleteGroup(DeleteView):
     Upon success redirects to home.
     """
     template_name= 'core/delete_group.html'
-    success_url= '/home'
+    success_url= '/profile'
 
     def get_object(self):
         """
@@ -667,7 +738,7 @@ class DeletePublication(DeleteView):
     Upon success redirects to home.
     """
     template_name= 'core/delete_publication.html'
-    success_url= '/home'
+    success_url= '/profile'
 
     def get_object(self):
         """
@@ -684,7 +755,7 @@ class DeleteGrant(DeleteView):
     Upon success redirects to home.
     """
     template_name= 'core/delete_grant.html'
-    success_url= '/home'
+    success_url= '/profile'
 
     def get_object(self):
         """
@@ -701,7 +772,7 @@ class DeleteAuthor(DeleteView):
     Upon success redirects to home.
     """
     template_name='core/delete_authors.html'
-    success_url= '/home'
+    success_url= '/profile'
 
     def get_object(self):
         """
@@ -720,7 +791,7 @@ class DeleteMember(DeleteView):
     Upon success redirects to home.
     """
     template_name='core/delete_members.html'
-    success_url= '/home'
+    success_url= '/profile'
 
     def get_object(self):
         """
@@ -739,7 +810,7 @@ class DeleteParticipant(DeleteView):
     Upon success redirects to home.
     """
     template_name= 'core/delete_participant.html'
-    success_url= '/home'
+    success_url= '/profile'
 
     def get_object(self):
         """
@@ -749,3 +820,27 @@ class DeleteParticipant(DeleteView):
         grant_id=self.kwargs.get("grant_id")
         part_id=GrantParticipant.objects.get(person=id,grant=grant_id)
         return get_object_or_404(GrantParticipant, id=part_id.id)
+
+class DeleteTutor(DeleteView):
+    template_name= 'core/delete_tutor.html'
+    success_url= '/profile'
+
+    def get_object(self):
+        id=self.kwargs.get("tutor_id")
+        user_id=self.kwargs.get("user_id")
+        user = Person.objects.get(pk=user_id)
+        student = Student.objects.get(person=user)
+        student_of_id=StudentOf.objects.get(tutor=id,student=student)
+        return get_object_or_404(StudentOf, id=student_of_id.id)
+
+class DeleteStudent(DeleteView):
+    template_name= 'core/delete_student.html'
+    success_url= '/profile'
+
+    def get_object(self):
+        id=self.kwargs.get("student_id")
+        user_id=self.kwargs.get("user_id")
+        user = Person.objects.get(pk=user_id)
+        tutor = Researcher.objects.get(person=user)
+        student_of_id=StudentOf.objects.get(student=id,tutor=tutor)
+        return get_object_or_404(StudentOf, id=student_of_id.id)
