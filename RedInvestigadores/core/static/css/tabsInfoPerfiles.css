@@ -12,7 +12,7 @@ body, html {
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
+    padding: 14px 0px;
     font-size: 17px;
     width: 25%;
 }
@@ -26,7 +26,6 @@ body, html {
     color: white;
     display: none;
     padding: 100px 20px;
-    height: 100%;
 }
 #redondeado{
   color: black;
