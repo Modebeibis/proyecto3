@@ -195,6 +195,12 @@
                    <a class="enlaceboton" href="{% url 'group_petition' %}">Crear grupo</a>
                    <a class="enlaceboton" href="{% url 'publication_petition'%}">Añadir articulo</a>
                    <a class="enlaceboton" href="{% url 'grant_petition'%}">Añadir proyecto</a>
+                   {% if is_researcher %}
+                     <a class="enlaceboton" href="{% url 'student_petition'%}">Añadir estudiante</a>
+                   {% endif %}
+                   {% if is_student %}
+                     <a class="enlaceboton" href="{% url 'tutor_petition'%}">Añadir tutor</a>
+                   {% endif %}
                     {% if user.is_staff %}
                       <a class="enlaceboton" href="{% url 'admin:index' %}">Administración</a>
                     {% endif %}
