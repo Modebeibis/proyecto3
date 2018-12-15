@@ -13,6 +13,7 @@ _Repositorio para el tercer proyecto en el curso de modelado y programación de 
 * PostgreSQL >= 9.5.14
 * Faker >= 1.0.1
 * psycopg2 >= 2.7.6.1
+* psycopg2-binary >= 2.7.6.1
 * django-allauth >= 0.38.0
 
 # Instalación
@@ -22,6 +23,7 @@ _Repositorio para el tercer proyecto en el curso de modelado y programación de 
 * Faker
 * django-allauth
 * psycopg2
+* psycopg2-binary
 
 ## PostgreSQL
 En la mayoría de los sistemas operativos hoy disponibles, el manejador de base de datos PostgreSQL ya se encuentra instalado por omisión. Sin embargo si este no es el caso, por favor checar el siguiente enlace en donde se encuentra toda la documentación necesaría: [postgresql](https://www.postgresql.org/docs/9.3/tutorial-install.html).
@@ -91,11 +93,11 @@ Este proceso puede tomar unos minutos, ya que se estan insertando más de 1000 r
 
 
 # Autores ✒️
-* **César Hernández Cruz** - [Japodrilo](https://github.com/Japodrilo)
 * **Mauricio Carrasco Ruiz** - [GrayCentipede](https://github.com/GrayCentipede)
 * **Marco Antonio Cruz Maya** - [marco-cruzmaya](https://github.com/marco-cruzmaya)
-* **Gisselle Ibarra Moreno** - [GisselleIb](https://github.com/GisselleIb)
 * **José Ángel Correa García** - [AngelCorrea](https://github.com/AngelCorrea)
+* **César Hernández Cruz** - [Japodrilo](https://github.com/Japodrilo)
+* **Gisselle Ibarra Moreno** - [GisselleIb](https://github.com/GisselleIb)
 * **Ramses Antonio López Soto** - [ramseslopez](https://github.com/ramseslopez)
 
 #### Construido con mucho amor y dedicación <3
