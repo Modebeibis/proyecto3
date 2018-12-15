@@ -198,14 +198,12 @@
                      </tr>
                        
                      <tr>
-                       <td>
                          {% if is_researcher %}
                          <td><a class="enlaceboton" href="{% url 'student_petition'%}">Añadir estudiante</a></td>
                          {% endif %}
                          {% if is_student %}
-                         <td><a class="enlaceboton" href="{% url 'tutor_petition'%}">Añadir tutor</a></td>
+                         <td><a class="enlaceboton" href="{% url 'tutor_petition'%}">Añadir tutor</a> </td>
                          {% endif %}
-                       </td>
                        <td>
                          {% if user.is_staff %}
                            <a class="enlaceboton" href="{% url 'admin:index' %}">Administración</a>
