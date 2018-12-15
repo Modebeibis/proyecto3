@@ -23,6 +23,13 @@ from allauth.account.forms import LoginForm, SignupForm
 import json
 
 def signup(request):
+    """Presents the CustomSignupForm for the user fill it.
+    Sets the new user as inactive and sends a confirmation
+    email to the user after signing up.
+    The user can't login until it has confirmed it's email.
+    :return: redirects into a page that confirms that email
+    has been sent.
+    """
     if request.method == 'POST':
         form = CustomSignupForm(request.POST)
         if form.is_valid():
@@ -41,13 +48,19 @@ def signup(request):
             return redirect('core/account_activation_sent')
     else:
         form = CustomSignupForm()
-        lform = CustomLoginForm(request.POST)
     return render(request, 'login.html', {'form': form})
 
 def account_activation_sent(request):
+    """
+    Renders the html for the account activation.
+    """
     return render(request, 'core/account_activation_sent.html')
 
 def activate(request, uidb64, token):
+    """
+    When a user clicks the link sent to confirm the email, the user gets
+    active and now can login into it's account.
+    """
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
         user = CustomUser.objects.get(pk=uid)
@@ -60,16 +73,28 @@ def activate(request, uidb64, token):
         user.person.save()
         user.save()
         login(request, user)
-        return redirect('home')
+        return redirect('/home')
     else:
         return render(request, 'core/account_activation_invalid.html')
 
 class PersonInformation(object):
+    """
+    Class used to show the information of a Person.
+    """
     def __init__(self, person, roles):
+        """
+        Initiates the class.
+        """
         self.person = person
         self.roles = roles
 
 def home(request):
+    """
+    View for the home page.
+    Makes a census of the number researchers in every state of the datebase.
+    The map of the home page will show different colours depending on the
+    number of researchers in every state.
+    """
     states = State.objects.all()
     census = {}
     for state in states:
@@ -81,16 +106,29 @@ def home(request):
                  {'census': census})
 
 def research(request):
+    """
+    Renders the html for the page used to present a researcher.
+    """
     return render(request, 'core/researcher.html')
 
 def about_of(request):
+    """
+    Renders the html for the page that gives the description of the web app.
+    """
     return render(request, 'core/about_of.html')
 
 def search_view(request):
+    """
+    Renders the html for the page used to start a search.
+    """
     return render(request, 'core/search_view.html')
 
 
 def get_grant(request, grant_id):
+    """
+    Gets from the database the specified grant and returns the
+    information of the grant and the participants of it.
+    """
     grant = Grant.objects.get(pk = grant_id)
     responsible = Person.objects.get(pk = grant.responsible.person.id)
     grant_participants = GrantParticipant.objects.filter(grant = grant.id)
@@ -104,6 +142,10 @@ def get_grant(request, grant_id):
                    'participants':participants})
 
 def get_group(request, group_id):
+    """
+    Gets from the database the specified group and returns the
+    information of the group and the members of it.
+    """
     group = Group.objects.get(pk = group_id)
     members = []
     members.append(Person.objects.get(pk = group.owner.id))
@@ -116,6 +158,10 @@ def get_group(request, group_id):
                  {'group': group, 'members': members})
 
 def get_publication(request, publication_id):
+    """
+    Gets from the database the specified publication and returns the
+    information of the publication and the authors of it.
+    """
     publication = Publication.objects.get(pk = publication_id)
     authors_of = AuthorOf.objects.filter(publication = publication)
     authors = []
@@ -127,10 +173,16 @@ def get_publication(request, publication_id):
                   {'publication': publication, 'authors': authors})
 
 def get_affiliations(request):
+    """
+    Gets from the database all the affiliations saved.
+    """
     affiliations = Affiliation.objects.all()
     return render(request, 'core/sedes.html', {'affiliations':affiliations})
 
 def get_affiliation(request, affiliation_id):
+    """
+    Calls from the database the specified affiliation.
+    """
     affiliation = Affiliation.objects.get(pk = affiliation_id)
     sub_levels = Affiliation.objects.filter(super_level = affiliation)
     persons = Person.objects.filter(affiliation = affiliation_id)
@@ -147,6 +199,9 @@ def get_affiliation(request, affiliation_id):
                   {'affiliation': affiliation, 'sub_levels':sub_levels, 'register':register})
 
 def get_state_info(request, state_id):
+    """
+    Gets from the database the state that corresponds with the given id.
+    """
     state = State.objects.get(pk = state_id)
     affiliations = state.affiliation_set_top()
     persons = state.pop_list()
@@ -165,6 +220,10 @@ def get_state_info(request, state_id):
                    'register':     register})
 
 def get_state_affiliation_info(request, state_id, affiliation_id):
+    """
+    Gets the information of the affiliation given that
+    corresponds to the given state.
+    """
     state            = State.objects.get(pk = state_id)
     affiliation      = Affiliation.objects.get(pk = affiliation_id)
     sub_affiliations = state.sub_affiliation_set(affiliation)
@@ -188,6 +247,11 @@ def get_user_profile_without_id(request):
     return get_user_profile(request, request.user.id)
 
 def get_user_profile(request, user_id):
+    """
+    Gets the person information from the database of the given user.
+    This includes publications, groups in which the person is member,
+    and grants.
+    """
     user               = CustomUser.objects.get(pk = user_id)
     person             = Person.objects.get(user = user_id)
     papers_author_of   = AuthorOf.objects.filter(person = person)
@@ -261,6 +325,10 @@ def get_user_profile(request, user_id):
 
 
 def search(request):
+    """
+    Search in the database any  coincidence with the data
+    that was given.
+    """
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
         split_q = q.split()
@@ -281,6 +349,11 @@ def search(request):
 
 
 def profile_changes(request):
+    """
+    If the request method is GET then it presents the form to the user
+    to make changes into it's profile.
+    If the request method is POST then it saves the new information given
+    """
     if not request.user.is_authenticated:
         return redirect('/home')
 
@@ -307,6 +380,12 @@ def profile_changes(request):
     return render(request, 'core/researcher.html', {'form':form}, RequestContext(request))
 
 def get_publication_petition(request):
+    """
+    If the request method is GET then the method presents the form
+    to create a new publication.
+    If the request method is POST then the method creates a new
+    publication with the information given by the user.
+    """
     if not request.user.is_authenticated:
         return redirect('/home')
 
@@ -350,6 +429,12 @@ def get_publication_petition(request):
                   {'form':petition_form}, RequestContext(request))
 
 def publication_changes(request,publication_id):
+    """
+    If the request method is GET then the method presents the form
+    to make changes into a given publication.
+    If the request method is POST then the method saves the changes
+    made to the publication.
+    """
     if not request.user.is_authenticated:
         return redirect('/home')
 
@@ -397,6 +482,11 @@ def publication_changes(request,publication_id):
 
 
 def get_group_petition(request):
+    """
+    If the request method is GET the method presents the form to create
+    a new group.
+    If the request method is POST the method creates a new group.
+    """
     if not request.user.is_authenticated:
         return redirect('/home')
 
@@ -421,6 +511,12 @@ def get_group_petition(request):
                   {'form':petition_form}, RequestContext(request))
 
 def group_changes(request, group_id):
+    """
+    If the request method is GET the method presents the form to create
+    a new group.
+    If the request method is POST the method saves the changes made to the
+    given group.
+    """
     if not request.user.is_authenticated:
         return redirect('/home')
 
@@ -451,6 +547,11 @@ def group_changes(request, group_id):
 
 
 def get_grant_petition(request):
+    """
+    If the request method is GET the method presents the form to create
+    a new grant.
+    If the request method is POST the method creates a new grant.
+    """
     if not request.user.is_authenticated:
         return redirect('/home')
 
@@ -488,6 +589,12 @@ def get_grant_petition(request):
                   {'form':petition_form}, RequestContext(request))
 
 def grant_changes(request, grant_id):
+    """
+    If the request method is GET the method presents the form to create
+    a new grant.
+    If the request method is POST the method saves the changes made to the
+    given grant.
+    """
     if not request.user.is_authenticated:
         return redirect('/home')
 
@@ -523,6 +630,11 @@ def grant_changes(request, grant_id):
                   'grant': grant }, RequestContext(request))
 
 def get_affiliation_petition(request):
+    """
+    If the request method is GET the method presents the form to create
+    a new affiliation.
+    If the request method is POST the method creates a new affiliation.
+    """
     if not request.user.is_authenticated:
         return redirect('/home')
 
@@ -602,54 +714,108 @@ def get_tutor_petition(request):
                   {'form':petition_form}, RequestContext(request))
 
 class DeleteGroup(DeleteView):
+    """
+    Class that inherits from DeleteView.
+    Deletes a group that obtains from the method get_object
+    from the database.
+    Upon success redirects to home.
+    """
     template_name= 'core/delete_group.html'
     success_url= '/profile'
 
     def get_object(self):
+        """
+        Gets group that is going to be deleted.
+        """
         id=self.kwargs.get("group_id")
         return get_object_or_404(Group, id=id)
 
 class DeletePublication(DeleteView):
+    """
+    Class that inherits from DeleteView.
+    Deletes a publication that obtains from the method get_object
+    from the database.
+    Upon success redirects to home.
+    """
     template_name= 'core/delete_publication.html'
     success_url= '/profile'
 
     def get_object(self):
+        """
+        Gets publication that is going to be deleted.
+        """
         id=self.kwargs.get("publication_id")
         return get_object_or_404(Publication, id=id)
 
 class DeleteGrant(DeleteView):
+    """
+    Class that inherits from DeleteView.
+    Deletes a grant that obtains from the method get_object
+    from the database.
+    Upon success redirects to home.
+    """
     template_name= 'core/delete_grant.html'
     success_url= '/profile'
 
     def get_object(self):
+        """
+        Gets grant that is going to be deleted.
+        """
         id=self.kwargs.get("grant_id")
         return get_object_or_404(Grant, id=id)
 
 class DeleteAuthor(DeleteView):
+    """
+    Class that inherits from DeleteView.
+    Deletes an author that obtains from the method get_object
+    from the database.
+    Upon success redirects to home.
+    """
     template_name='core/delete_authors.html'
     success_url= '/profile'
 
     def get_object(self):
+        """
+        Gets author that is going to be deleted.
+        """
         id=self.kwargs.get("author_id")
         pub_id=self.kwargs.get("publication_id")
         author_id=AuthorOf.objects.get(person=id,publication=pub_id)
         return get_object_or_404(AuthorOf, id=author_id.id)
 
 class DeleteMember(DeleteView):
+    """
+    Class that inherits from DeleteView.
+    Deletes a member that obtains from the method get_object
+    from the database.
+    Upon success redirects to home.
+    """
     template_name='core/delete_members.html'
     success_url= '/profile'
 
     def get_object(self):
+        """
+        Gets member that is going to be deleted.
+        """
         id=self.kwargs.get("member_id")
         group_id=self.kwargs.get("group_id")
         member_id=GroupMember.objects.get(person=id, group=group_id)
         return get_object_or_404(GroupMember, id=member_id.id)
 
 class DeleteParticipant(DeleteView):
+    """
+    Class that inherits from DeleteView.
+    Deletes a participant that obtains from the method get_object
+    from the database.
+    Upon success redirects to home.
+    """
     template_name= 'core/delete_participant.html'
     success_url= '/profile'
 
     def get_object(self):
+        """
+        Gets participant that is going to be deleted.
+        """
         id=self.kwargs.get("participant_id")
         grant_id=self.kwargs.get("grant_id")
         part_id=GrantParticipant.objects.get(person=id,grant=grant_id)
