@@ -509,14 +509,14 @@ class Student(models.Model):
     """
 
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         """
         Returns a string representation of the student.
 
         :return: a string representation of the student.
         """
-        
+
         return self.person.__str__()
 
 class StudentOf(models.Model):
@@ -533,7 +533,7 @@ class StudentOf(models.Model):
         """
         Meta class for StudentOf
         """
-        
+
         unique_together = (('student', 'tutor'),)
 
 @receiver(post_save, sender = CustomUser)
@@ -542,12 +542,13 @@ def create_person_profile(sender, instance, created, **kwargs):
     Trigger for when an user is created.
     It creates a person associated to the user
     and assigns it the researcher's role
-
+    In case the responsible is deleted then
+    the same happens for the grant.
     """
     if created:
-        person  = Person.objects.create, and a start and end date.
-                                _name,
-                                In case the respoorcid      = str(instance),nsible is deleted then the same happends for the grant.
+        person  = Person.objects.create(first_name = instance.first_name,
+                                        last_name  = instance.last_name,
+                                        orcid      = str(instance),
                                         user       = instance)
         role = Role.objects.get(pk = 3)
         PersonRole.objects.create(person = person, role = role)
