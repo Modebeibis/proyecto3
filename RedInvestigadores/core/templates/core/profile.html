@@ -200,9 +200,10 @@
                      <tr>
                        <td>
                          {% if is_researcher %}
-                           <a class="enlaceboton" href="{% url 'student_petition'%}">Añadir estudiante</a>
-                         {% elif is_student %}
-                           <a class="enlaceboton" href="{% url 'tutor_petition'%}">Añadir tutor</a>
+                         <td><a class="enlaceboton" href="{% url 'student_petition'%}">Añadir estudiante</a></td>
+                         {% endif %}
+                         {% if is_student %}
+                         <td><a class="enlaceboton" href="{% url 'tutor_petition'%}">Añadir tutor</a></td>
                          {% endif %}
                        </td>
                        <td>
