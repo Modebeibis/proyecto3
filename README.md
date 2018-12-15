@@ -12,6 +12,7 @@ _Repositorio para el tercer proyecto en el curso de modelado y programación de 
 * Django >= 2.1.3
 * PostgreSQL >= 9.5.14
 * Faker >= 1.0.1
+* psycopg2 >= 2.7.6.1
 * django-allauth >= 0.38.0
 
 # Instalación
