@@ -41,7 +41,7 @@
     <div class="container">
          <form action = '.' method="post">
               {% csrf_token %}
-              <h1>¿Quieres eliminar al tutor "{{ object.student.person }}"?</h1>
+              <h1>¿Quieres eliminar al estudiante "{{ object.student.person }}"?</h1>
               <p><button type = "submit">Aceptar</button> <a href="{% url 'profile' %}">Cancelar</a></p>
          </form>
     </div>

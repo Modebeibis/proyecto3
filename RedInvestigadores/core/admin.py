@@ -16,19 +16,35 @@ class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ['email', 'username']
 
-class PersonAdmin(admin.ModelAdmin):
-    fields = ['first_name', 'last_name', 'user', 'state']
-    list_display = ('first_name', 'last_name', 'user', 'state')
+class AuthorOfAdmin(admin.ModelAdmin):
+    fields = ['publication', 'person']
+    list_display = ('publication', 'person')
+
+class GrantParticipantAdmin(admin.ModelAdmin):
+    fields = ['grant', 'person']
+    list_display = ('grant', 'person')
+
+class GroupMemberAdmin(admin.ModelAdmin):
+    fields = ['group', 'person']
+    list_display = ('group', 'person')
+
+class StudentOfAdmin(admin.ModelAdmin):
+    fields = ['tutor', 'student']
+    list_display = ('tutor', 'student')
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Administrator)
 admin.site.register(Affiliation)
+admin.site.register(AuthorOf, AuthorOfAdmin)
 admin.site.register(Grant)
+admin.site.register(GrantParticipant, GrantParticipantAdmin)
 admin.site.register(Group)
+admin.site.register(GroupMember, GroupMemberAdmin)
 admin.site.register(Journal)
-admin.site.register(Person, PersonAdmin)
+admin.site.register(Person)
 admin.site.register(PersonRole)
 admin.site.register(Postdoc)
 admin.site.register(Publication)
 admin.site.register(Researcher)
 admin.site.register(Student)
+admin.site.register(StudentOf, StudentOfAdmin)
