@@ -49,14 +49,14 @@
        <h2 align="center">¿Quiénes somos?</h2>
        <p style="
        padding: 3rem;">
-          Somos una pagina que busca crear una red de investigadores existentes en México,
-          donde toda persona podra buscar e informarce acerca de proyectos y trabajos que ciertas personas
-          se encuentren realizandolo.<br>
-          Queremos generar un sitio donde distintos investigadores puedan llevar el control de sus labores
-          y a su vez, hacerse publicos ante las personas que entren al sitio, se den a conocer por sus publicaciones,
-          trabajos realizados o publicaciones. <br>
-          A su vez, poder mostrar los investigador que se encuentren en determinada region del pais, a que institutos pertenecen
-          e información general de sus publicaciones, grupos de trabajo, entre otros.<br>
+       Esta página tiene como finalidad crear una red de investigadores
+       existentes en México, donde cualquier persona podrá consultar las
+       publicaciones, grupos de trabajo, proyectos e información
+       academicamente relevante sobre los usuarios registrados. Se intenta
+       generar un sitio donde los académicos puedan llevar el control de sus
+       labores y a su vez, ganar visibilidad. Se propone una forma sencilla
+       de agrupar a los académicos por estado, institución y subdependencias
+       para tener fácil acceso a una búsqueda regionalizada en México. <br>
        </p>
      </div>
    <style>
@@ -76,40 +76,9 @@
      <div id="redondeado">
        <p>
        <font size=5>
-       Sin haberse registrado, tomara el rol de invitado solo tendras permitido
-       realizar busquedas y visualizar lo datos en general de los
-       usuarios registrados.
-      </font>
-      </p>
-     </div>
-   </div>
-
-   <div id="Investigador" class="tabcontent">
-     <h3>Investigador</h3>
-     <img style="float: right;" src="{% static "img/PerfilUsuario/iconoInvest.svg" %}" width="150px" height="150px" >
-     <div id="redondeado">
-       <p>
-       <font size=5>
-         Para las personas que se encuentre registradas como investigador,
-         podran realizar las mismas acciones que un invitado, ademas de poder
-         crear grupos en los que agregaran alumnos o a otros investigadores
-         para esto a los se le quieran agregar, deberan estar registrados.
-         Deberan pertenecer a una institución y a su vez, esta debe ser existente
-         o en caso contrario, solicitarla para poder registrarla.
-      </font>
-      </p>
-     </div>
-   </div>
-
-   <div id="Postdoc" class="tabcontent">
-     <h3>Postdoc</h3>
-     <img style="float: right;" src="{% static "img/PerfilUsuario/iconoPostdoc.svg" %}" width="150px" height="150px" >
-     <div id="redondeado">
-       <p>
-       <font size=5>
-         Para las personas que se encuentre registradas como Postdoc,
-         podran realizar las mismas acciones que un investigador, salvo el crear
-         grupos.
+       Sin haber iniciado sesión, tendrás por omisión el rol de invitado.
+       Sólo tendras permitido realizar busquedas y visualizar los datos
+       generales de los usuarios registrados.
       </font>
       </p>
      </div>
@@ -121,15 +90,46 @@
      <div id="redondeado">
        <p>
        <font size=5>
-         Registrarse como un alumno, al ingresar se podran realizar busquedas
-         como cualquier usuario invitado, ademas de poder pertenecer a grupos
+         Los usuarios registrados como alumnos, adicionalmente a las mismas
+         acciones que puede realizar un invitado, tendrán un perfil que
+         incluye su información básica; podrán pertenecer a grupos
          creados por investigadores, en los cuales se llevara un registro de
-         integrantes y se le podran atribuir contribuciones a dichos trabajos a
-         donde pertenezca.
+         integrantes y podrá añadir sus publicaciones, o ser agregado como
+         autor a publicaciones de otros usuarios.
       </font>
       </p>
      </div>
    </div>
+
+   <div id="Postdoc" class="tabcontent">
+     <h3>Postdoc</h3>
+     <img style="float: right;" src="{% static "img/PerfilUsuario/iconoPostdoc.svg" %}" width="150px" height="150px" >
+     <div id="redondeado">
+       <p>
+       <font size=5>
+         Las personas que se encuentren registradas como postdoc, además de
+         las mismas acciones que pueden llevar a cabo los alumnos, podrán
+         añadir los proyectos que se encuentran desarrollando.
+      </font>
+      </p>
+     </div>
+   </div>
+
+   <div id="Investigador" class="tabcontent">
+     <h3>Investigador</h3>
+     <img style="float: right;" src="{% static "img/PerfilUsuario/iconoInvest.svg" %}" width="150px" height="150px" >
+     <div id="redondeado">
+       <p>
+       <font size=5>
+         Las personas que se encuentren registradas como investigador,
+         adicionalmente a las mismas acciones que puede realizar un postdoc,
+         podrán crear grupos de trabajo en los que podrán incluir a otros
+         académicos registrados y podrán añadir a sus alumnos actuales.
+      </font>
+      </p>
+     </div>
+   </div>
+
    <script>
      function openPage(pageName,elmnt,color) {
        var i, tabcontent, tablinks;

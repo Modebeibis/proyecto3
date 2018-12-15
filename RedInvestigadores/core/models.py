@@ -443,6 +443,15 @@ class GrantParticipant(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     grant  = models.ForeignKey(Grant, on_delete=models.CASCADE)
 
+    def __str__(self):
+        """
+        Returns a string representation of the relation.
+
+        :return: a string representation of the relation.
+        """
+
+        return "(%s, %s)" % (self.person.__str__(), self.grant.__str__())
+
     class Meta:
         """
         Meta class for GrantParticipant
@@ -484,6 +493,15 @@ class GroupMember(models.Model):
 
     group  = models.ForeignKey(Group, on_delete=models.CASCADE)
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
+
+    def __str__(self):
+        """
+        Returns a string representation of the relation.
+
+        :return: a string representation of the relation.
+        """
+
+        return "(%s, %s)" % (self.group.name, self.person.__str__())
 
     class Meta:
         """
