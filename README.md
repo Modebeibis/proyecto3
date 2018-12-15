@@ -81,7 +81,7 @@ Y listo, todo usuario que se registra ahora recibirá un enlace con dirección q
 # Utilidades
 
 ## Poblar la Base de Datos
-Se crearon ```seeders``` que nos permiten poblar la base de datos para probar que su funcionamiento fuera el indicado. Para esto es necesario que la BDD ya hubiese sido creada y migrada.
+Se crearon ```seeders``` que nos permiten poblar la base de datos con registros falsos, usando ```Faker```, para probar que su funcionamiento fuera el indicado. Para esto es necesario que la BDD ya hubiese sido creada y migrada.
 ```bash
 $ python3 manage.py shell < core/seeder.py
 ```
